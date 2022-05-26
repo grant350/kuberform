@@ -1,8 +1,8 @@
 {
   "name": "@zenabyss/reactformbuilder",
-  "version": "1.0.8",
+  "version": "1.0.12.2",
   "description": "FormBuilder For React",
-  "notes": "reactive add starting",
+  "notes": " readme not finished",
   "main": "./compile/index.js",
   "type": "module",
   "repository": {
