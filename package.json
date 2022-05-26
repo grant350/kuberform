@@ -1,0 +1,50 @@
+{
+  "name": "@zenabyss/reactformbuilder",
+  "version": "1.0.8",
+  "description": "FormBuilder For React",
+  "notes": "reactive add starting",
+  "main": "./compile/index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/grant350/reactformbuilder.git"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+      "@babel/env"
+    ]
+  },
+  "files": [
+    "dist",
+    "dist/components"
+  ],
+  "scripts": {
+    "compile": "babel ./compile -d ./dist --ignore 'node_modules' ",
+    "test": "jest --detectOpenHandles"
+  },
+  "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/grant350/reactformbuilder/issues"
+  },
+  "homepage": "https://github.com/grant350/reactformbuilder#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.2",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.3",
+    "webpack-cli": "^4.9.2"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.18.0",
+    "jest": "^27.5.1",
+    "react-test-renderer": "^18.0.0",
+    "requirejs": "^2.3.6",
+    "rxjs": "^7.5.2"
+  }
+}
