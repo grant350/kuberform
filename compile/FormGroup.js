@@ -3,7 +3,7 @@ import FormControl from './FormControl.js';
 import FormArray from './FormArray.js';
 import React from 'react';
 import {Observable,merge} from 'rxjs';
-import {Input,Container} from './components/index';
+import {Input,Container} from './components/index.js';
 class FormGroup extends React.Component {
 
   constructor(props) {

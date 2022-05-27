@@ -2,6 +2,7 @@ import FormGroup from './FormGroup.js';
 import FormControl from './FormControl.js';
 import {Observable,merge} from 'rxjs';
 import React from 'react';
+import {Input,Container} from './components/index.js';
 
 class FormArray extends React.Component{
   constructor(props){
@@ -70,16 +71,26 @@ class FormArray extends React.Component{
         // var children = this.state.children;
         // children.push(child)
         // this.setState({value: this.state.value , children:children})
+        if (child.JSXElement === undefined ){
+          child.JSXElement = Input
+        }
         controls.push(<FormControl index={index} update={this.update} JSXElement={child.JSXElement} name={child.name} value={child.value} status={'VALID'} key={index}/>)
+
       }
 
       if (child.type === 'formArray' ){
         // loop to get children pass object down
         // console.log('the child',child)
+        if (child.JSXContainer === undefined ){
+          child.JSXElement = Container
+        }
         controls.push(<FormArray key={index} JSXContainer={child.JSXContainer} form={child.children} />)
       }
       if (child.type === 'formGroup' ){
         // loop to get children pass object down
+        if (child.JSXContainer === undefined ){
+          child.JSXElement = Container
+        }
         controls.push(<FormGroup form={child.form} JSXContainer={child.JSXContainer} key={index} />)
       }
       // if field then return field jsx
