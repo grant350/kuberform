@@ -107,9 +107,12 @@ class FormArray extends React.Component {
   }
 
   render() {
+    var children = this.makeChildren();
     return React.Fragment(null, React.DOM.div({
       className: "formArray"
-    }, this.props.JSXContainer(this.makeChildren())), React.DOM.button({
+    }, this.props.JSXContainer({
+      children: children
+    })), React.DOM.button({
       onClick: this.addChild
     }, " addChild"), React.DOM.button({
       onClick: this.removeChild

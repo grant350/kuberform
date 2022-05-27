@@ -1,6 +1,6 @@
 {
   "name": "@zenabyss/reactformbuilder",
-  "version": "1.0.12.6",
+  "version": "1.0.13.0",
   "description": "FormBuilder For React",
   "notes": " readme not finished",
   "main": "./dist/index.js",
@@ -35,6 +35,9 @@
     "react": "^18.0.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.8.1",
     "jest": "^27.5.1",
     "rxjs": "^7.5.2",
     "source-map-loader": "^3.0.1"

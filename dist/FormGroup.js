@@ -108,9 +108,12 @@ class FormGroup extends React.Component {
   }
 
   render() {
+    var children = this.makeChildren();
     return React.Fragment(null, React.DOM.div({
       className: "formGroup"
-    }, this.props.JSXContainer(this.makeChildren())), this.submit ? this.submit({
+    }, this.props.JSXContainer({
+      children: children
+    })), this.submit ? this.submit({
       getData: this.getData
     }) : null);
   }

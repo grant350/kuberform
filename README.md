@@ -161,3 +161,70 @@ var formArray = {
 
 
 
+
+# how to work with prebuilt components
+
+<p align="center">
+  <img src="https://github.com/grant350/reactformbuilder/blob/master/examplecontainer.png?raw=true" width="600px" height="600px"/>
+</p>
+
+
+## before we talked about how to make a form, but now we are going to talk about how to structure your form.
+
+## container work for formgroups and formArrays as each will output an array of JSXElements
+
+### in each container  there is a prop called children
+
+```js
+
+class Container extends React.Component {
+  constructor(props){
+    super(props)
+  }
+  render(){
+    return (
+      <div className="container" style={{background:"red", width:"100%", height:"auto",position:"relative","left":"20px"}}>
+          {this.props.children}
+      </div>
+    );
+  }
+}
+//each child of the children array is a JSXElement you have defined in the form.
+ ```
+
+ # as we discussed each contianer has JSXElements this is an example of a JSXElement
+
+ ## you can create it in any way you want. also if you do not call update on a character change or submit  the value will never change nor will it validate. it order for it to work you are required to call update on event.
+ ```js
+import {TextField} from  '@mui/material';
+class Input extends React.Component {
+  constructor(props){
+    super(props)
+  }
+  render(){
+    return (
+      <div className="input" style={{position:"relative",left:this.props.tabOver? this.props.tabOver.toString()+"px":"0px"}}>
+        <label style={{display:"block", width:"100%",position:"relative", margin: "5px"}}> {this.props.labelName}</label>
+        <TextField
+        size="small"
+        onChange={(e)=>{this.props.update(e.target.value)}}
+        value={this.props.value}
+        label={this.props.label? this.props.label:"type here"}
+        error={this.props.error? this.props.error:false}
+        required={this.props.required? this.props.required:false}
+        disabled={this.props.disabled? this.props.disabled:false}
+        helperText={this.props.helperText? this.props.helperText:""}
+        InputProps={{ style: { fontSize: this.props.InputProps? this.props.InputProp:10 } }}
+        InputLabelProps={{ style: { fontSize: (this.props.InputLabelProps? this.props.InputLabelProps:12) } }}
+        style={{background:'white', "borderLeft":"20px solid "+this.props.border,"borderRadius": "10px",width: this.props.width !== undefined ? this.props.width.toString()+"px":"100px"}}
+        id="filled-basic"
+        variant="filled" />
+      </div>
+    );
+  }
+}
+ ```
+
+
+ # what happend if you dont specify JSXContainer or JSXElment and or its not valid JSX?
+ ## reactformbuilder will select a default container so the code does not break and a default input. so if you have a textbox and you are wondering why its an input proably because you have invalid JSX or the component isnt in the form.
