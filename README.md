@@ -1,10 +1,10 @@
 <h1 align="center"> React Formbuilder like angular formbuilder</h1>
 
 <p align="center">
-  <img src="https://github.com/grant350/reactformbuilder/blob/bae6c33d6f69c61bc986a9bca6fc42e93e7b97e8/form.png" width="600px" height="600px"/>
+  <img src="https://github.com/grant350/reactformbuilder/blob/master/form.png?raw=true" width="600px" height="600px"/>
 </p>
 <p align="center">
-  <img src="https://github.com/grant350/reactformbuilder/blob/bae6c33d6f69c61bc986a9bca6fc42e93e7b97e8/readme.png" width="600px" height="600px"/>
+  <img src="https://github.com/grant350/reactformbuilder/blob/master/readme.png?raw=true" width="600px" height="600px"/>
 </p>
 <p align="center">
 React Formbuilder has asynchornous observables from rxjs
