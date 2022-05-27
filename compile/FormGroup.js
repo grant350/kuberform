@@ -3,12 +3,11 @@ import FormControl from './FormControl.js';
 import FormArray from './FormArray.js';
 import React from 'react';
 import {Observable,merge} from 'rxjs';
-
+import {Input,Container} from './components/index';
 class FormGroup extends React.Component {
 
   constructor(props) {
     super(props);
-    // { field array formgroup}
     this.type = "formGroup";
     this.name = this.props.name
     this.state = {
@@ -16,7 +15,6 @@ class FormGroup extends React.Component {
       status:  "VALID",
       value: this.props.value? this.props.value: {}
     }
-    // console.log('my props',props)
     this.submit = props.submit
     this.makeChildren = this.makeChildren.bind(this);
     this.update = this.update.bind(this);
@@ -63,13 +61,23 @@ class FormGroup extends React.Component {
     var controls = [];
     Object.keys(this.state.children).forEach( (key, index)=>{
       var child = this.state.children[key];
+
       if (child.type === 'formControl' ){
+        if (child.JSXElement === undefined ){
+          child.JSXElement = Input
+        }
         controls.push(<FormControl  index={key} update={this.update} JSXElement={child.JSXElement} name={key} value={child.value} status={'VALID'} key={key}/>)
       }
       if (child.type === 'formArray' ){
+        if (child.JSXContainer === undefined ){
+          child.JSXContainer = Container
+        }
         controls.push(<FormArray value={this.state.value[key]} name={key} key={key}  index={key} JSXContainer={child.JSXContainer} form={child.children} />)
       }
       if (child.type === 'formGroup' ){
+        if (child.JSXContainer === undefined ){
+          child.JSXContainer = Container
+        }
         controls.push(<FormGroup value={this.state.value[key]}  name={key}  form={child.form} JSXContainer={child.JSXContainer} key={key} />)
       }
     })
