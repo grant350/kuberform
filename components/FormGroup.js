@@ -2,8 +2,8 @@
 import FormControl from './FormControl.js';
 import FormArray from './FormArray.js';
 import React from 'react';
-import {Observable,merge} from 'rxjs';
-import {Input,Container} from './components/index.js';
+// import {Observable,merge} from 'rxjs';
+import {Input,Container} from './index.js';
 class FormGroup extends React.Component {
 
   constructor(props) {
@@ -11,11 +11,11 @@ class FormGroup extends React.Component {
     this.type = "formGroup";
     this.name = this.props.name
     this.state = {
-      children:props.form,
+      children:this.props.form,
       status:  "VALID",
       value: this.props.value? this.props.value: {}
     }
-    this.submit = props.submit
+    this.submit = this.props.submit? this.props.submit:null;
     this.makeChildren = this.makeChildren.bind(this);
     this.update = this.update.bind(this);
     this.getData = this.getData.bind(this);
@@ -30,7 +30,6 @@ class FormGroup extends React.Component {
       if (v.type === "formControl"){
         this.state.value[k] = v.value;
       } else if (v.type === "formArray") {
-        console.log('formarray',v)
         var mapped = v.children.map(item=>{
           return item.value
         })
@@ -59,24 +58,24 @@ class FormGroup extends React.Component {
 
   makeChildren(){
     var controls = [];
+
     Object.keys(this.state.children).forEach( (key, index)=>{
       var child = this.state.children[key];
-
       if (child.type === 'formControl' ){
         if (child.JSXElement === undefined ){
-          child.JSXElement = Input
+          child.JSXElement = Input;
         }
         controls.push(<FormControl  index={key} update={this.update} JSXElement={child.JSXElement} name={key} value={child.value} status={'VALID'} key={key}/>)
       }
       if (child.type === 'formArray' ){
         if (child.JSXContainer === undefined ){
-          child.JSXContainer = Container
+          child.JSXContainer = Container;
         }
         controls.push(<FormArray value={this.state.value[key]} name={key} key={key}  index={key} JSXContainer={child.JSXContainer} form={child.children} />)
       }
       if (child.type === 'formGroup' ){
         if (child.JSXContainer === undefined ){
-          child.JSXContainer = Container
+          child.JSXContainer = Container;
         }
         controls.push(<FormGroup value={this.state.value[key]}  name={key}  form={child.form} JSXContainer={child.JSXContainer} key={key} />)
       }
@@ -93,8 +92,7 @@ class FormGroup extends React.Component {
       return (
         <React.Fragment>
         <div className = "formGroup" >
-          {/* {this.props.JSXContainer(this.makeChildren())} */}
-        <this.props.JSXContainer children={children}></this.props.JSXContainer>
+        <this.props.JSXContainer children={children}/>
        </div>
         {this.submit? <this.submit getData={this.getData}/>: null}
       </React.Fragment>)

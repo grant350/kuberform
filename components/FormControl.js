@@ -1,5 +1,5 @@
 import React from 'react';
-import {Observable,merge} from 'rxjs';
+// import {Observable,merge} from 'rxjs';
 class FormControl extends React.Component {
 
   constructor(props) {
@@ -23,9 +23,8 @@ class FormControl extends React.Component {
   }
 
   render(){
-    console.log(this.props.update)
    return( <div className="formControl">
-            <this.props.JSXElement update={this.update} border={this.statusToColor()} name={this.props.name}  value={this.props.value} status={this.props.status}></this.props.JSXElement>
+            <this.props.JSXElement update={this.update} border={this.statusToColor()} name={this.props.name}  value={this.props.value} status={this.props.status}/>
     </div>
    )
   }

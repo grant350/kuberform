@@ -1,45 +1,42 @@
 {
   "name": "@zenabyss/reactformbuilder",
-  "version": "1.0.14.0",
-  "description": "FormBuilder For React",
+  "version": "1.1.10",
+  "description": "components for formbuilder",
   "notes": " readme not finished",
-  "main": "./dist/index.js",
-  "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/grant350/reactformbuilder.git"
+    "url": "git+ssh://git@github.com/grant350/components.git"
   },
-  "babel": {
-    "plugins": [
-      "@babel/plugin-transform-react-jsx-compat"
-    ],
-    "presets": []
-  },
+  "module": "dist/index.js",
   "scripts": {
-    "compile": "babel ./compile -d ./dist --ignore 'node_modules' ",
-    "test": "jest --detectOpenHandles"
+    "start": "rollup -c -w "
   },
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
   "license": "",
   "bugs": {
-    "url": "https://github.com/grant350/reactformbuilder/issues"
+    "url": "https://github.com/grant350/components/issues"
   },
-  "homepage": "https://github.com/grant350/reactformbuilder#readme",
+  "homepage": "https://github.com/grant350/components#readme",
   "devDependencies": {
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.2",
     "@babel/plugin-transform-react-jsx-compat": "^7.16.7",
-    "babel-loader": "^8.2.3"
+    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-react": "^7.17.12",
+    "@rollup/plugin-babel": "^5.3.1",
+    "babel-loader": "^8.2.3",
+    "rollup": "^2.75.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-css-only": "^3.1.0"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "@mui/material": "^5.8.1",
     "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1"
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.8.1",
+    "react": "^18.0.0"
   },
   "dependencies": {
-    "jest": "^27.5.1",
-    "rxjs": "^7.5.2",
     "source-map-loader": "^3.0.1"
   }
 }

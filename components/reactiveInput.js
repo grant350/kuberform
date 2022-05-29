@@ -10,7 +10,7 @@ class Input extends React.Component {
         <label style={{display:"block", width:"100%",position:"relative", margin: "5px"}}> {this.props.labelName}</label>
         <TextField
         size="small"
-        onChange={(e)=>{this.props.update(e.target.value)}}
+        onChange={(e)=>{this.props.update(this.props.name,e.target.value)}}
         value={this.props.value}
         label={this.props.label? this.props.label:"type here"}
         error={this.props.error? this.props.error:false}
