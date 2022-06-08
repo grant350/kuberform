@@ -2,97 +2,152 @@
 import FormControl from './FormControl.js';
 import FormArray from './FormArray.js';
 import React from 'react';
-// import {Observable,merge} from 'rxjs';
+import {Observable,BehaviorSubject,mergeMap,map,forkJoin} from 'rxjs';
 import {Input,Container} from './index.js';
-class FormGroup extends React.Component {
 
+class FormGroup extends React.Component {
+  // Cannot create property 'firstname' on string 'a'
+  // _this2.state.value[key] = value;
   constructor(props) {
     super(props);
     this.type = "formGroup";
-    this.name = this.props.name
+    this.name = this.props.name;
+
     this.state = {
-      children:this.props.form,
-      status:  "VALID",
-      value: this.props.value? this.props.value: {}
-    }
-    this.submit = this.props.submit? this.props.submit:null;
-    this.makeChildren = this.makeChildren.bind(this);
-    this.update = this.update.bind(this);
-    this.getData = this.getData.bind(this);
-    this.loadValues = this.loadValues.bind(this);
-    this.loadValues();
-  }
+      value: this.props.value? this.props.value: {},
+      status: this.props.status? this.props.status: "VALID",
+      ctls:this.props.controls,
+      statuses:{},
+      color:"#36bc78"
+     }
 
-  loadValues(){
-    var object = Object.assign({},this.state.children)
-    Object.keys(object).forEach( (k)=>{
-      var v = object[k];
-      if (v.type === "formControl"){
-        this.state.value[k] = v.value;
-      } else if (v.type === "formArray") {
-        var mapped = v.children.map(item=>{
-          return item.value
-        })
-        this.state.value[k] = mapped;
-      } else if (v.type === "formGroup"){
-        this.state.value[k] = {};
-        Object.keys(v.form).forEach(key=>{
-          var val = v.form[key].value;
-          this.state.value[k][key] = val
-        })
+     Object.keys(this.props.controls).forEach(k=>{
+      var empty = '';
+      if (this.props.controls[k].type === "formArray"){
+        empty=[];
+      } else if (this.props.controls[k].type === "formGroup"){
+        empty={};
       }
-    })
+       this.state.value[k] = this.props.controls[k].value? this.props.controls[k].value: empty;
+     });
+    // this.subscribeChanges = this.subscribeChanges.bind(this);
+    this.makeChildren = this.makeChildren.bind(this);
+    // this.makeChildren();
+
+
+    this.submit = this.props.submit? this.props.submit:null;
+    this.getData = this.getData.bind(this);
+    // this.checkStatusControls = this.checkStatusControls.bind(this);
+    this.statusToColor = this.statusToColor.bind(this);
+    this.VALIDATE = this.VALIDATE.bind(this);
+    this.subject$ = new BehaviorSubject(null);
+
   }
 
-  componentDidMount(){
-    setTimeout( ()=>{
-      this.setState({status:'INVALID'},function(){
-        // console.log(this.state)
-      });
-    },2000)
-  }
-  update(name,value){
-    this.state.children[name].value = value
-    this.setState({children:this.state.children},function(){})
-  }
+componentDidMount(){}
 
-  makeChildren(){
-    var controls = [];
+VALIDATE(name,index,value,validator) {
+  this.index = name
+  this.state.value[name] = value;
+  this.setState({value: this.state.value},()=>{
+    this.subject$.next(null)
+    if (validator !== null && validator !== undefined){
+          validator(value,this.subject$)
+        } else {
+          this.subject$.next(true)
+      }
+  })
 
-    Object.keys(this.state.children).forEach( (key, index)=>{
-      var child = this.state.children[key];
+
+
+}
+componentDidMount(){
+  this.subject$.next(true);
+  this.subject$.subscribe(res => {
+    var status;
+    switch (res) {
+      case null:
+        status = 'PENDING'
+        break
+      case false:
+        status = 'INVALID';
+        break;
+      default:
+        status = 'VALID';
+    }
+
+    this.state.statuses[this.index] = status;
+
+    var parentStatus;
+    if (Object.values(this.state.statuses).includes('INVALID')){
+      parentStatus = 'INVALID'
+    } else if (Object.values(this.state.statuses).includes('PENDING')){
+      parentStatus= 'PENDING'
+    } else {
+      parentStatus= 'VALID'
+    }
+   var color = this.statusToColor(parentStatus);
+   console.log('fg color',color)
+   console.log('fg status',status);
+    this.setState({color:color,value:this.state.value,status:status},function(){
+      console.log('fg',this.state)
+      if (this.props.VALIDATE){
+        //set parent not validate;
+        // this.props.VALIDATE(this.name,this.props.index,this.state.value);
+      }
+    });
+  });
+}
+
+setParent(key,value){
+  //key = value
+  //set state
+}
+  makeChildren(ctls){
+
+   return Object.keys(ctls).map( (key, index)=>{
+      var child = ctls[key];
+
       if (child.type === 'formControl' ){
         if (child.JSXElement === undefined ){
           child.JSXElement = Input;
         }
-        controls.push(<FormControl  index={key} update={this.update} JSXElement={child.JSXElement} name={key} value={child.value} status={'VALID'} key={key}/>)
-      }
+        return <FormControl validator={child.validator} parent={this} VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
+        }
       if (child.type === 'formArray' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        controls.push(<FormArray value={this.state.value[key]} name={key} key={key}  index={key} JSXContainer={child.JSXContainer} form={child.children} />)
+        return  <FormArray parent={this} VALIDATE={this.VALIDATE} value={this.state.value[key]} name={key} key={key}  index={index} JSXContainer={child.JSXContainer} controls={child.controls} />;
       }
       if (child.type === 'formGroup' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        controls.push(<FormGroup value={this.state.value[key]}  name={key}  form={child.form} JSXContainer={child.JSXContainer} key={key} />)
+        return <FormGroup parent={this} VALIDATE={this.VALIDATE} value={this.state.value[key]} index={index}  name={key}  controls={child.controls} JSXContainer={child.JSXContainer} key={key} />;
+
       }
     })
-    return controls;
   }
 
   getData(e){
     return this.state.value
   }
+  statusToColor(status){
+    if (status === "VALID") {
+      return "#36bc78"
+    } else if (status === "PENDING") {
+      return "#f2da33";
+    } else {
+      return "#cb1842";
+    }
+  }
 
   render() {
-     var children = this.makeChildren();
       return (
         <React.Fragment>
-        <div className = "formGroup" >
-        <this.props.JSXContainer children={children}/>
+        <div className = "formGroup"  style={{"borderLeft":"10px solid " +this.state.color}}>
+        <this.props.JSXContainer children={this.makeChildren(this.state.ctls)}/>
        </div>
         {this.submit? <this.submit getData={this.getData}/>: null}
       </React.Fragment>)

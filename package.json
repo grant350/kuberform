@@ -9,7 +9,8 @@
   },
   "module": "dist/index.js",
   "scripts": {
-    "start": "rollup -c -w "
+    "start": "mv node_moduless node_modules; rollup -c -w ",
+    "end":"mv node_modules node_moduless"
   },
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
   "license": "",
@@ -37,6 +38,8 @@
     "react": "^18.0.0"
   },
   "dependencies": {
+    "react-rxjs-elements": "^0.0.7",
+    "rxjs": "^7.5.5",
     "source-map-loader": "^3.0.1"
   }
 }
