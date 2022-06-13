@@ -31,6 +31,7 @@ class FormGroup extends React.Component {
        this.state.value[k] = this.props.controls[k].value? this.props.controls[k].value: empty;
      });
     // this.subscribeChanges = this.subscribeChanges.bind(this);
+    this.setParent = this.setParent.bind(this);
     this.makeChildren = this.makeChildren.bind(this);
     // this.makeChildren();
 
@@ -87,21 +88,21 @@ componentDidMount(){
       parentStatus= 'VALID'
     }
    var color = this.statusToColor(parentStatus);
-   console.log('fg color',color)
-   console.log('fg status',status);
+
     this.setState({color:color,value:this.state.value,status:status},function(){
       console.log('fg',this.state)
-      if (this.props.VALIDATE){
-        //set parent not validate;
-        // this.props.VALIDATE(this.name,this.props.index,this.state.value);
-      }
+      // if (this.props.VALIDATE){
+      //   //set parent not validate;
+      //   // this.props.VALIDATE(this.name,this.props.index,this.state.value);
+      // }
     });
   });
 }
-
+//refractor to only use children and those children will have value
 setParent(key,value){
   //key = value
   //set state
+  this.state.
 }
   makeChildren(ctls){
 
@@ -144,12 +145,15 @@ setParent(key,value){
   }
 
   render() {
+    var Thecontainer = this.props.JSXContainer
+    if (Thecontainer === undefined){
+      Thecontainer = Container
+    }
       return (
         <React.Fragment>
         <div className = "formGroup"  style={{"borderLeft":"10px solid " +this.state.color}}>
-        <this.props.JSXContainer children={this.makeChildren(this.state.ctls)}/>
+        <Thecontainer children={this.makeChildren(this.state.ctls)}/>
        </div>
-        {this.submit? <this.submit getData={this.getData}/>: null}
       </React.Fragment>)
     }
 

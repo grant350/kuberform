@@ -134,17 +134,14 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.update = _this.update.bind(_assertThisInitialized(_this));
     _this.statusToColor = _this.statusToColor.bind(_assertThisInitialized(_this));
     _this.value = _this.props.value ? _this.props.value : null;
-    _this.status = _this.props.status ? _this.props.status : "VALID"; // this.subject$ = new BehaviorSubject({value:this.props.value, status:this.props.status});
-    // this.subject$.next =  this.subject$.next.bind(this.subject$);
-    // this.changes = this.changes.bind(this);
-    // this.VALIDATE = this.VALIDATE.bind(this);
-
+    _this.status = _this.props.status ? _this.props.status : "VALID";
     return _this;
   }
 
   _createClass(FormControl, [{
     key: "componentDidMount",
-    value: function componentDidMount() {// this.props.VALIDATE(this.name,this.props.index,this.props.value,this.props.validator);
+    value: function componentDidMount() {
+      this.props.VALIDATE(this.name, this.props.index, this.props.value, this.props.validator);
     }
   }, {
     key: "statusToColor",
@@ -197,6 +194,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.type = "formArray";
     _this.name = _this.props.name;
+    console.log('props in formarray', _this.props);
     _this.state = {
       value: _this.props.value ? _this.props.value : [],
       status: _this.props.status ? _this.props.status : "VALID",
@@ -539,20 +537,19 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
 
         var color = _this2.statusToColor(parentStatus);
 
-        console.log('fg color', color);
-        console.log('fg status', status);
-
         _this2.setState({
           color: color,
           value: _this2.state.value,
           status: status
         }, function () {
-          console.log('fg', this.state);
-
-          if (this.props.VALIDATE) ;
+          console.log('fg', this.state); // if (this.props.VALIDATE){
+          //   //set parent not validate;
+          //   // this.props.VALIDATE(this.name,this.props.index,this.state.value);
+          // }
         });
       });
-    }
+    } //refractor to only use children and those children will have value
+
   }, {
     key: "VALIDATE",
     value: function VALIDATE(name, index, value, validator) {
@@ -657,16 +654,20 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var Thecontainer = this.props.JSXContainer;
+
+      if (Thecontainer === undefined) {
+        Thecontainer = Container;
+      }
+
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
         className: "formGroup",
         style: {
           "borderLeft": "10px solid " + this.state.color
         }
-      }, /*#__PURE__*/React.createElement(this.props.JSXContainer, {
+      }, /*#__PURE__*/React.createElement(Thecontainer, {
         children: this.makeChildren(this.state.ctls)
-      })), this.submit ? /*#__PURE__*/React.createElement(this.submit, {
-        getData: this.getData
-      }) : null);
+      })));
     }
   }]);
 

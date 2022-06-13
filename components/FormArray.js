@@ -9,7 +9,7 @@ class FormArray extends React.Component{
     super(props);
     this.type = "formArray";
     this.name = this.props.name
-
+    console.log('props in formarray',this.props)
     this.state = {
       value: this.props.value? this.props.value: [],
       status: this.props.status? this.props.status: "VALID",

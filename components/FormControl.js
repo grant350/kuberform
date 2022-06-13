@@ -12,13 +12,10 @@ class FormControl extends React.Component {
     this.statusToColor = this.statusToColor.bind(this);
     this.value = this.props.value? this.props.value: null;
     this.status = this.props.status? this.props.status: "VALID";
-    // this.subject$ = new BehaviorSubject({value:this.props.value, status:this.props.status});
-    // this.subject$.next =  this.subject$.next.bind(this.subject$);
-    // this.changes = this.changes.bind(this);
-    // this.VALIDATE = this.VALIDATE.bind(this);
+
   }
   componentDidMount(){
-    // this.props.VALIDATE(this.name,this.props.index,this.props.value,this.props.validator);
+    this.props.VALIDATE(this.name,this.props.index,this.props.value,this.props.validator);
   }
 
 
