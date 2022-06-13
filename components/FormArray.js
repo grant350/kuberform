@@ -24,26 +24,43 @@ class FormArray extends React.Component{
     this.removeChild = this.removeChild.bind(this);
     this.resetControl= this.resetControl.bind(this);
     this.setParent = this.setParent.bind(this);
+    this.checkStatus = this.checkStatus.bind(this);
 
     this.copy = Object.assign({}, this.props.controls.slice(0,1)[0]);
     // this.statusToColor = this.statusToColor.bind(this);
+    this.state.controls.forEach((item,index)=>{
+      this.state.statuses[index]="VALID";
+    })
+
   }
   //last but not least is to change value from [] to put in controls.
 
-  componentDidMount(){
-    console.log('beforechanges in didmount',this.state.value)
-    //loop over controls call setParent
+  checkStatus(statuses){
+    if (Object.values(statuses).includes('INVALID')){
+      return 'INVALID'
+    } else if (Object.values(statuses).includes('PENDING')){
+      return "PENDING"
+    } else {
+      return "VALID"
+    }
   }
-  setParent(key,value){
-    console.log('this.props.index',key,this.props.index)
+
+
+
+  setParent(key,value,status){
+    var statuses = Object.assign({},this.state.statuses);
+    if (status){
+      statuses[key]=status;
+    }
+   var newstatus= this.checkStatus(statuses);
     var statevalue = this.state.value.slice(0);
     statevalue[key] = value;
-    this.setState({value:statevalue},()=>{
+    this.setState({value:statevalue,statuses:statuses,status:newstatus},()=>{
      if (this.props.setParent){
        if (this.props.parent.type === 'formGroup'){
-       this.props.setParent(this.name,this.state.value)
+       this.props.setParent(this.name,this.state.value,this.state.status)
        } else if (this.props.parent.type === 'formArray'){
-        this.props.setParent(this.props.index,this.state.value)
+        this.props.setParent(this.props.index,this.state.value,this.state.status)
        }
 
      }
@@ -127,7 +144,6 @@ class FormArray extends React.Component{
     var length = controls.length;
     var value = this.state.value.slice();
 
-    console.log(controls)
     switch (controls[controls.length-1].type){
       case 'formControl': value.push("");
       break;
@@ -155,9 +171,18 @@ class FormArray extends React.Component{
   }
 
   render(){
+    var getBorder = ()=>{
+      if (this.state.status === "VALID") {
+        return "#36bc78"
+      } else if (this.state.status === "PENDING") {
+        return "#f2da33";
+      } else {
+        return "#cb1842";
+      }
+    }
     return (
       <React.Fragment>
-    <div className="formArray" style={{"borderLeft":"10px solid " +this.state.color}}>
+    <div className="formArray" style={{"borderLeft":"10px solid " +getBorder()}}>
       <this.props.JSXContainer children={this.makeChildren(this.state.controls)} />
     </div>
     <button onClick={this.addChild}> addChild</button>
