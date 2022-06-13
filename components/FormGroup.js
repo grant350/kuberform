@@ -6,153 +6,99 @@ import {Observable,BehaviorSubject,mergeMap,map,forkJoin} from 'rxjs';
 import {Input,Container} from './index.js';
 
 class FormGroup extends React.Component {
-  // Cannot create property 'firstname' on string 'a'
-  // _this2.state.value[key] = value;
   constructor(props) {
     super(props);
     this.type = "formGroup";
     this.name = this.props.name;
-
+    this.Container = this.props.JSXContainer? this.props.JSXContainer:Container;
     this.state = {
       value: this.props.value? this.props.value: {},
       status: this.props.status? this.props.status: "VALID",
-      ctls:this.props.controls,
+      controls:this.props.controls,
       statuses:{},
       color:"#36bc78"
      }
 
-     Object.keys(this.props.controls).forEach(k=>{
-      var empty = '';
-      if (this.props.controls[k].type === "formArray"){
-        empty=[];
-      } else if (this.props.controls[k].type === "formGroup"){
-        empty={};
-      }
-       this.state.value[k] = this.props.controls[k].value? this.props.controls[k].value: empty;
-     });
-    // this.subscribeChanges = this.subscribeChanges.bind(this);
-    this.setParent = this.setParent.bind(this);
-    this.makeChildren = this.makeChildren.bind(this);
-    // this.makeChildren();
-
-
-    this.submit = this.props.submit? this.props.submit:null;
-    this.getData = this.getData.bind(this);
-    // this.checkStatusControls = this.checkStatusControls.bind(this);
-    this.statusToColor = this.statusToColor.bind(this);
-    this.VALIDATE = this.VALIDATE.bind(this);
-    this.subject$ = new BehaviorSubject(null);
-
+     Object.keys(this.props.controls).forEach(key=>{
+       switch (this.props.controls[key].type){
+        case 'formControl': this.state.value[key] = "";
+        break;
+        case 'formArray': this.state.value[key] = [];
+        break;
+        case 'FormGroup': this.state.value[key] = {};
+        break;
+       }
+     })
+     this.setParent = this.setParent.bind(this);
   }
 
-componentDidMount(){}
 
-VALIDATE(name,index,value,validator) {
-  this.index = name
-  this.state.value[name] = value;
-  this.setState({value: this.state.value},()=>{
-    this.subject$.next(null)
-    if (validator !== null && validator !== undefined){
-          validator(value,this.subject$)
-        } else {
-          this.subject$.next(true)
+
+    componentDidMount(){
+      console.log('component did mount',this);
+    }
+
+
+    setParent(key,value){
+     var statevalue = Object.assign({},this.state.value);
+     statevalue[key] = value;
+     this.setState({value:statevalue},()=>{
+       console.log(this.state)
+      if (this.props.setParent){
+          if (this.props.parent.type === "formGroup"){
+        this.props.setParent(this.name,this.state.value)
+          } else if (this.props.parent.type === "formArray"){
+            this.props.setParent(this.props.index,this.state.value)
+          }
       }
-  })
+     });
 
-
-
-}
-componentDidMount(){
-  this.subject$.next(true);
-  this.subject$.subscribe(res => {
-    var status;
-    switch (res) {
-      case null:
-        status = 'PENDING'
-        break
-      case false:
-        status = 'INVALID';
-        break;
-      default:
-        status = 'VALID';
     }
 
-    this.state.statuses[this.index] = status;
 
-    var parentStatus;
-    if (Object.values(this.state.statuses).includes('INVALID')){
-      parentStatus = 'INVALID'
-    } else if (Object.values(this.state.statuses).includes('PENDING')){
-      parentStatus= 'PENDING'
-    } else {
-      parentStatus= 'VALID'
-    }
-   var color = this.statusToColor(parentStatus);
 
-    this.setState({color:color,value:this.state.value,status:status},function(){
-      console.log('fg',this.state)
-      // if (this.props.VALIDATE){
-      //   //set parent not validate;
-      //   // this.props.VALIDATE(this.name,this.props.index,this.state.value);
-      // }
-    });
-  });
-}
-//refractor to only use children and those children will have value
-setParent(key,value){
-  //key = value
-  //set state
-  this.state.
-}
+
   makeChildren(ctls){
-
    return Object.keys(ctls).map( (key, index)=>{
       var child = ctls[key];
-
       if (child.type === 'formControl' ){
         if (child.JSXElement === undefined ){
           child.JSXElement = Input;
         }
-        return <FormControl validator={child.validator} parent={this} VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
+        return <FormControl setParent={this.setParent} parent={this} control={child}  index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
         }
       if (child.type === 'formArray' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        return  <FormArray parent={this} VALIDATE={this.VALIDATE} value={this.state.value[key]} name={key} key={key}  index={index} JSXContainer={child.JSXContainer} controls={child.controls} />;
+        return  <FormArray setParent={this.setParent}   parent={this}  control={child} value={this.state.value[key]} name={key} key={key}  index={index} JSXContainer={child.JSXContainer} controls={child.controls} />;
       }
       if (child.type === 'formGroup' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        return <FormGroup parent={this} VALIDATE={this.VALIDATE} value={this.state.value[key]} index={index}  name={key}  controls={child.controls} JSXContainer={child.JSXContainer} key={key} />;
-
+        return <FormGroup setParent={this.setParent}  parent={this}  control={child} value={this.state.value[key]} index={index}  name={key}  controls={child.controls} JSXContainer={child.JSXContainer} key={key} />;
       }
     })
   }
 
-  getData(e){
-    return this.state.value
-  }
-  statusToColor(status){
-    if (status === "VALID") {
-      return "#36bc78"
-    } else if (status === "PENDING") {
-      return "#f2da33";
-    } else {
-      return "#cb1842";
-    }
-  }
+
+  // statusToColor(status){
+  //   if (status === "VALID") {
+  //     return "#36bc78"
+  //   } else if (status === "PENDING") {
+  //     return "#f2da33";
+  //   } else {
+  //     return "#cb1842";
+  //   }
+  // }
 
   render() {
-    var Thecontainer = this.props.JSXContainer
-    if (Thecontainer === undefined){
-      Thecontainer = Container
-    }
+
       return (
         <React.Fragment>
         <div className = "formGroup"  style={{"borderLeft":"10px solid " +this.state.color}}>
-        <Thecontainer children={this.makeChildren(this.state.ctls)}/>
+        <this.Container children={this.makeChildren(this.state.controls)}/>
        </div>
       </React.Fragment>)
     }

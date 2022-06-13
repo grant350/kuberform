@@ -6,7 +6,7 @@ import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
 import React from 'react';
 import { TextField } from '@mui/material';
 import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
-import { BehaviorSubject } from 'rxjs';
+import 'rxjs';
 
 function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -132,32 +132,45 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.validator = _this.props.validator;
     _this.required = props.required;
     _this.update = _this.update.bind(_assertThisInitialized(_this));
-    _this.statusToColor = _this.statusToColor.bind(_assertThisInitialized(_this));
-    _this.value = _this.props.value ? _this.props.value : null;
+    _this.value = _this.props.value ? _this.props.value : '';
     _this.status = _this.props.status ? _this.props.status : "VALID";
+    console.log('formcontrol', _assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.VALIDATE(this.name, this.props.index, this.props.value, this.props.validator);
-    }
-  }, {
-    key: "statusToColor",
-    value: function statusToColor() {
-      if (this.props.status === "INVALID") {
-        return "#cb1842";
-      } else if (this.props.status === "PENDING") {
-        return "#f2da33";
-      } else {
-        return "#36bc78";
+      if (this.props.parent.type === 'formGroup') {
+        this.props.setParent(this.name, this.value);
       }
-    }
+
+      if (this.props.parent.type === 'formArray') {
+        console.log('index', this.props.index);
+        this.props.setParent(this.props.index, this.value);
+      } // this.VALIDATE(this.name,this.index,this.value,this.validator);
+
+    } // VALIDATE(value,validator) {
+    //     this.props.subject$.next(null)
+    //     if (validator !== null && validator !== undefined){
+    //           validator(value,this.props.subject$)
+    //         } else {
+    //           this.props.subject$.next(true)
+    //     }
+    // }
+
   }, {
     key: "update",
     value: function update(value) {
-      this.props.VALIDATE(this.name, this.props.index, value, this.props.validator);
+      // this.VALIDATE(value,this.validator)
+      if (this.props.parent.type === 'formGroup') {
+        this.props.setParent(this.name, value);
+      }
+
+      if (this.props.parent.type === 'formArray') {
+        console.log('index', this.props.index);
+        this.props.setParent(this.props.index, value);
+      }
     }
   }, {
     key: "render",
@@ -165,8 +178,9 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "formControl"
       }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
+        labelName: this.name,
         update: this.update,
-        border: this.statusToColor(),
+        border: "red",
         name: this.props.name,
         value: this.props.value,
         status: this.props.status
@@ -194,119 +208,47 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.type = "formArray";
     _this.name = _this.props.name;
-    console.log('props in formarray', _this.props);
     _this.state = {
+      statuses: [],
+      color: "#36bc78",
       value: _this.props.value ? _this.props.value : [],
       status: _this.props.status ? _this.props.status : "VALID",
-      ctls: _this.props.controls,
-      statuses: [],
-      color: "#36bc78"
-    }; //setting the value types
-
-    _this.setControlType = _this.setControlType.bind(_assertThisInitialized(_this));
-
-    _this.setControlType(); //children
-
-
+      controls: _this.props.controls
+    };
     _this.makeChildren = _this.makeChildren.bind(_assertThisInitialized(_this));
     _this.addChild = _this.addChild.bind(_assertThisInitialized(_this));
     _this.removeChild = _this.removeChild.bind(_assertThisInitialized(_this));
-    _this.resetControl = _this.resetControl.bind(_assertThisInitialized(_this)); // rxjs
+    _this.resetControl = _this.resetControl.bind(_assertThisInitialized(_this));
+    _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
+    _this.copy = Object.assign({}, _this.props.controls.slice(0, 1)[0]); // this.statusToColor = this.statusToColor.bind(this);
 
-    _this.subject$ = new BehaviorSubject(null);
-    _this.VALIDATE = _this.VALIDATE.bind(_assertThisInitialized(_this)); // a copy of control to add controls to array
-
-    _this.copy = Object.assign({}, _this.props.controls.slice(0, 1)[0]); //this function return the color type for validity
-
-    _this.statusToColor = _this.statusToColor.bind(_assertThisInitialized(_this));
     return _this;
   } //last but not least is to change value from [] to put in controls.
 
 
   _createClass(FormArray, [{
-    key: "setControlType",
-    value: function setControlType() {
-      var _this2 = this;
-
-      this.props.controls.forEach(function (control, index) {
-        var empty = '';
-
-        if (control.type === "formArray") {
-          empty = [];
-        } else if (control.type === "formGroup") {
-          empty = {};
-        }
-
-        _this2.state.value[index] = control.value ? control.value : empty;
-        _this2.state.statuses[index] = control.status ? control.status : 'VALID';
-      });
-    }
-  }, {
-    key: "VALIDATE",
-    value: function VALIDATE(name, index, value, validator) {
-      var _this3 = this;
-
-      this.index = index;
-      this.state.value[index] = value;
-      this.setState({
-        value: this.state.value
-      }, function () {
-        _this3.subject$.next(null);
-
-        if (validator !== null && validator !== undefined) {
-          validator(value, _this3.subject$);
-        } else {
-          _this3.subject$.next(true);
-        }
-      });
-    }
-  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this4 = this;
+      console.log('beforechanges in didmount', this.state.value); //loop over controls call setParent
+    }
+  }, {
+    key: "setParent",
+    value: function setParent(key, value) {
+      var _this2 = this;
 
-      this.subject$.next(true);
-      this.subject$.subscribe(function (res) {
-        console.log('in subscriber', res);
-        var status;
-
-        switch (res) {
-          case null:
-            status = 'PENDING';
-            break;
-
-          case false:
-            status = 'INVALID';
-            break;
-
-          default:
-            status = 'VALID';
+      console.log('this.props.index', key, this.props.index);
+      var statevalue = this.state.value.slice(0);
+      statevalue[key] = value;
+      this.setState({
+        value: statevalue
+      }, function () {
+        if (_this2.props.setParent) {
+          if (_this2.props.parent.type === 'formGroup') {
+            _this2.props.setParent(_this2.name, _this2.state.value);
+          } else if (_this2.props.parent.type === 'formArray') {
+            _this2.props.setParent(_this2.props.index, _this2.state.value);
+          }
         }
-
-        _this4.state.statuses[_this4.index] = status;
-        var parentStatus;
-
-        if (_this4.state.statuses.includes('INVALID')) {
-          parentStatus = 'INVALID';
-        } else if (Object.values(_this4.state.statuses).includes('PENDING')) {
-          parentStatus = 'PENDING';
-        } else {
-          parentStatus = 'VALID';
-        }
-
-        var color = _this4.statusToColor(parentStatus);
-
-        console.log('fA color', color);
-        console.log('fA status', status);
-
-        _this4.setState({
-          color: color,
-          status: status
-        }, function () {
-          console.log('fA', this.state);
-
-          if (this.props.VALIDATE) ;
-        });
       });
     }
   }, {
@@ -345,7 +287,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "makeChildren",
     value: function makeChildren(ctls) {
-      var _this5 = this;
+      var _this3 = this;
 
       return ctls.map(function (child, index) {
         if (child.type === 'formControl') {
@@ -355,14 +297,17 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
 
           console.log(child.validator);
           return /*#__PURE__*/React.createElement(FormControl, {
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
             validator: child.validator,
-            VALIDATE: _this5.VALIDATE,
+            VALIDATE: _this3.VALIDATE,
             index: index,
             JSXElement: child.JSXElement,
             name: child.name,
             key: index,
-            value: _this5.state.value[index],
-            status: _this5.state.statuses[index]
+            value: _this3.state.value[index],
+            status: _this3.state.statuses[index]
           });
         }
 
@@ -372,9 +317,12 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormArray, {
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
             index: index,
-            VALIDATE: _this5.VALIDATE,
-            value: _this5.state.value[index],
+            VALIDATE: _this3.VALIDATE,
+            value: _this3.state.value[index],
             name: child.name,
             key: index,
             JSXContainer: child.JSXContainer,
@@ -388,9 +336,12 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormGroup$1, {
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
             index: index,
-            VALIDATE: _this5.VALIDATE,
-            value: _this5.state.value[index],
+            VALIDATE: _this3.VALIDATE,
+            value: _this3.state.value[index],
             name: child.name,
             key: index,
             controls: child.controls,
@@ -402,21 +353,35 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "addChild",
     value: function addChild() {
-      this.state.ctls.push(this.resetControl(this.copy));
+      var controls = this.state.controls.slice(0);
+      controls.push(this.resetControl(this.copy));
+      console.log('controls', controls[controls.length - 1]);
+      controls.length;
+      var value = this.state.value.slice();
+      console.log(controls);
+
+      switch (controls[controls.length - 1].type) {
+        case 'formControl':
+          value.push("");
+          break;
+
+        case 'formArray':
+          value.push([]);
+          break;
+
+        case 'FormGroup':
+          value.push({});
+          console.log('value after formgroup insert', value);
+          break;
+      } //  console.log('addchild',value)
+
+
       this.setState({
-        ctls: this.state.ctls
+        controls: controls,
+        value: value
+      }, function () {
+        console.log('after add controls', this);
       });
-    }
-  }, {
-    key: "statusToColor",
-    value: function statusToColor(status) {
-      if (status === "VALID") {
-        return "#36bc78";
-      } else if (status === "PENDING") {
-        return "#f2da33";
-      } else {
-        return "#cb1842";
-      }
     }
   }, {
     key: "removeChild",
@@ -441,7 +406,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           "borderLeft": "10px solid " + this.state.color
         }
       }, /*#__PURE__*/React.createElement(this.props.JSXContainer, {
-        children: this.makeChildren(this.state.ctls)
+        children: this.makeChildren(this.state.controls)
       })), /*#__PURE__*/React.createElement("button", {
         onClick: this.addChild
       }, " addChild"), /*#__PURE__*/React.createElement("button", {
@@ -462,8 +427,6 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(FormGroup);
 
-  // Cannot create property 'firstname' on string 'a'
-  // _this2.state.value[key] = value;
   function FormGroup(props) {
     var _this;
 
@@ -472,112 +435,63 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.type = "formGroup";
     _this.name = _this.props.name;
+    _this.Container = _this.props.JSXContainer ? _this.props.JSXContainer : Container;
     _this.state = {
       value: _this.props.value ? _this.props.value : {},
       status: _this.props.status ? _this.props.status : "VALID",
-      ctls: _this.props.controls,
+      controls: _this.props.controls,
       statuses: {},
       color: "#36bc78"
     };
-    Object.keys(_this.props.controls).forEach(function (k) {
-      var empty = '';
+    Object.keys(_this.props.controls).forEach(function (key) {
+      switch (_this.props.controls[key].type) {
+        case 'formControl':
+          _this.state.value[key] = "";
+          break;
 
-      if (_this.props.controls[k].type === "formArray") {
-        empty = [];
-      } else if (_this.props.controls[k].type === "formGroup") {
-        empty = {};
+        case 'formArray':
+          _this.state.value[key] = [];
+          break;
+
+        case 'FormGroup':
+          _this.state.value[key] = {};
+          break;
       }
-
-      _this.state.value[k] = _this.props.controls[k].value ? _this.props.controls[k].value : empty;
-    }); // this.subscribeChanges = this.subscribeChanges.bind(this);
-
-    _this.makeChildren = _this.makeChildren.bind(_assertThisInitialized(_this)); // this.makeChildren();
-
-    _this.submit = _this.props.submit ? _this.props.submit : null;
-    _this.getData = _this.getData.bind(_assertThisInitialized(_this)); // this.checkStatusControls = this.checkStatusControls.bind(this);
-
-    _this.statusToColor = _this.statusToColor.bind(_assertThisInitialized(_this));
-    _this.VALIDATE = _this.VALIDATE.bind(_assertThisInitialized(_this));
-    _this.subject$ = new BehaviorSubject(null);
+    });
+    _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(FormGroup, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
-      this.subject$.next(true);
-      this.subject$.subscribe(function (res) {
-        var status;
-
-        switch (res) {
-          case null:
-            status = 'PENDING';
-            break;
-
-          case false:
-            status = 'INVALID';
-            break;
-
-          default:
-            status = 'VALID';
-        }
-
-        _this2.state.statuses[_this2.index] = status;
-        var parentStatus;
-
-        if (Object.values(_this2.state.statuses).includes('INVALID')) {
-          parentStatus = 'INVALID';
-        } else if (Object.values(_this2.state.statuses).includes('PENDING')) {
-          parentStatus = 'PENDING';
-        } else {
-          parentStatus = 'VALID';
-        }
-
-        var color = _this2.statusToColor(parentStatus);
-
-        _this2.setState({
-          color: color,
-          value: _this2.state.value,
-          status: status
-        }, function () {
-          console.log('fg', this.state); // if (this.props.VALIDATE){
-          //   //set parent not validate;
-          //   // this.props.VALIDATE(this.name,this.props.index,this.state.value);
-          // }
-        });
-      });
-    } //refractor to only use children and those children will have value
-
-  }, {
-    key: "VALIDATE",
-    value: function VALIDATE(name, index, value, validator) {
-      var _this3 = this;
-
-      this.index = name;
-      this.state.value[name] = value;
-      this.setState({
-        value: this.state.value
-      }, function () {
-        _this3.subject$.next(null);
-
-        if (validator !== null && validator !== undefined) {
-          validator(value, _this3.subject$);
-        } else {
-          _this3.subject$.next(true);
-        }
-      });
+      console.log('component did mount', this);
     }
   }, {
     key: "setParent",
-    value: function setParent(key, value) {//key = value
-      //set state
+    value: function setParent(key, value) {
+      var _this2 = this;
+
+      var statevalue = Object.assign({}, this.state.value);
+      statevalue[key] = value;
+      this.setState({
+        value: statevalue
+      }, function () {
+        console.log(_this2.state);
+
+        if (_this2.props.setParent) {
+          if (_this2.props.parent.type === "formGroup") {
+            _this2.props.setParent(_this2.name, _this2.state.value);
+          } else if (_this2.props.parent.type === "formArray") {
+            _this2.props.setParent(_this2.props.index, _this2.state.value);
+          }
+        }
+      });
     }
   }, {
     key: "makeChildren",
     value: function makeChildren(ctls) {
-      var _this4 = this;
+      var _this3 = this;
 
       return Object.keys(ctls).map(function (key, index) {
         var child = ctls[key];
@@ -588,14 +502,14 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
-            validator: child.validator,
-            parent: _this4,
-            VALIDATE: _this4.VALIDATE,
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
             index: index,
             JSXElement: child.JSXElement,
             name: key,
-            value: _this4.state.value[key],
-            status: _this4.state.statuses[key],
+            value: _this3.state.value[key],
+            status: _this3.state.statuses[key],
             key: key
           });
         }
@@ -606,9 +520,10 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormArray, {
-            parent: _this4,
-            VALIDATE: _this4.VALIDATE,
-            value: _this4.state.value[key],
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
+            value: _this3.state.value[key],
             name: key,
             key: key,
             index: index,
@@ -623,9 +538,10 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormGroup, {
-            parent: _this4,
-            VALIDATE: _this4.VALIDATE,
-            value: _this4.state.value[key],
+            setParent: _this3.setParent,
+            parent: _this3,
+            control: child,
+            value: _this3.state.value[key],
             index: index,
             name: key,
             controls: child.controls,
@@ -634,39 +550,26 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           });
         }
       });
-    }
-  }, {
-    key: "getData",
-    value: function getData(e) {
-      return this.state.value;
-    }
-  }, {
-    key: "statusToColor",
-    value: function statusToColor(status) {
-      if (status === "VALID") {
-        return "#36bc78";
-      } else if (status === "PENDING") {
-        return "#f2da33";
-      } else {
-        return "#cb1842";
-      }
-    }
+    } // statusToColor(status){
+    //   if (status === "VALID") {
+    //     return "#36bc78"
+    //   } else if (status === "PENDING") {
+    //     return "#f2da33";
+    //   } else {
+    //     return "#cb1842";
+    //   }
+    // }
+
   }, {
     key: "render",
     value: function render() {
-      var Thecontainer = this.props.JSXContainer;
-
-      if (Thecontainer === undefined) {
-        Thecontainer = Container;
-      }
-
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
         className: "formGroup",
         style: {
           "borderLeft": "10px solid " + this.state.color
         }
-      }, /*#__PURE__*/React.createElement(Thecontainer, {
-        children: this.makeChildren(this.state.ctls)
+      }, /*#__PURE__*/React.createElement(this.Container, {
+        children: this.makeChildren(this.state.controls)
       })));
     }
   }]);
