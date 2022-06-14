@@ -55,12 +55,9 @@ class FormGroup extends React.Component {
         statuses[key]=status;
       }
      var newstatus= this.checkStatus(statuses);
-     console.log('parent status', newstatus)
-
      var statevalue = Object.assign({},this.state.value);
      statevalue[key] = value;
      this.setState({value:statevalue,statuses:statuses,status:newstatus},()=>{
-      //  console.log(this.state)
       if (this.props.setParent){
           if (this.props.parent.type === "formGroup"){
         this.props.setParent(this.name,this.state.value,this.state.status)
@@ -72,13 +69,9 @@ class FormGroup extends React.Component {
 
     }
 
-    // setStatus(){
-
-    // }
     getData(){
       return this.state.value;
     }
-
 
   makeChildren(ctls,statuses){
    return Object.keys(ctls).map( (key, index)=>{
