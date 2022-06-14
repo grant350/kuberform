@@ -28,8 +28,12 @@ var formgroup= {
      type:'formGroup',
      JSXContainer: <JSXElement> ,
      name: <String>,
-     form:  ("name":<Formgroup> || <FormArray> || <FormControl>){},
-     submit: <JSXElement> || null
+     state:{
+      value:{}, 
+      statuses:{},
+      status: (<VALID||INVALID||PENDING>),
+      controls:  ("name":<Formgroup> || <FormArray> || <FormControl>)}
+     }
 }
 ```
 
@@ -40,97 +44,27 @@ var formArray = {
      type:'formArray',
      JSXContainer: <JSXElement> ,
      name: <String>,
-     children: (<Formgroup> || <FormArray> || <FormControl>)[],
+     state:{
+      value:[], 
+      statuses:[],
+      status: (<VALID||INVALID||PENDING>),
+      controls:  ("name":<Formgroup> || <FormArray> || <FormControl>)}
+     }
 }
+
 ```
 
 # FormControl
 
 ```ts
  var formControl= {
-     validate:(value:<any>,status:<any>)=>{ },
+     validator:<any>,
      type:'formControl',
      JSXElement: <JSXElement> ,
      name: <String>
-     value: <any>
+     value: "" || props.value
 }
 ```
-
-# example formgroup
- ## remember formgroups are allways the start of a form
-  ``` js
-  var form = {
-  firstname:{
-    type: "formControl",
-    value: 5,
-    JSXElement: Input
-  },
-  someArray:{
-    type: "formArray",
-    children: [
-      {
-         type: "formControl",
-        name:'item',
-        value: 1,
-        JSXElement: Input
-      },
-      {
-        type: "formControl",
-        name:'item',
-        value: 2,
-        JSXElement: Input
-      }
-
-    ],
-    JSXContainer: ContainerA
-  },
-  mastergroup:{
-    type: "formGroup",
-    JSXContainer: ContainerO,
-    form: {
-      price:{
-        type: "formControl",
-        value: 3.99,
-        JSXElement: Input
-      },
-      formy: {
-        type: 'formArray',
-        JSXContainer: ContainerA,
-        children: [
-          {
-            type: "formControl",
-           name:'z1',
-           value: 'a',
-           JSXElement: Input
-         },
-         {
-           type: "formControl",
-           name:'z2',
-           value: 'b',
-           JSXElement: Input
-         }
-        ]
-
-      }
-    }
-  },
- };
- ```
- ## so as the example shows above there is the main object which is formgroup and there is nested objects within the main formgroup. these nested objects are called children|form. children is for arrays and form is for objects.
-
- ```js
-  var formArray = {
-    type: "formArray",
-    children: []
-    }
- ```
-  ```js
-  var formGroup ={
-    type: "formGroup",
-    form: {}
-    }
- ```
-
 
  # What is a JSXElmenet?.
  ## A JSXElement is a React Component that can be a class or a functional component.
@@ -147,7 +81,7 @@ var formArray = {
 ```
 
 
-# getdata from the formGroup?
+# How to getdata from the formGroup?
 
  ```js
  // to get data you must use a refrence to the formGroup.
