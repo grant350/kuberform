@@ -39,10 +39,10 @@ class FormGroup extends React.Component {
 
 
     checkStatus(statuses){
-      if (Object.values(statuses).includes('INVALID')){
-        return 'INVALID'
-      } else if (Object.values(statuses).includes('PENDING')){
-        return "PENDING"
+      if (Object.values(statuses).includes('PENDING')){
+        return 'PENDING'
+      } else if (Object.values(statuses).includes('INVALID')){
+        return "INVALID"
       } else {
         return "VALID"
       }
@@ -50,7 +50,6 @@ class FormGroup extends React.Component {
 
     setParent(key,value,status){
       var statuses = Object.assign({},this.state.statuses);
-      console.log('statuses',statuses);
       if (status){
         statuses[key]=status;
       }

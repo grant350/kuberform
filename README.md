@@ -4,19 +4,14 @@
 ## 'npm start' to start rollup and compile the code.
 ## 'npm run end' to remove node_modules so there isnt duplicate react error which is compicated to fix.
 
-
-
 <h1 align="center"> React Formbuilder like angular formbuilder</h1>
 
 <p align="center">
 React Formbuilder has asynchornous observables from rxjs
 </p>
 
-
-
 ## Documentation
 Get started with reactFormbuilder!
-
 
 ### Prerequisites
  # * have react installed.

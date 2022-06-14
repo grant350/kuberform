@@ -10,23 +10,21 @@ class FormControl extends React.Component {
     this.required = props.required;
     this.update = this.update.bind(this);
     this.value = this.props.value? this.props.value: '';
-    this.status = this.props.status? this.props.status: "VALID";
-    this.subject$;
-    this.state={status:'VALID'}
+    this.subject$ = new BehaviorSubject(null);;
   }
 
 
   componentDidMount(){
-    this.subject$ = new BehaviorSubject(null);
     this.update(this.value)
-
   }
 
   update(value){
-    this.subject$.next(true);
-      if (this.props.validator){
+    setTimeout(()=>{
+      if (this.validator){
         this.subject$.next(null);
-        this.props.validator(value,this.subject$);
+          this.props.validator(value,this.subject$);
+      } else {
+        this.subject$.next(true);
       }
       this.subject$.subscribe((x)=>{
       var status;
@@ -34,7 +32,7 @@ class FormControl extends React.Component {
         status = 'PENDING'
       } else if (x === false){
         status ='INVALID'
-      } else {
+      } else if (x === true){
         status = "VALID"
       }
       if (this.props.parent.type === 'formGroup'){
@@ -46,15 +44,17 @@ class FormControl extends React.Component {
         this.setState({status:status})
       }
     })
+  },50);
+
   }
 
   render(){
     var getBorder = ()=>{
-      if (this.state.status === "VALID") {
+      if (this.props.status === "VALID") {
         return "#36bc78"
-      } else if (this.state.status === "PENDING") {
+      } else if (this.props.status === "PENDING") {
         return "#f2da33";
-      } else {
+      } else if (this.props.status === "INVALID") {
         return "#cb1842";
       }
     }

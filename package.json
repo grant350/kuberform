@@ -1,7 +1,7 @@
 {
   "name": "@zenabyss/reactformbuilder",
-  "version": "1.2.3",
-  "description": "components for formbuilder",
+  "version": "1.2.4",
+  "description": "reactive formbuilder",
   "notes": " readme not finished",
   "repository": {
     "type": "git",
