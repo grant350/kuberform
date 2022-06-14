@@ -21,7 +21,6 @@ class FormControl extends React.Component {
 
 
   componentDidMount(){
-    console.log('in form control',this.value)
     this.update(this.value)
   }
 

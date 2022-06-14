@@ -116,7 +116,6 @@ class FormArray extends React.Component{
           if (child.JSXElement === undefined ){
             child.JSXElement = Input;
           }
-          console.log(child.validator);
           return <FormControl disabled={child.disabled} width={child.width} label={child.label} setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
           }
         if (child.type === 'formArray' ){
@@ -139,7 +138,6 @@ class FormArray extends React.Component{
     var controls = this.state.controls.slice(0)
     controls.push(this.resetControl(this.copy))
 
-    console.log('controls',controls[controls.length-1]);
 
     var length = controls.length;
     var value = this.state.value.slice();
@@ -150,13 +148,9 @@ class FormArray extends React.Component{
       case 'formArray': value.push([]);
       break;
       case 'FormGroup': value.push({});
-         console.log('value after formgroup insert',value)
       break;
      }
-    //  console.log('addchild',value)
-    this.setState({controls:controls,value:value},function(){
-      console.log('after add controls',this)
-    });
+    this.setState({controls:controls,value:value});
   }
 
 

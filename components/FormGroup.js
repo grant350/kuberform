@@ -35,11 +35,7 @@ class FormGroup extends React.Component {
      this.checkStatus = this.checkStatus.bind(this);
   }
 
-
-
-
     checkStatus(statuses){
-      console.log('statuses',statuses)
       if (Object.values(statuses).includes('PENDING')){
         return 'PENDING'
       } else if (Object.values(statuses).includes('INVALID')){
@@ -50,7 +46,6 @@ class FormGroup extends React.Component {
     }
 
     setParent(key,value,status){
-      console.log(key,value,status);
       var statuses = Object.assign({},this.state.statuses);
       if (status){
         statuses[key]=status;
