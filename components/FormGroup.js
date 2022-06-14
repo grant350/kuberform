@@ -39,6 +39,7 @@ class FormGroup extends React.Component {
 
 
     checkStatus(statuses){
+      console.log('statuses',statuses)
       if (Object.values(statuses).includes('PENDING')){
         return 'PENDING'
       } else if (Object.values(statuses).includes('INVALID')){
@@ -49,6 +50,7 @@ class FormGroup extends React.Component {
     }
 
     setParent(key,value,status){
+      console.log(key,value,status);
       var statuses = Object.assign({},this.state.statuses);
       if (status){
         statuses[key]=status;
@@ -72,26 +74,26 @@ class FormGroup extends React.Component {
       return this.state.value;
     }
 
-  makeChildren(ctls,statuses){
+  makeChildren(ctls){
    return Object.keys(ctls).map( (key, index)=>{
       var child = ctls[key];
       if (child.type === 'formControl' ){
         if (child.JSXElement === undefined ){
           child.JSXElement = Input;
         }
-        return <FormControl setParent={this.setParent} validator={child.validator} parent={this} control={child}  index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={statuses[key]} key={key}/>
+        return <FormControl  disabled={child.disabled} width={child.width}  label={child.label} setParent={this.setParent} validator={child.validator} parent={this} control={child}  index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
         }
       if (child.type === 'formArray' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        return  <FormArray setParent={this.setParent}   validator={child.validator} parent={this}  control={child} value={this.state.value[key]} name={key} key={key}  index={index} JSXContainer={child.JSXContainer} status={statuses[key]} controls={child.controls} />;
+        return  <FormArray setParent={this.setParent}   parent={this}  control={child} value={this.state.value[key]} name={key} key={key}  index={index} JSXContainer={child.JSXContainer} status={this.state.statuses[key]} controls={child.controls} />;
       }
       if (child.type === 'formGroup' ){
         if (child.JSXContainer === undefined ){
           child.JSXContainer = Container;
         }
-        return <FormGroup setParent={this.setParent} validator={child.validator}  parent={this}  control={child} value={this.state.value[key]} index={index}  name={key}  controls={child.controls} status={statuses[key]} JSXContainer={child.JSXContainer} key={key} />;
+        return <FormGroup setParent={this.setParent} parent={this}  control={child} value={this.state.value[key]} index={index}  name={key}  controls={child.controls} status={this.state.statuses[key]} JSXContainer={child.JSXContainer} key={key} />;
       }
     })
   }
@@ -114,7 +116,7 @@ class FormGroup extends React.Component {
       return "#36bc78"
     } else if (this.state.status === "PENDING") {
       return "#f2da33";
-    } else {
+    } else if (this.state.status === "INVALID"){
       return "#cb1842";
     }
   }
@@ -122,7 +124,7 @@ class FormGroup extends React.Component {
       return (
         <React.Fragment>
         <div className = "formGroup"  style={{"borderLeft":"10px solid " +getBorder()}}>
-        <this.Container children={this.makeChildren(this.state.controls,this.state.statuses)}/>
+        <this.Container children={this.makeChildren(this.state.controls)}/>
        </div>
       </React.Fragment>)
     }

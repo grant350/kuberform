@@ -117,7 +117,7 @@ class FormArray extends React.Component{
             child.JSXElement = Input;
           }
           console.log(child.validator);
-          return <FormControl setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
+          return <FormControl disabled={child.disabled} width={child.width} label={child.label} setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
           }
         if (child.type === 'formArray' ){
           if (child.JSXContainer === undefined ){
@@ -183,10 +183,9 @@ class FormArray extends React.Component{
     return (
       <React.Fragment>
     <div className="formArray" style={{"borderLeft":"10px solid " +getBorder()}}>
-      <this.props.JSXContainer children={this.makeChildren(this.state.controls)} />
+      <this.props.JSXContainer addChild={this.addChild} addChild={this.removeChild} children={this.makeChildren(this.state.controls)} />
     </div>
-    <button onClick={this.addChild}> addChild</button>
-    <button onClick={this.removeChild}> removeChild</button>
+
 
     </React.Fragment>
     )

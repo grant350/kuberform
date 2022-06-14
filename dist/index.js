@@ -4,9 +4,10 @@ import _inherits from '@babel/runtime/helpers/inherits';
 import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
 import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
 import React from 'react';
-import { TextField } from '@mui/material';
+import { FormGroup as FormGroup$2, FormControl as FormControl$1, TextField } from '@mui/material';
 import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
 import { BehaviorSubject } from 'rxjs';
+import _defineProperty from '@babel/runtime/helpers/defineProperty';
 
 function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -26,7 +27,7 @@ var Container = /*#__PURE__*/function (_React$Component) {
   _createClass(Container, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React.createElement(FormGroup$2, {
         className: "container",
         style: {
           width: "100%",
@@ -63,7 +64,7 @@ var Input = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this = this;
 
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React.createElement(FormControl$1, {
         className: "input",
         style: {
           position: "relative",
@@ -134,12 +135,19 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.update = _this.update.bind(_assertThisInitialized(_this));
     _this.value = _this.props.value ? _this.props.value : '';
     _this.subject$ = new BehaviorSubject(null);
+    _this.label = _this.props.label ? _this.props.label : 'type here';
+    _this.width = _this.props.width ? _this.props.width : '200px';
+    _this.disabled = _this.props.disabled ? _this.props.disabled : false;
+    _this.state = {
+      status: _this.props.status ? _this.props.status : "VALID"
+    };
     return _this;
   }
 
   _createClass(FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      console.log('in form control', this.value);
       this.update(this.value);
     }
   }, {
@@ -151,7 +159,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         if (_this2.validator) {
           _this2.subject$.next(null);
 
-          _this2.props.validator(value, _this2.subject$);
+          _this2.validator(value, _this2.subject$);
         } else {
           _this2.subject$.next(true);
         }
@@ -167,21 +175,17 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
             status = "VALID";
           }
 
-          if (_this2.props.parent.type === 'formGroup') {
-            _this2.props.setParent(_this2.name, value, status);
+          _this2.setState({
+            status: status
+          }, function () {
+            if (_this2.props.parent.type === 'formGroup') {
+              _this2.props.setParent(_this2.name, value, status);
+            }
 
-            _this2.setState({
-              status: status
-            });
-          }
-
-          if (_this2.props.parent.type === 'formArray') {
-            _this2.props.setParent(_this2.props.index, value, status);
-
-            _this2.setState({
-              status: status
-            });
-          }
+            if (_this2.props.parent.type === 'formArray') {
+              _this2.props.setParent(_this2.props.index, value, status);
+            }
+          });
         });
       }, 50);
     }
@@ -191,11 +195,11 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       var _this3 = this;
 
       var getBorder = function getBorder() {
-        if (_this3.props.status === "VALID") {
+        if (_this3.state.status === "VALID") {
           return "#36bc78";
-        } else if (_this3.props.status === "PENDING") {
+        } else if (_this3.state.status === "PENDING") {
           return "#f2da33";
-        } else if (_this3.props.status === "INVALID") {
+        } else if (_this3.state.status === "INVALID") {
           return "#cb1842";
         }
       };
@@ -204,11 +208,12 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         className: "formControl"
       }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
         labelName: this.name,
+        label: this.label,
         update: this.update,
         border: getBorder(),
         name: this.props.name,
         value: this.props.value,
-        status: this.props.status
+        status: this.state.status
       }));
     }
   }]);
@@ -341,6 +346,9 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
 
           console.log(child.validator);
           return /*#__PURE__*/React.createElement(FormControl, {
+            disabled: child.disabled,
+            width: child.width,
+            label: child.label,
             setParent: _this3.setParent,
             parent: _this3,
             control: child,
@@ -443,7 +451,8 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this4 = this,
+          _React$createElement;
 
       var getBorder = function getBorder() {
         if (_this4.state.status === "VALID") {
@@ -460,13 +469,9 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
         style: {
           "borderLeft": "10px solid " + getBorder()
         }
-      }, /*#__PURE__*/React.createElement(this.props.JSXContainer, {
-        children: this.makeChildren(this.state.controls)
-      })), /*#__PURE__*/React.createElement("button", {
-        onClick: this.addChild
-      }, " addChild"), /*#__PURE__*/React.createElement("button", {
-        onClick: this.removeChild
-      }, " removeChild"));
+      }, /*#__PURE__*/React.createElement(this.props.JSXContainer, (_React$createElement = {
+        addChild: this.addChild
+      }, _defineProperty(_React$createElement, "addChild", this.removeChild), _defineProperty(_React$createElement, "children", this.makeChildren(this.state.controls)), _React$createElement))));
     }
   }]);
 
@@ -524,6 +529,8 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
   _createClass(FormGroup, [{
     key: "checkStatus",
     value: function checkStatus(statuses) {
+      console.log('statuses', statuses);
+
       if (Object.values(statuses).includes('PENDING')) {
         return 'PENDING';
       } else if (Object.values(statuses).includes('INVALID')) {
@@ -537,6 +544,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
     value: function setParent(key, value, status) {
       var _this2 = this;
 
+      console.log(key, value, status);
       var statuses = Object.assign({}, this.state.statuses);
 
       if (status) {
@@ -567,7 +575,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "makeChildren",
-    value: function makeChildren(ctls, statuses) {
+    value: function makeChildren(ctls) {
       var _this3 = this;
 
       return Object.keys(ctls).map(function (key, index) {
@@ -579,6 +587,9 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            disabled: child.disabled,
+            width: child.width,
+            label: child.label,
             setParent: _this3.setParent,
             validator: child.validator,
             parent: _this3,
@@ -587,7 +598,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
             JSXElement: child.JSXElement,
             name: key,
             value: _this3.state.value[key],
-            status: statuses[key],
+            status: _this3.state.statuses[key],
             key: key
           });
         }
@@ -599,7 +610,6 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
 
           return /*#__PURE__*/React.createElement(FormArray, {
             setParent: _this3.setParent,
-            validator: child.validator,
             parent: _this3,
             control: child,
             value: _this3.state.value[key],
@@ -607,7 +617,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
             key: key,
             index: index,
             JSXContainer: child.JSXContainer,
-            status: statuses[key],
+            status: _this3.state.statuses[key],
             controls: child.controls
           });
         }
@@ -619,14 +629,13 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
 
           return /*#__PURE__*/React.createElement(FormGroup, {
             setParent: _this3.setParent,
-            validator: child.validator,
             parent: _this3,
             control: child,
             value: _this3.state.value[key],
             index: index,
             name: key,
             controls: child.controls,
-            status: statuses[key],
+            status: _this3.state.statuses[key],
             JSXContainer: child.JSXContainer,
             key: key
           });
@@ -652,7 +661,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           return "#36bc78";
         } else if (_this4.state.status === "PENDING") {
           return "#f2da33";
-        } else {
+        } else if (_this4.state.status === "INVALID") {
           return "#cb1842";
         }
       };
@@ -663,7 +672,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           "borderLeft": "10px solid " + getBorder()
         }
       }, /*#__PURE__*/React.createElement(this.Container, {
-        children: this.makeChildren(this.state.controls, this.state.statuses)
+        children: this.makeChildren(this.state.controls)
       })));
     }
   }]);
