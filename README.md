@@ -1,3 +1,11 @@
+# How to compile the formbuilder for developers
+
+## 'npm install' if you havent already 
+## 'npm start' to start rollup and compile the code. 
+## 'npm run end' to remove node_modules so there isnt duplicate react error which is compicated to fix. 
+
+
+
 <h1 align="center"> React Formbuilder like angular formbuilder</h1>
 
 <p align="center">
