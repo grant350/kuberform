@@ -133,22 +133,17 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.validator = _this.props.validator ? _this.props.validator : null;
     _this.required = props.required;
     _this.update = _this.update.bind(_assertThisInitialized(_this));
-    _this.value = _this.props.value ? _this.props.value : '';
     _this.subject$ = new BehaviorSubject(null);
     _this.label = _this.props.label ? _this.props.label : 'type here';
     _this.width = _this.props.width ? _this.props.width : '200px';
     _this.disabled = _this.props.disabled ? _this.props.disabled : false;
-    _this.state = {
-      status: _this.props.status ? _this.props.status : "VALID"
-    };
     return _this;
   }
 
   _createClass(FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log('in form control', this.value);
-      this.update(this.value);
+      this.update(this.props.value);
     }
   }, {
     key: "update",
@@ -175,17 +170,13 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
             status = "VALID";
           }
 
-          _this2.setState({
-            status: status
-          }, function () {
-            if (_this2.props.parent.type === 'formGroup') {
-              _this2.props.setParent(_this2.name, value, status);
-            }
+          if (_this2.props.parent.type === 'formGroup') {
+            _this2.props.setParent(_this2.name, value, status);
+          }
 
-            if (_this2.props.parent.type === 'formArray') {
-              _this2.props.setParent(_this2.props.index, value, status);
-            }
-          });
+          if (_this2.props.parent.type === 'formArray') {
+            _this2.props.setParent(_this2.props.index, value, status);
+          }
         });
       }, 50);
     }
@@ -195,11 +186,11 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       var _this3 = this;
 
       var getBorder = function getBorder() {
-        if (_this3.state.status === "VALID") {
+        if (_this3.props.status === "VALID") {
           return "#36bc78";
-        } else if (_this3.state.status === "PENDING") {
+        } else if (_this3.props.status === "PENDING") {
           return "#f2da33";
-        } else if (_this3.state.status === "INVALID") {
+        } else if (_this3.props.status === "INVALID") {
           return "#cb1842";
         }
       };
@@ -213,7 +204,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         border: getBorder(),
         name: this.props.name,
         value: this.props.value,
-        status: this.state.status
+        status: this.props.status
       }));
     }
   }]);
@@ -344,7 +335,6 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
             child.JSXElement = Input;
           }
 
-          console.log(child.validator);
           return /*#__PURE__*/React.createElement(FormControl, {
             disabled: child.disabled,
             width: child.width,
@@ -407,7 +397,6 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
     value: function addChild() {
       var controls = this.state.controls.slice(0);
       controls.push(this.resetControl(this.copy));
-      console.log('controls', controls[controls.length - 1]);
       controls.length;
       var value = this.state.value.slice();
 
@@ -422,16 +411,12 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
 
         case 'FormGroup':
           value.push({});
-          console.log('value after formgroup insert', value);
           break;
-      } //  console.log('addchild',value)
-
+      }
 
       this.setState({
         controls: controls,
         value: value
-      }, function () {
-        console.log('after add controls', this);
       });
     }
   }, {
@@ -529,8 +514,6 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
   _createClass(FormGroup, [{
     key: "checkStatus",
     value: function checkStatus(statuses) {
-      console.log('statuses', statuses);
-
       if (Object.values(statuses).includes('PENDING')) {
         return 'PENDING';
       } else if (Object.values(statuses).includes('INVALID')) {
@@ -538,19 +521,32 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
       } else {
         return "VALID";
       }
-    }
+    } // setParent(key,value,status){
+    //   var statuses = Object.assign({},this.state.statuses);
+    //   if (status){
+    //     statuses[key]=status;
+    //   }
+    //  var newstatus= this.checkStatus(statuses);
+    //  var statevalue = Object.assign({},this.state.value);
+    //  statevalue[key] = value;
+    //  this.setState({value:statevalue,statuses:statuses,status:newstatus},()=>{
+    //   if (this.props.setParent){
+    //       if (this.props.parent.type === "formGroup"){
+    //     this.props.setParent(this.name,this.state.value,this.state.status)
+    //       } else if (this.props.parent.type === "formArray"){
+    //         this.props.setParent(this.props.index,this.state.value,this.state.status)
+    //       }
+    //   }
+    //  });
+    // }
+
   }, {
     key: "setParent",
     value: function setParent(key, value, status) {
       var _this2 = this;
 
-      console.log(key, value, status);
-      var statuses = Object.assign({}, this.state.statuses);
-
-      if (status) {
-        statuses[key] = status;
-      }
-
+      var statuses = this.state.statuses;
+      statuses[key] = status;
       var newstatus = this.checkStatus(statuses);
       var statevalue = Object.assign({}, this.state.value);
       statevalue[key] = value;
@@ -559,10 +555,12 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
         statuses: statuses,
         status: newstatus
       }, function () {
+        console.log('newstatissisis', _this2.state.statuses);
+
         if (_this2.props.setParent) {
-          if (_this2.props.parent.type === "formGroup") {
+          if (_this2.props.parent.type === 'formGroup') {
             _this2.props.setParent(_this2.name, _this2.state.value, _this2.state.status);
-          } else if (_this2.props.parent.type === "formArray") {
+          } else if (_this2.props.parent.type === 'formArray') {
             _this2.props.setParent(_this2.props.index, _this2.state.value, _this2.state.status);
           }
         }
@@ -641,16 +639,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           });
         }
       });
-    } // statusToColor(status){
-    //   if (status === "VALID") {
-    //     return "#36bc78"
-    //   } else if (status === "PENDING") {
-    //     return "#f2da33";
-    //   } else {
-    //     return "#cb1842";
-    //   }
-    // }
-
+    }
   }, {
     key: "render",
     value: function render() {
