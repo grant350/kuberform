@@ -132,51 +132,43 @@ var formArray = {
  ```
 
 
- # what is JSXElmenet and JSXContainer?
+ # What is a JSXElmenet?.
+ ## A JSXElement is a React Component that can be a class or a functional component.
 
- ## JSXElement is exactly what it says. look below, Babel turns this into jsx it can also be a class as well.
+### To be able to update the values in your input fields you need to call props.update.  also if you want to get the status color for the border of an input field you need to use props.border.
 
  ```js
  var Input = function (props){
-  return (<div className="input">
+  return (<div className="input" style={"border":"2px solid "+props.border}>
       <span style={{width:'100%'}}>{props.status}</span>
-    {props.name} <input onChange={ (e)=>{props.update(props.name,e.target.value)}} value={props.value}/>
+    {props.name} <input onChange={ (e)=>{props.update(e.target.value)}} value={props.value}/>
         </div>)
 }
 ```
 
 
-# how to update changes from input feilds.
-## from the example above there is an update function passed down in props. you can use  this to update the state.
+# getdata from the formGroup?
 
- ```ts
-  update(props.name:<string>, e.target.value:<any>)
+ ```js
+ // to get data you must use a refrence to the formGroup.
+   function submit(){
+      var formvalue = this.myRef.current.getData();
+      console.log('formvalue',formvalue)
+   }
+  <FormGroup ref={this.myRef} controls={formgroup} name={'order'}  />
 ```
-
-# submit button
-
-
-
-# getdata from form
 
 
 
 
 # how to work with prebuilt components
+## Containers!
 
-<p align="center">
-  <img src="https://github.com/grant350/reactformbuilder/blob/master/examplecontainer.png?raw=true" width="600px" height="600px"/>
-</p>
+### Below is an example of a container class and this is a default for reactformbuilder to use. you can create any type of container you wish as long as you use {this.props.children} in the render or in a functional component, return {this.props.children}
 
-
-## before we talked about how to make a form, but now we are going to talk about how to structure your form.
-
-## container work for formgroups and formArrays as each will output an array of JSXElements
-
-### in each container  there is a prop called children
+## each child of the children array is a JSXElement you have defined in the form.
 
 ```js
-
 class Container extends React.Component {
   constructor(props){
     super(props)
@@ -189,12 +181,12 @@ class Container extends React.Component {
     );
   }
 }
-//each child of the children array is a JSXElement you have defined in the form.
  ```
 
  # as we discussed each contianer has JSXElements this is an example of a JSXElement
 
- ## you can create it in any way you want. also if you do not call update on a character change or submit  the value will never change nor will it validate. it order for it to work you are required to call update on event.
+ ## you can create it in any way you want. If you do not call update on a input change, the value will never change nor will it validate the form.
+
  ```js
 import {TextField} from  '@mui/material';
 class Input extends React.Component {
@@ -227,4 +219,72 @@ class Input extends React.Component {
 
 
  # what happend if you dont specify JSXContainer or JSXElment and or its not valid JSX?
+
  ## reactformbuilder will select a default container so the code does not break and a default input. so if you have a textbox and you are wondering why its an input proably because you have invalid JSX or the component isnt in the form.
+
+
+# How to get started.
+
+## First import reactformbuilder.
+
+```js
+  import {FormGroup,Input,Container} from '@zenabyss/reactformbuilder';
+```
+
+
+## next build a model formgroup
+```js
+   var formgroup = {
+      "name":{
+        "type":"formControl",
+         "validator": (value,obs)=>{
+              //you can use set time out or not or any async call
+              // true === "VALID"
+              // false === "INVALID"
+              // null === "PENDING"
+             setTimeout(()=>{
+                if (value === "bob"){
+                  obs.next(true);
+                } else {
+                  obs.next(false)
+                }
+              },3000);
+          }
+        },
+      "address":{
+        "type":"formGroup",
+        "JSXContainer":JSXContainer
+        "controls":{
+          "zipcode":{
+            "type":"formControl",
+            "value":"84932"
+          },
+          "streetAddress":{
+            "type":"formControl",
+            "JSXElement":JSXElement
+          }
+        }
+      }
+      "skills":{
+        "type":"formArray",
+        "controls": [{
+          "name":"skillname",
+          "value":"bob builder mastery",
+          "JSXElement":JSXElement
+        }]
+      }
+   }
+```
+
+# bugs that need resolving
+
+
+## removechild doesnt remove the child
+
+## rxjs calls way too many times for rendering the form but maybe thats fine. should implement debounce soon.
+
+
+
+
+
+
