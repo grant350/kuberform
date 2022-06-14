@@ -36,9 +36,9 @@ class FormArray extends React.Component{
   //last but not least is to change value from [] to put in controls.
 
   checkStatus(statuses){
-    if (Object.values(statuses).includes('INVALID')){
+    if (statuses.includes('INVALID')){
       return 'INVALID'
-    } else if (Object.values(statuses).includes('PENDING')){
+    } else if (statuses.includes('PENDING')){
       return "PENDING"
     } else {
       return "VALID"
@@ -48,7 +48,7 @@ class FormArray extends React.Component{
 
 
   setParent(key,value,status){
-    var statuses = Object.assign({},this.state.statuses);
+    var statuses = this.state.statuses.slice()
     if (status){
       statuses[key]=status;
     }
@@ -116,8 +116,7 @@ class FormArray extends React.Component{
           if (child.JSXElement === undefined ){
             child.JSXElement = Input;
           }
-          console.log(child.validator);
-          return <FormControl setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
+          return <FormControl disabled={child.disabled} width={child.width} label={child.label} setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
           }
         if (child.type === 'formArray' ){
           if (child.JSXContainer === undefined ){
@@ -139,7 +138,6 @@ class FormArray extends React.Component{
     var controls = this.state.controls.slice(0)
     controls.push(this.resetControl(this.copy))
 
-    console.log('controls',controls[controls.length-1]);
 
     var length = controls.length;
     var value = this.state.value.slice();
@@ -150,23 +148,31 @@ class FormArray extends React.Component{
       case 'formArray': value.push([]);
       break;
       case 'FormGroup': value.push({});
-         console.log('value after formgroup insert',value)
       break;
      }
-    //  console.log('addchild',value)
-    this.setState({controls:controls,value:value},function(){
-      console.log('after add controls',this)
-    });
+    this.setState({controls:controls,value:value});
   }
 
 
   removeChild(index){
-    if (index === undefined ){
-      index == this.state.ctls.lenght -1;
-    }
-    if (this.state.ctls.length >0){
-      this.state.ctls.splice(index,1);
-      this.setState({ctls:this.state.ctls});
+
+
+    if ((this.state.controls.length -1) > 0){
+      this.state.controls.pop();
+      this.state.value.pop();
+      this.state.statuses.pop();
+      var newstatus= this.checkStatus(this.state.statuses);
+
+      this.setState({controls:this.state.controls,value:this.state.value,statuses:this.state.statuses,status:newstatus},function(){
+        if (this.props.setParent){
+          if (this.props.parent.type === 'formGroup'){
+          this.props.setParent(this.name,this.state.value,this.state.status)
+          } else if (this.props.parent.type === 'formArray'){
+           this.props.setParent(this.props.index,this.state.value,this.state.status)
+          }
+
+        }
+      });
     }
   }
 
@@ -183,10 +189,9 @@ class FormArray extends React.Component{
     return (
       <React.Fragment>
     <div className="formArray" style={{"borderLeft":"10px solid " +getBorder()}}>
-      <this.props.JSXContainer children={this.makeChildren(this.state.controls)} />
+      <this.props.JSXContainer addChild={this.addChild} removeChild={this.removeChild} children={this.makeChildren(this.state.controls)} />
     </div>
-    <button onClick={this.addChild}> addChild</button>
-    <button onClick={this.removeChild}> removeChild</button>
+
 
     </React.Fragment>
     )

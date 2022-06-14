@@ -13,7 +13,8 @@
     "end":"mv node_modules node_moduless"
   },
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
-  "license": "",
+  "license" : "GNU3",
+  "licenseURL": "https://www.gnu.org/licenses/gpl-3.0.en.html",
   "bugs": {
     "url": "https://github.com/grant350/components/issues"
   },

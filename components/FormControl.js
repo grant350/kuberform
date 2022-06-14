@@ -9,20 +9,23 @@ class FormControl extends React.Component {
     this.validator = this.props.validator? this.props.validator:null;
     this.required = props.required;
     this.update = this.update.bind(this);
-    this.value = this.props.value? this.props.value: '';
-    this.subject$ = new BehaviorSubject(null);;
+    this.subject$ = new BehaviorSubject(null);
+    this.label = this.props.label? this.props.label:'type here';
+    this.width = this.props.width? this.props.width:'200px';
+    this.disabled= this.props.disabled? this.props.disabled:false;
+
   }
 
 
   componentDidMount(){
-    this.update(this.value)
+    this.update(this.props.value)
   }
 
   update(value){
     setTimeout(()=>{
       if (this.validator){
-        this.subject$.next(null);
-          this.props.validator(value,this.subject$);
+          this.subject$.next(null);
+          this.validator(value,this.subject$);
       } else {
         this.subject$.next(true);
       }
@@ -35,15 +38,15 @@ class FormControl extends React.Component {
       } else if (x === true){
         status = "VALID"
       }
-      if (this.props.parent.type === 'formGroup'){
-        this.props.setParent(this.name,value,status)
-        this.setState({status:status})
-      }
-      if (this.props.parent.type === 'formArray'){
-        this.props.setParent(this.props.index,value,status)
-        this.setState({status:status})
-      }
+        if (this.props.parent.type === 'formGroup'){
+          this.props.setParent(this.name,value,status)
+        }
+        if (this.props.parent.type === 'formArray'){
+          this.props.setParent(this.props.index,value,status)
+        }
+
     })
+
   },50);
 
   }
@@ -60,8 +63,7 @@ class FormControl extends React.Component {
     }
 
    return( <div className="formControl">
-
-            <this.props.JSXElement labelName={this.name} update={this.update} border={getBorder()} name={this.props.name}  value={this.props.value } status={this.props.status}/>
+            <this.props.JSXElement labelName={this.name} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={this.props.value } status={this.props.status}/>
     </div>
    )
   }

@@ -1,12 +1,13 @@
 import React from 'react';
-import {TextField} from  '@mui/material';
+import {TextField,FormControl} from  '@mui/material';
+
 class Input extends React.Component {
   constructor(props){
     super(props)
   }
   render(){
     return (
-      <div className="input" style={{position:"relative",left:this.props.tabOver? this.props.tabOver.toString()+"px":"0px"}}>
+      <FormControl className="input" style={{position:"relative",left:this.props.tabOver? this.props.tabOver.toString()+"px":"0px"}}>
         <label style={{display:"block", width:"100%",position:"relative", margin: "5px"}}> {this.props.labelName}</label>
         <TextField
         size="small"
@@ -19,10 +20,10 @@ class Input extends React.Component {
         helperText={this.props.helperText? this.props.helperText:""}
         InputProps={{ style: { fontSize: this.props.InputProps? this.props.InputProp:10 } }}
         InputLabelProps={{ style: { fontSize: (this.props.InputLabelProps? this.props.InputLabelProps:12) } }}
-        style={{background:'white', "borderLeft":"20px solid "+this.props.border,"borderRadius": "10px",width: this.props.width !== undefined ? this.props.width.toString()+"px":"100px"}}
+        style={{background:'white', "borderLeft":"20px solid "+this.props.border,"borderRadius": "10px"}}
         id="filled-basic"
         variant="filled" />
-      </div>
+      </FormControl>
     );
   }
 }
