@@ -1,8 +1,8 @@
 # How to compile the formbuilder for developers
 
-## 'npm install' if you havent already 
-## 'npm start' to start rollup and compile the code. 
-## 'npm run end' to remove node_modules so there isnt duplicate react error which is compicated to fix. 
+## 'npm install' if you havent already
+## 'npm start' to start rollup and compile the code.
+## 'npm run end' to remove node_modules so there isnt duplicate react error which is compicated to fix.
 
 
 
@@ -31,7 +31,7 @@ var formgroup= {
      JSXContainer: <JSXElement> ,
      name: <String>,
      state:{
-      value:{}, 
+      value:{},
       statuses:{},
       status: (<VALID||INVALID||PENDING>),
       controls:  ("name":<Formgroup> || <FormArray> || <FormControl>)}
@@ -47,7 +47,7 @@ var formArray = {
      JSXContainer: <JSXElement> ,
      name: <String>,
      state:{
-      value:[], 
+      value:[],
       statuses:[],
       status: (<VALID||INVALID||PENDING>),
       controls:  ("name":<Formgroup> || <FormArray> || <FormControl>)}
