@@ -110,8 +110,7 @@ var Input = /*#__PURE__*/function (_React$Component) {
         style: {
           background: 'white',
           "borderLeft": "20px solid " + this.props.border,
-          "borderRadius": "10px",
-          width: this.props.width !== undefined ? this.props.width.toString() + "px" : "100px"
+          "borderRadius": "10px"
         },
         id: "filled-basic",
         variant: "filled"
@@ -508,6 +507,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
       statuses: {},
       color: "#36bc78"
     };
+    _this.copyState = Object.assign({}, _this.state);
     _this.getData = _this.getData.bind(_assertThisInitialized(_this));
     Object.keys(_this.props.controls).forEach(function (key) {
       _this.state.statuses[key] = "VALID";
@@ -528,6 +528,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
     });
     _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
     _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized(_this));
+    _this.clearForm = _this.clearForm.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -541,6 +542,17 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
       } else {
         return "VALID";
       }
+    }
+  }, {
+    key: "clearForm",
+    value: function clearForm() {
+      // this.copyState;
+      this.setState({
+        value: this.copyState.value,
+        statuses: this.copyState.statuses,
+        status: this.copyState.status,
+        controls: this.copyState.controls
+      });
     }
   }, {
     key: "setParent",

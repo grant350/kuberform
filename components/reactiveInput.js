@@ -20,7 +20,7 @@ class Input extends React.Component {
         helperText={this.props.helperText? this.props.helperText:""}
         InputProps={{ style: { fontSize: this.props.InputProps? this.props.InputProp:10 } }}
         InputLabelProps={{ style: { fontSize: (this.props.InputLabelProps? this.props.InputLabelProps:12) } }}
-        style={{background:'white', "borderLeft":"20px solid "+this.props.border,"borderRadius": "10px",width: this.props.width !== undefined ? this.props.width.toString()+"px":"100px"}}
+        style={{background:'white', "borderLeft":"20px solid "+this.props.border,"borderRadius": "10px"}}
         id="filled-basic"
         variant="filled" />
       </FormControl>

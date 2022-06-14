@@ -18,8 +18,8 @@ class FormGroup extends React.Component {
       statuses:{},
       color:"#36bc78"
      }
+     this.copyState = Object.assign({},this.state)
      this.getData = this.getData.bind(this);
-
      Object.keys(this.props.controls).forEach(key=>{
       this.state.statuses[key]="VALID";
        switch (this.props.controls[key].type){
@@ -33,6 +33,8 @@ class FormGroup extends React.Component {
      })
      this.setParent = this.setParent.bind(this);
      this.checkStatus = this.checkStatus.bind(this);
+     this.clearForm = this.clearForm.bind(this);
+
   }
 
     checkStatus(statuses){
@@ -45,6 +47,12 @@ class FormGroup extends React.Component {
       }
     }
 
+    //how to clear the form.
+
+    clearForm(){
+      // this.copyState;
+      this.setState({value:this.copyState.value, statuses:this.copyState.statuses,status:this.copyState.status,controls:this.copyState.controls})
+    }
 
 
 
