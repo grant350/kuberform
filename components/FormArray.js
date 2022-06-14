@@ -36,9 +36,9 @@ class FormArray extends React.Component{
   //last but not least is to change value from [] to put in controls.
 
   checkStatus(statuses){
-    if (Object.values(statuses).includes('INVALID')){
+    if (statuses.includes('INVALID')){
       return 'INVALID'
-    } else if (Object.values(statuses).includes('PENDING')){
+    } else if (statuses.includes('PENDING')){
       return "PENDING"
     } else {
       return "VALID"
@@ -48,7 +48,7 @@ class FormArray extends React.Component{
 
 
   setParent(key,value,status){
-    var statuses = Object.assign({},this.state.statuses);
+    var statuses = this.state.statuses.slice()
     if (status){
       statuses[key]=status;
     }
@@ -155,12 +155,24 @@ class FormArray extends React.Component{
 
 
   removeChild(index){
-    if (index === undefined ){
-      index == this.state.ctls.lenght -1;
-    }
-    if (this.state.ctls.length >0){
-      this.state.ctls.splice(index,1);
-      this.setState({ctls:this.state.ctls});
+
+
+    if ((this.state.controls.length -1) > 0){
+      this.state.controls.pop();
+      this.state.value.pop();
+      this.state.statuses.pop();
+      var newstatus= this.checkStatus(this.state.statuses);
+
+      this.setState({controls:this.state.controls,value:this.state.value,statuses:this.state.statuses,status:newstatus},function(){
+        if (this.props.setParent){
+          if (this.props.parent.type === 'formGroup'){
+          this.props.setParent(this.name,this.state.value,this.state.status)
+          } else if (this.props.parent.type === 'formArray'){
+           this.props.setParent(this.props.index,this.state.value,this.state.status)
+          }
+
+        }
+      });
     }
   }
 
@@ -177,7 +189,7 @@ class FormArray extends React.Component{
     return (
       <React.Fragment>
     <div className="formArray" style={{"borderLeft":"10px solid " +getBorder()}}>
-      <this.props.JSXContainer addChild={this.addChild} addChild={this.removeChild} children={this.makeChildren(this.state.controls)} />
+      <this.props.JSXContainer addChild={this.addChild} removeChild={this.removeChild} children={this.makeChildren(this.state.controls)} />
     </div>
 
 

@@ -45,34 +45,16 @@ class FormGroup extends React.Component {
       }
     }
 
-    // setParent(key,value,status){
-    //   var statuses = Object.assign({},this.state.statuses);
-    //   if (status){
-    //     statuses[key]=status;
-    //   }
-    //  var newstatus= this.checkStatus(statuses);
-    //  var statevalue = Object.assign({},this.state.value);
-    //  statevalue[key] = value;
-    //  this.setState({value:statevalue,statuses:statuses,status:newstatus},()=>{
-    //   if (this.props.setParent){
-    //       if (this.props.parent.type === "formGroup"){
-    //     this.props.setParent(this.name,this.state.value,this.state.status)
-    //       } else if (this.props.parent.type === "formArray"){
-    //         this.props.setParent(this.props.index,this.state.value,this.state.status)
-    //       }
-    //   }
-    //  });
 
-    // }
+
+
     setParent(key,value,status){
       var statuses =this.state.statuses
         statuses[key]=status;
-
      var newstatus= this.checkStatus(statuses);
       var statevalue = Object.assign({},this.state.value);
       statevalue[key] = value;
       this.setState({value:statevalue,statuses:statuses,status:newstatus},()=>{
-        console.log('newstatissisis',this.state.statuses)
        if (this.props.setParent){
          if (this.props.parent.type === 'formGroup'){
          this.props.setParent(this.name,this.state.value,this.state.status)
