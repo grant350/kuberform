@@ -146,10 +146,16 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.disabled = _this.props.disabled ? _this.props.disabled : false;
     _this.dataType = _this.props.dataType;
     _this.getDataType = _this.getDataType.bind(_assertThisInitialized(_this));
+    _this.state = {
+      error: false,
+      touched: false
+    };
     _this.value = _this.props.value ? _this.props.value : _this.getDataType();
     _this.helperMessage = _this.props.helperMessage;
     _this.errorMessage = _this.props.errorMessage;
     _this.touched = _this.props.touched ? _this.props.touched : false;
+    _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized(_this));
+    _this.copyvalue = _this.value;
     return _this;
   }
 
@@ -182,23 +188,39 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
-    key: "update",
-    value: function update(value) {
+    key: "touchEvent",
+    value: function touchEvent(e) {
       var _this2 = this;
 
-      if (this.validator) {
-        this.subject$.next(null);
-        this.validator(value, this.subject$);
-      } else {
-        if (this.required) {
-          if (this.touched === false && this.value !== undefined) {
-            this.subject$.next(true);
-          } else {
-            this.subject$.next(false);
+      console.log(this.required);
+      this.setState({
+        touched: true
+      }, function () {
+        console.log('touched');
+
+        if (_this2.required) {
+          console.log('required');
+
+          if (_this2.state.touched === true && JSON.stringify(_this2.value) === JSON.stringify(_this2.copyvalue)) {
+            _this2.update(_this2.value, true);
           }
+        }
+      });
+    }
+  }, {
+    key: "update",
+    value: function update(value, error) {
+      var _this3 = this;
+
+      if (error === undefined) {
+        if (this.validator) {
+          this.subject$.next(null);
+          this.validator(value, this.subject$);
         } else {
           this.subject$.next(true);
         }
+      } else {
+        this.subject$.next(false);
       }
 
       this.subject$.subscribe(function (x) {
@@ -212,26 +234,26 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
           status = "VALID";
         }
 
-        if (_this2.props.parent.type === 'formGroup') {
-          _this2.props.setParent(_this2.name, value, status);
+        if (_this3.props.parent.type === 'formGroup') {
+          _this3.props.setParent(_this3.name, value, status);
         }
 
-        if (_this2.props.parent.type === 'formArray') {
-          _this2.props.setParent(_this2.props.index, value, status);
+        if (_this3.props.parent.type === 'formArray') {
+          _this3.props.setParent(_this3.props.index, value, status);
         }
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var getBorder = function getBorder() {
-        if (_this3.props.status === "VALID") {
+        if (_this4.props.status === "VALID") {
           return "#36bc78";
-        } else if (_this3.props.status === "PENDING") {
+        } else if (_this4.props.status === "PENDING") {
           return "#f2da33";
-        } else if (_this3.props.status === "INVALID") {
+        } else if (_this4.props.status === "INVALID") {
           return "#cb1842";
         }
       };
@@ -239,6 +261,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "formControl"
       }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
+        touchEvent: this.touchEvent,
         disabled: this.disabled,
         errorMessage: this.errorMessage,
         helperMessage: this.helperMessage,

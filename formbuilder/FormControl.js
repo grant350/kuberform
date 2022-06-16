@@ -17,11 +17,13 @@ class FormControl extends React.Component {
     this.disabled= this.props.disabled? this.props.disabled:false;
     this.dataType = this.props.dataType;
     this.getDataType = this.getDataType.bind(this)
-
+    this.state = {error:false, touched:false}
     this.value = this.props.value? this.props.value:this.getDataType();
     this.helperMessage = this.props.helperMessage;
     this.errorMessage = this.props.errorMessage;
     this.touched = this.props.touched? this.props.touched:false;
+    this.touchEvent = this.touchEvent.bind(this);
+    this.copyvalue = this.value;
   }
 
 
@@ -47,21 +49,34 @@ class FormControl extends React.Component {
     return "";
   }
 }
-  update(value){
+
+  touchEvent(e){
+    console.log(this.required);
+    this.setState({touched:true},()=>{
+      console.log('touched')
+  if (this.required){
+      console.log('required')
+        if (this.state.touched === true && JSON.stringify(this.value) === JSON.stringify(this.copyvalue)){
+          this.update(this.value,true)
+        }
+    }
+
+    })
+
+
+  }
+
+  update(value,error){
+    if (error === undefined){
       if (this.validator){
           this.subject$.next(null);
           this.validator(value,this.subject$);
-      } else {
-        if (this.required){
-            if (this.touched === false && this.value !== undefined){
-                this.subject$.next(true);
-            } else {
-              this.subject$.next(false);
-            }
-        } else {
+      }
+      else {
           this.subject$.next(true);
-
         }
+      } else {
+        this.subject$.next(false)
       }
       this.subject$.subscribe((x)=>{
       var status;
@@ -96,8 +111,9 @@ class FormControl extends React.Component {
       }
     }
 
+
    return( <div className="formControl">
-            <this.props.JSXElement disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={ this.props.value? this.props.value: this.getDataType() } status={this.props.status}/>
+            <this.props.JSXElement  touchEvent={this.touchEvent} disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={ this.props.value? this.props.value: this.getDataType() } status={this.props.status}/>
     </div>
    )
   }
