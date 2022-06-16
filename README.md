@@ -234,5 +234,6 @@ class Input extends React.Component {
 
 ## for major changes please fork the project.
 
-## this code cannot be distributed to for commercial use, please contact me for commercial use.
+## this code cannot be distributed for commercial use, please contact me for commercial use.
 
+## whats needed majorly is efficency and pre build components for people to use. now since this is nested there should be an option for a server middleware for images to load 64bit data.
