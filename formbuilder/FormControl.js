@@ -23,7 +23,7 @@ class FormControl extends React.Component {
     this.errorMessage = this.props.errorMessage;
     this.touched = this.props.touched? this.props.touched:false;
     this.touchEvent = this.touchEvent.bind(this);
-    this.copyvalue = this.value;
+    this.copyvalue = this.props.value;
   }
 
 
@@ -51,19 +51,13 @@ class FormControl extends React.Component {
 }
 
   touchEvent(e){
-    console.log(this.required);
     this.setState({touched:true},()=>{
-      console.log('touched')
-  if (this.required){
-      console.log('required')
-        if (this.state.touched === true && JSON.stringify(this.value) === JSON.stringify(this.copyvalue)){
-          this.update(this.value,true)
+      if (this.required){
+            if (this.state.touched === true && JSON.stringify(this.props.value) === JSON.stringify(this.copyvalue)){
+              this.update(this.props.value,true)
+            }
         }
-    }
-
     })
-
-
   }
 
   update(value,error){

@@ -155,7 +155,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.errorMessage = _this.props.errorMessage;
     _this.touched = _this.props.touched ? _this.props.touched : false;
     _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized(_this));
-    _this.copyvalue = _this.value;
+    _this.copyvalue = _this.props.value;
     return _this;
   }
 
@@ -192,17 +192,12 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     value: function touchEvent(e) {
       var _this2 = this;
 
-      console.log(this.required);
       this.setState({
         touched: true
       }, function () {
-        console.log('touched');
-
         if (_this2.required) {
-          console.log('required');
-
-          if (_this2.state.touched === true && JSON.stringify(_this2.value) === JSON.stringify(_this2.copyvalue)) {
-            _this2.update(_this2.value, true);
+          if (_this2.state.touched === true && JSON.stringify(_this2.props.value) === JSON.stringify(_this2.copyvalue)) {
+            _this2.update(_this2.props.value, true);
           }
         }
       });
