@@ -39,9 +39,7 @@ class FormGroup extends React.Component {
 
   }
 
-  componentDidUpdate(){
 
-  }
     checkStatus(statuses){
       if (Object.values(statuses).includes('PENDING')){
         return 'PENDING'
@@ -103,7 +101,7 @@ class FormGroup extends React.Component {
         if (child.JSXElement === undefined ){
           child.JSXElement = Input;
         }
-        return <FormControl ref={this.refrences[key]} disabled={child.disabled} width={child.width}  label={child.label} setParent={this.setParent} validator={child.validator} parent={this} control={child}  index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
+        return <FormControl className={child.className} required={child.required} helperMessage={child.helperMessage} errorMessage={child.errorMessage} ref={this.refrences[key]} disabled={child.disabled} width={child.width}  label={child.label} setParent={this.setParent} validator={child.validator} parent={this} control={child}  index={index}  JSXElement={child.JSXElement} name={key} value={this.state.value[key]} status={this.state.statuses[key]} key={key}/>
         }
       if (child.type === 'formArray' ){
         if (child.JSXContainer === undefined ){

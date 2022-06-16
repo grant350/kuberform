@@ -5,14 +5,19 @@ class FormControl extends React.Component {
   constructor(props) {
     super(props)
     this.name = this.props.name;
-    this.type = "formControl"
+    this.type = "formControl";
     this.validator = this.props.validator? this.props.validator:null;
-    this.required = props.required;
+    this.required = this.props.required;
+    this.className= this.props.className;
     this.update = this.update.bind(this);
     this.subject$ = new BehaviorSubject(null);
     this.label = this.props.label? this.props.label:'type here';
     this.width = this.props.width? this.props.width:'200px';
     this.disabled= this.props.disabled? this.props.disabled:false;
+    this.value = this.props.value;
+    this.helperMessage = this.props.helperMessage;
+    this.errorMessage = this.props.errorMessage;
+
 
   }
 
@@ -61,7 +66,7 @@ class FormControl extends React.Component {
     }
 
    return( <div className="formControl">
-            <this.props.JSXElement labelName={this.name} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={this.props.value } status={this.props.status}/>
+            <this.props.JSXElement disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={this.props.value } status={this.props.status}/>
     </div>
    )
   }

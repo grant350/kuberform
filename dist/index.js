@@ -83,7 +83,7 @@ var Input = /*#__PURE__*/function (_React$Component) {
           position: "relative",
           margin: "5px"
         }
-      }, " ", this.props.labelName), /*#__PURE__*/React.createElement(TextField, {
+      }, " ", this.props.label), /*#__PURE__*/React.createElement(TextField, {
         size: "small",
         onChange: function onChange(e) {
           _this.props.update(e.target.value);
@@ -136,12 +136,16 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.name = _this.props.name;
     _this.type = "formControl";
     _this.validator = _this.props.validator ? _this.props.validator : null;
-    _this.required = props.required;
+    _this.required = _this.props.required;
+    _this.className = _this.props.className;
     _this.update = _this.update.bind(_assertThisInitialized(_this));
     _this.subject$ = new BehaviorSubject(null);
     _this.label = _this.props.label ? _this.props.label : 'type here';
     _this.width = _this.props.width ? _this.props.width : '200px';
     _this.disabled = _this.props.disabled ? _this.props.disabled : false;
+    _this.value = _this.props.value;
+    _this.helperMessage = _this.props.helperMessage;
+    _this.errorMessage = _this.props.errorMessage;
     return _this;
   }
 
@@ -200,7 +204,10 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "formControl"
       }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
-        labelName: this.name,
+        disabled: this.disabled,
+        errorMessage: this.errorMessage,
+        helperMessage: this.helperMessage,
+        required: this.required,
         label: this.label,
         update: this.update,
         border: getBorder(),
@@ -256,6 +263,21 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
     _this.state.controls.forEach(function (item, index) {
       _this.state.statuses[index] = "VALID";
       _this.refrences[index] = /*#__PURE__*/React.createRef();
+      var control = _this.props.controls[index];
+
+      switch (control.type) {
+        case 'formControl':
+          _this.state.value[key] = "";
+          break;
+
+        case 'formArray':
+          _this.state.value[key] = [];
+          break;
+
+        case 'FormGroup':
+          _this.state.value[key] = {};
+          break;
+      }
     });
 
     return _this;
@@ -371,6 +393,10 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            className: child.className,
+            required: child.required,
+            helperMessage: child.helperMessage,
+            errorMessage: child.errorMessage,
             ref: _this4.refrences[index],
             disabled: child.disabled,
             width: child.width,
@@ -571,9 +597,6 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(FormGroup, [{
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {}
-  }, {
     key: "checkStatus",
     value: function checkStatus(statuses) {
       if (Object.values(statuses).includes('PENDING')) {
@@ -652,6 +675,10 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            className: child.className,
+            required: child.required,
+            helperMessage: child.helperMessage,
+            errorMessage: child.errorMessage,
             ref: _this4.refrences[key],
             disabled: child.disabled,
             width: child.width,

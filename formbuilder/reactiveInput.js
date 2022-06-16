@@ -8,7 +8,7 @@ class Input extends React.Component {
   render(){
     return (
       <FormControl className="input" style={{position:"relative",left:this.props.tabOver? this.props.tabOver.toString()+"px":"0px"}}>
-        <label style={{display:"block", width:"100%",position:"relative", margin: "5px"}}> {this.props.labelName}</label>
+        <label style={{display:"block", width:"100%",position:"relative", margin: "5px"}}> {this.props.label}</label>
         <TextField
         size="small"
         onChange={(e)=>{this.props.update(e.target.value)}}
