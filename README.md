@@ -207,12 +207,7 @@ class Input extends React.Component {
    }
 ```
 
-# bugs that need resolving
 
-
-## removechild doesnt remove the child
-
-## rxjs calls way too many times for rendering the form but maybe thats fine. should implement debounce soon.
 
 
 
