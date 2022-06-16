@@ -142,17 +142,44 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.subject$ = new BehaviorSubject(null);
     _this.label = _this.props.label ? _this.props.label : 'type here';
     _this.width = _this.props.width ? _this.props.width : '200px';
+    _this.dataType = _this.props.dataType;
     _this.disabled = _this.props.disabled ? _this.props.disabled : false;
-    _this.value = _this.props.value;
+    _this.dataType = _this.props.dataType;
+    _this.getDataType = _this.getDataType.bind(_assertThisInitialized(_this));
+    _this.value = _this.props.value ? _this.props.value : _this.getDataType();
     _this.helperMessage = _this.props.helperMessage;
     _this.errorMessage = _this.props.errorMessage;
+    _this.touched = _this.props.touched ? _this.props.touched : false;
     return _this;
   }
 
   _createClass(FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.update(this.props.value);
+      this.update(this.value);
+    }
+  }, {
+    key: "getDataType",
+    value: function getDataType() {
+      if (this.dataType !== undefined) {
+        if (this.dataType.toLowerCase() === "object") {
+          return {};
+        }
+
+        if (this.dataType.toLowerCase() === "string") {
+          return "";
+        }
+
+        if (this.dataType.toLowerCase() === "number") {
+          return 0;
+        }
+
+        if (this.dataType.toLowerCase() === "array") {
+          return [];
+        }
+      } else {
+        return "";
+      }
     }
   }, {
     key: "update",
@@ -163,7 +190,15 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         this.subject$.next(null);
         this.validator(value, this.subject$);
       } else {
-        this.subject$.next(true);
+        if (this.required) {
+          if (this.touched === false && this.value !== undefined) {
+            this.subject$.next(true);
+          } else {
+            this.subject$.next(false);
+          }
+        } else {
+          this.subject$.next(true);
+        }
       }
 
       this.subject$.subscribe(function (x) {
@@ -212,7 +247,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         update: this.update,
         border: getBorder(),
         name: this.props.name,
-        value: this.props.value,
+        value: this.props.value ? this.props.value : this.getDataType(),
         status: this.props.status
       }));
     }
@@ -263,21 +298,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
     _this.state.controls.forEach(function (item, index) {
       _this.state.statuses[index] = "VALID";
       _this.refrences[index] = /*#__PURE__*/React.createRef();
-      var control = _this.props.controls[index];
-
-      switch (control.type) {
-        case 'formControl':
-          _this.state.value[key] = "";
-          break;
-
-        case 'formArray':
-          _this.state.value[key] = [];
-          break;
-
-        case 'FormGroup':
-          _this.state.value[key] = {};
-          break;
-      }
+      _this.props.controls[index];
     });
 
     return _this;
@@ -393,6 +414,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            dataType: child.dataType,
             className: child.className,
             required: child.required,
             helperMessage: child.helperMessage,
@@ -575,19 +597,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
       _this.state.statuses[key] = "VALID";
       _this.refrences[key] = /*#__PURE__*/React.createRef();
 
-      switch (_this.props.controls[key].type) {
-        case 'formControl':
-          _this.state.value[key] = "";
-          break;
-
-        case 'formArray':
-          _this.state.value[key] = [];
-          break;
-
-        case 'FormGroup':
-          _this.state.value[key] = {};
-          break;
-      }
+      switch (_this.props.controls[key].type) {}
     });
     _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
     _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized(_this));
@@ -675,6 +685,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            dataType: child.dataType,
             className: child.className,
             required: child.required,
             helperMessage: child.helperMessage,

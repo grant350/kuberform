@@ -13,25 +13,55 @@ class FormControl extends React.Component {
     this.subject$ = new BehaviorSubject(null);
     this.label = this.props.label? this.props.label:'type here';
     this.width = this.props.width? this.props.width:'200px';
+    this.dataType = this.props.dataType;
     this.disabled= this.props.disabled? this.props.disabled:false;
-    this.value = this.props.value;
+    this.dataType = this.props.dataType;
+    this.getDataType = this.getDataType.bind(this)
+
+    this.value = this.props.value? this.props.value:this.getDataType();
     this.helperMessage = this.props.helperMessage;
     this.errorMessage = this.props.errorMessage;
-
-
+    this.touched = this.props.touched? this.props.touched:false;
   }
 
 
   componentDidMount(){
-    this.update(this.props.value)
+    this.update(this.value)
   }
 
+   getDataType(){
+     if (this.dataType !== undefined){
+    if (this.dataType.toLowerCase() === "object"){
+      return {};
+    }
+    if (this.dataType.toLowerCase() === "string"){
+      return "";
+    }
+    if (this.dataType.toLowerCase() === "number"){
+      return 0;
+    }
+    if (this.dataType.toLowerCase() === "array"){
+      return [];
+    }
+  } else {
+    return "";
+  }
+}
   update(value){
       if (this.validator){
           this.subject$.next(null);
           this.validator(value,this.subject$);
       } else {
-        this.subject$.next(true);
+        if (this.required){
+            if (this.touched === false && this.value !== undefined){
+                this.subject$.next(true);
+            } else {
+              this.subject$.next(false);
+            }
+        } else {
+          this.subject$.next(true);
+
+        }
       }
       this.subject$.subscribe((x)=>{
       var status;
@@ -55,6 +85,7 @@ class FormControl extends React.Component {
   }
 
   render(){
+
     var getBorder = ()=>{
       if (this.props.status === "VALID") {
         return "#36bc78"
@@ -66,7 +97,7 @@ class FormControl extends React.Component {
     }
 
    return( <div className="formControl">
-            <this.props.JSXElement disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={this.props.value } status={this.props.status}/>
+            <this.props.JSXElement disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={ this.props.value? this.props.value: this.getDataType() } status={this.props.status}/>
     </div>
    )
   }
