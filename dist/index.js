@@ -196,7 +196,11 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         touched: true
       }, function () {
         if (_this2.required) {
-          if (_this2.state.touched === true && JSON.stringify(_this2.props.value) === JSON.stringify(_this2.copyvalue)) {
+          if (typeof _this2.props.value === 'string') {
+            if (_this2.props.value <= 0) {
+              _this2.update(_this2.props.value, true);
+            }
+          } else if (_this2.state.touched === true && JSON.stringify(_this2.props.value) === JSON.stringify(_this2.copyvalue)) {
             _this2.update(_this2.props.value, true);
           }
         }

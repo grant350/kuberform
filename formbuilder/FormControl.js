@@ -53,6 +53,11 @@ class FormControl extends React.Component {
   touchEvent(e){
     this.setState({touched:true},()=>{
       if (this.required){
+        if (typeof this.props.value === 'string'){
+          if (this.props.value <= 0){
+            this.update(this.props.value,true)
+          }
+        } else
             if (this.state.touched === true && JSON.stringify(this.props.value) === JSON.stringify(this.copyvalue)){
               this.update(this.props.value,true)
             }
