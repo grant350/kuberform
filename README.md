@@ -211,7 +211,6 @@ class Input extends React.Component {
   <button onClick={this.submit|| submit}></button>
 
 ```
-
 # How to clear the form?
 
  ```js
@@ -224,9 +223,22 @@ class Input extends React.Component {
    <button onClick={this.submit|| submit}></button>
 ```
 
+# Data Injections?
+
+## A data Injection is where the component you define in the model needs data to display to the use, for example a select input may need an array of letters for the user to choose from. in order to give the data to the component you must add in the model a property called dataInjection. You can access the dataInject property like props.dataInjection || this.props.dataInjection.
+
+```js
+var letters = ['A','B','C','D']
+ "state": {
+          "type": "formControl",
+          "JSXElement": Selector,
+          "dataInject": letters,
+          "label": "state"
+        }
+
+```
 
 # More examples...
-
 
 ## Here is an example of an order form
 
@@ -417,8 +429,20 @@ class Input extends React.Component {
 
 ```
 
-## How to Contribute?
 
+
+# Future Features
+
+## The ability to redefine the value in FormControl as it goes through validation
+
+## The ability to auto fill the entire form with values when formControl is validated.
+
+## The ability to load a validator file to run on each child
+
+## The ability to load a values file to run on each child
+
+
+# How to Contribute?
 ### you can contribute by emailing my at welcometoreality2808@gmail.com or https://www.linkedin.com/in/grant-mitchell-82a756150/.
 
 
