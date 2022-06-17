@@ -12,6 +12,7 @@ class Input extends React.Component {
         <TextField
         size="small"
         onChange={(e)=>{this.props.update(e.target.value)}}
+        onClick={(e)=>{this.props.touchEvent(e)}}
         value={this.props.value}
         label={this.props.label? this.props.label:"type here"}
         error={this.props.error? this.props.error:false}

@@ -88,6 +88,9 @@ var Input = /*#__PURE__*/function (_React$Component) {
         onChange: function onChange(e) {
           _this.props.update(e.target.value);
         },
+        onClick: function onClick(e) {
+          _this.props.touchEvent(e);
+        },
         value: this.props.value,
         label: this.props.label ? this.props.label : "type here",
         error: this.props.error ? this.props.error : false,
@@ -197,7 +200,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       }, function () {
         if (_this2.required) {
           if (typeof _this2.props.value === 'string') {
-            if (_this2.props.value <= 0) {
+            if (_this2.props.value.length <= 0) {
               _this2.update(_this2.props.value, true);
             }
           } else if (_this2.state.touched === true && JSON.stringify(_this2.props.value) === JSON.stringify(_this2.copyvalue)) {
@@ -260,6 +263,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", {
         className: "formControl"
       }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
+        dataInject: this.props.dataInject,
         touchEvent: this.touchEvent,
         disabled: this.disabled,
         errorMessage: this.errorMessage,
@@ -436,6 +440,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            dataInject: child.dataInject,
             dataType: child.dataType,
             className: child.className,
             required: child.required,
@@ -707,6 +712,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
 
           return /*#__PURE__*/React.createElement(FormControl, {
+            dataInject: child.dataInject,
             dataType: child.dataType,
             className: child.className,
             required: child.required,

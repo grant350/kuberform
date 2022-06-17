@@ -142,7 +142,7 @@ class FormArray extends React.Component{
           if (child.JSXElement === undefined ){
             child.JSXElement = Input;
           }
-          return <FormControl dataType={child.dataType} className={child.className} required={child.required}  helperMessage={child.helperMessage} errorMessage={child.errorMessage}  ref={this.refrences[index]} disabled={child.disabled} width={child.width} label={child.label} setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
+          return <FormControl dataInject={child.dataInject} dataType={child.dataType} className={child.className} required={child.required}  helperMessage={child.helperMessage} errorMessage={child.errorMessage}  ref={this.refrences[index]} disabled={child.disabled} width={child.width} label={child.label} setParent={this.setParent} parent={this} control={child} validator={child.validator}  VALIDATE={this.VALIDATE} index={index}  JSXElement={child.JSXElement} name={child.name} key={index}  value={this.state.value[index]} status={this.state.statuses[index]} />
           }
         if (child.type === 'formArray' ){
           if (child.JSXContainer === undefined ){

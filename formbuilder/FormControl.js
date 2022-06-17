@@ -54,7 +54,7 @@ class FormControl extends React.Component {
     this.setState({touched:true},()=>{
       if (this.required){
         if (typeof this.props.value === 'string'){
-          if (this.props.value <= 0){
+          if (this.props.value.length <= 0){
             this.update(this.props.value,true)
           }
         } else
@@ -112,7 +112,7 @@ class FormControl extends React.Component {
 
 
    return( <div className="formControl">
-            <this.props.JSXElement  touchEvent={this.touchEvent} disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={ this.props.value? this.props.value: this.getDataType() } status={this.props.status}/>
+            <this.props.JSXElement dataInject={this.props.dataInject} touchEvent={this.touchEvent} disabled={this.disabled} errorMessage={this.errorMessage} helperMessage={this.helperMessage} required={this.required} label={this.label} update={this.update} border={getBorder()} name={this.props.name}  value={ this.props.value? this.props.value: this.getDataType() } status={this.props.status}/>
     </div>
    )
   }
