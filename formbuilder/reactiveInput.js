@@ -15,7 +15,7 @@ class Input extends React.Component {
         onClick={(e)=>{this.props.touchEvent(e)}}
         value={this.props.value}
         type={this.props.controlType}
-        innerlabel={this.props.innerlabel? this.props.innerlabel:"type here"}
+        label={this.props.innerlabel? this.props.s:"type here"}
         error={this.props.error? this.props.error:false}
         required={this.props.required? this.props.required:false}
         disabled={this.props.disabled? this.props.disabled:false}

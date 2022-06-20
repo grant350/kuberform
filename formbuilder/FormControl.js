@@ -15,18 +15,19 @@ class FormControl extends React.Component {
     this.width = this.props.width? this.props.width:'200px';
     this.dataType = this.props.dataType;
     this.parent = this.props.parent;
-    // this.disabled= this.props.disabled? this.props.disabled:false;
     this.dataType = this.props.dataType;
     this.getDataType = this.getDataType.bind(this)
     this.state = {error:false, touched:false,dirty:false,enabled:true,disabled:this.props.disabled? this.props.disabled:false}
     this.value = this.props.value? this.props.value:this.getDataType();
+    if (this.state.disabled){
+      this.value = ''
+    }
     this.helperMessage = this.props.helperMessage;
     this.errorMessage = this.props.errorMessage;
     this.touchEvent = this.touchEvent.bind(this);
     this.copyvalue = this.props.value;
     this.wrapperRef = React.createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
-
 
   }
 
@@ -44,9 +45,6 @@ class FormControl extends React.Component {
   componentDidMount(){
     this.update(this.value)
   }
-
-
-
 
    getDataType(){
      if (this.dataType !== undefined){
