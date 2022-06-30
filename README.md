@@ -235,7 +235,21 @@ class Input extends React.Component {
 ```
 
 
+# How to check if form is valid?
 
+ ```js
+ // to get data you must use a refrence to the formGroup.
+   function submit(){
+       if ( this.myRef.current.isValid()){
+         //continue
+       } else {
+         //invalid form
+       }
+   }
+  <FormGroup ref={this.myRef} controls={formgroup} name={'order'}  />
+  <button onClick={this.submit|| submit}></button>
+
+```
 
 # How to getdata from the formGroup?
 

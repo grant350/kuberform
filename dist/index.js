@@ -148,8 +148,7 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.label = _this.props.label ? _this.props.label : 'type here';
     _this.width = _this.props.width ? _this.props.width : '200px';
     _this.dataType = _this.props.dataType;
-    _this.parent = _this.props.parent; // this.disabled= this.props.disabled? this.props.disabled:false;
-
+    _this.parent = _this.props.parent;
     _this.dataType = _this.props.dataType;
     _this.getDataType = _this.getDataType.bind(_assertThisInitialized(_this));
     _this.state = {
@@ -160,6 +159,11 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
       disabled: _this.props.disabled ? _this.props.disabled : false
     };
     _this.value = _this.props.value ? _this.props.value : _this.getDataType();
+
+    if (_this.state.disabled) {
+      _this.value = '';
+    }
+
     _this.helperMessage = _this.props.helperMessage;
     _this.errorMessage = _this.props.errorMessage;
     _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized(_this));
@@ -717,6 +721,20 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
           }
         }
       });
+    }
+  }, {
+    key: "isValid",
+    value: function isValid() {
+      switch (this.state.status) {
+        case 'INVALID':
+          return false;
+
+        case 'VALID':
+          return true;
+
+        default:
+          return null;
+      }
     }
   }, {
     key: "getData",

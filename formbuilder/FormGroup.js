@@ -80,7 +80,15 @@ class FormGroup extends React.Component {
         }
         });
      }
-
+     isValid(){
+       switch (this.state.status){
+         case 'INVALID': return false;
+         break;
+         case 'VALID': return true
+         break;
+         default: return null
+       }
+     }
     getData(){
       return this.state.value;
     }
