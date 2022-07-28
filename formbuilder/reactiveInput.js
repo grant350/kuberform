@@ -4,6 +4,7 @@ import {TextField,FormControl} from  '@mui/material';
 class Input extends React.Component {
   constructor(props){
     super(props)
+    //needs to be simplified where styling is up to the user
   }
   render(){
     return (

@@ -1,33 +1,48 @@
-import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
-import _createClass from '@babel/runtime/helpers/createClass';
-import _inherits from '@babel/runtime/helpers/inherits';
-import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
-import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
-import React from 'react';
-import { FormGroup as FormGroup$2, Button, FormControl as FormControl$1, TextField } from '@mui/material';
-import _defineProperty from '@babel/runtime/helpers/defineProperty';
-import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
-import { BehaviorSubject } from 'rxjs';
+'use strict';
 
-function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var _classCallCheck = require('@babel/runtime/helpers/classCallCheck');
+var _createClass = require('@babel/runtime/helpers/createClass');
+var _inherits = require('@babel/runtime/helpers/inherits');
+var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstructorReturn');
+var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
+var React = require('react');
+var material = require('@mui/material');
+var _defineProperty = require('@babel/runtime/helpers/defineProperty');
+var _assertThisInitialized = require('@babel/runtime/helpers/assertThisInitialized');
+var rxjs = require('rxjs');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var _classCallCheck__default = /*#__PURE__*/_interopDefaultLegacy(_classCallCheck);
+var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
+var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
+var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
+var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
+var _assertThisInitialized__default = /*#__PURE__*/_interopDefaultLegacy(_assertThisInitialized);
+
+function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var Container = /*#__PURE__*/function (_React$Component) {
-  _inherits(Container, _React$Component);
+  _inherits__default["default"](Container, _React$Component);
 
   var _super = _createSuper$4(Container);
 
   function Container(props) {
-    _classCallCheck(this, Container);
+    _classCallCheck__default["default"](this, Container);
 
     return _super.call(this, props);
   }
 
-  _createClass(Container, [{
+  _createClass__default["default"](Container, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement(FormGroup$2, {
+      return /*#__PURE__*/React__default["default"].createElement(material.FormGroup, {
         className: "container",
         style: {
           width: "100%",
@@ -35,12 +50,12 @@ var Container = /*#__PURE__*/function (_React$Component) {
           position: "relative",
           "left": "20px"
         }
-      }, /*#__PURE__*/React.createElement("div", null, this.props.children.map(function (item) {
+      }, /*#__PURE__*/React__default["default"].createElement("div", null, this.props.children.map(function (item) {
         return item;
-      })), this.props.addChild ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Button, {
+      })), this.props.addChild ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement(material.Button, {
         className: "btn",
         onClick: this.props.addChild
-      }, "Add Child"), " ", /*#__PURE__*/React.createElement(Button, {
+      }, "Add Child"), " ", /*#__PURE__*/React__default["default"].createElement(material.Button, {
         className: "btn",
         onClick: this.props.removeChild
       }, "Remove Child")) : null);
@@ -48,42 +63,42 @@ var Container = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return Container;
-}(React.Component);
+}(React__default["default"].Component);
 
-function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var Input = /*#__PURE__*/function (_React$Component) {
-  _inherits(Input, _React$Component);
+  _inherits__default["default"](Input, _React$Component);
 
   var _super = _createSuper$3(Input);
 
   function Input(props) {
-    _classCallCheck(this, Input);
+    _classCallCheck__default["default"](this, Input);
 
-    return _super.call(this, props);
+    return _super.call(this, props); //needs to be simplified where styling is up to the user
   }
 
-  _createClass(Input, [{
+  _createClass__default["default"](Input, [{
     key: "render",
     value: function render() {
       var _this = this;
 
-      return /*#__PURE__*/React.createElement(FormControl$1, {
+      return /*#__PURE__*/React__default["default"].createElement(material.FormControl, {
         className: "input",
         style: {
           position: "relative",
           left: this.props.tabOver ? this.props.tabOver.toString() + "px" : "0px"
         }
-      }, /*#__PURE__*/React.createElement("label", {
+      }, /*#__PURE__*/React__default["default"].createElement("label", {
         style: {
           display: "block",
           width: "100%",
           position: "relative",
           margin: "5px"
         }
-      }, " ", this.props.label), /*#__PURE__*/React.createElement(TextField, {
+      }, " ", this.props.label), /*#__PURE__*/React__default["default"].createElement(material.TextField, {
         size: "small",
         onChange: function onChange(e) {
           _this.props.update(e.target.value);
@@ -121,21 +136,21 @@ var Input = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return Input;
-}(React.Component);
+}(React__default["default"].Component);
 
-function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var FormControl = /*#__PURE__*/function (_React$Component) {
-  _inherits(FormControl, _React$Component);
+  _inherits__default["default"](FormControl, _React$Component);
 
   var _super = _createSuper$2(FormControl);
 
   function FormControl(props) {
     var _this;
 
-    _classCallCheck(this, FormControl);
+    _classCallCheck__default["default"](this, FormControl);
 
     _this = _super.call(this, props);
     _this.name = _this.props.name;
@@ -143,14 +158,14 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
     _this.validator = _this.props.validator ? _this.props.validator : null;
     _this.required = _this.props.required;
     _this.className = _this.props.className;
-    _this.update = _this.update.bind(_assertThisInitialized(_this));
-    _this.subject$ = new BehaviorSubject(null);
+    _this.update = _this.update.bind(_assertThisInitialized__default["default"](_this));
+    _this.subject$ = new rxjs.BehaviorSubject(null);
     _this.label = _this.props.label ? _this.props.label : 'type here';
     _this.width = _this.props.width ? _this.props.width : '200px';
     _this.dataType = _this.props.dataType;
     _this.parent = _this.props.parent;
     _this.dataType = _this.props.dataType;
-    _this.getDataType = _this.getDataType.bind(_assertThisInitialized(_this));
+    _this.getDataType = _this.getDataType.bind(_assertThisInitialized__default["default"](_this));
     _this.state = {
       error: false,
       touched: false,
@@ -166,14 +181,14 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
 
     _this.helperMessage = _this.props.helperMessage;
     _this.errorMessage = _this.props.errorMessage;
-    _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized(_this));
+    _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized__default["default"](_this));
     _this.copyvalue = _this.props.value;
-    _this.wrapperRef = /*#__PURE__*/React.createRef();
-    _this.handleClickOutside = _this.handleClickOutside.bind(_assertThisInitialized(_this));
+    _this.wrapperRef = /*#__PURE__*/React__default["default"].createRef();
+    _this.handleClickOutside = _this.handleClickOutside.bind(_assertThisInitialized__default["default"](_this));
     return _this;
   }
 
-  _createClass(FormControl, [{
+  _createClass__default["default"](FormControl, [{
     key: "handleClickOutside",
     value: function handleClickOutside(event) {// if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
       //   if (this.props.value !== undefined){
@@ -283,11 +298,11 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
         }
       };
 
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formControl",
         onMouseDown: this.handleClickOutside,
         ref: this.wrapperRef
-      }, /*#__PURE__*/React.createElement(this.props.JSXElement, {
+      }, /*#__PURE__*/React__default["default"].createElement(this.props.JSXElement, {
         controlType: this.props.controlType,
         dataInject: this.props.dataInject,
         touchEvent: this.touchEvent,
@@ -306,25 +321,25 @@ var FormControl = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return FormControl;
-}(React.Component);
+}(React__default["default"].Component);
 
 function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
-function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var FormArray = /*#__PURE__*/function (_React$Component) {
-  _inherits(FormArray, _React$Component);
+  _inherits__default["default"](FormArray, _React$Component);
 
   var _super = _createSuper$1(FormArray);
 
   function FormArray(props) {
     var _this;
 
-    _classCallCheck(this, FormArray);
+    _classCallCheck__default["default"](this, FormArray);
 
     _this = _super.call(this, props);
     _this.type = "formArray";
@@ -336,28 +351,28 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
       status: _this.props.status ? _this.props.status : "VALID",
       controls: _this.props.controls
     };
-    _this.reset = _this.reset.bind(_assertThisInitialized(_this));
+    _this.reset = _this.reset.bind(_assertThisInitialized__default["default"](_this));
     _this.refrences = [];
-    _this.makeChildren = _this.makeChildren.bind(_assertThisInitialized(_this));
-    _this.addChild = _this.addChild.bind(_assertThisInitialized(_this));
-    _this.removeChild = _this.removeChild.bind(_assertThisInitialized(_this));
-    _this.resetControl = _this.resetControl.bind(_assertThisInitialized(_this));
-    _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
-    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized(_this));
+    _this.makeChildren = _this.makeChildren.bind(_assertThisInitialized__default["default"](_this));
+    _this.addChild = _this.addChild.bind(_assertThisInitialized__default["default"](_this));
+    _this.removeChild = _this.removeChild.bind(_assertThisInitialized__default["default"](_this));
+    _this.resetControl = _this.resetControl.bind(_assertThisInitialized__default["default"](_this));
+    _this.setParent = _this.setParent.bind(_assertThisInitialized__default["default"](_this));
+    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized__default["default"](_this));
     _this.copyState = Object.assign({}, _this.state);
     _this.autoFill = _this.props.autoFill ? _this.props.autoFill : [];
     _this.copy = Object.assign({}, _this.props.controls.slice(0, 1)[0]);
 
     _this.state.controls.forEach(function (item, index) {
       _this.state.statuses[index] = "VALID";
-      _this.refrences[index] = /*#__PURE__*/React.createRef();
+      _this.refrences[index] = /*#__PURE__*/React__default["default"].createRef();
       _this.props.controls[index];
     });
 
     return _this;
   }
 
-  _createClass(FormArray, [{
+  _createClass__default["default"](FormArray, [{
     key: "reset",
     value: function reset() {
       var _this2 = this;
@@ -470,7 +485,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
             child.JSXElement = Input;
           }
 
-          return /*#__PURE__*/React.createElement(FormControl, {
+          return /*#__PURE__*/React__default["default"].createElement(FormControl, {
             controlType: child.controlType,
             dataInject: child.dataInject,
             dataType: child.dataType,
@@ -501,7 +516,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
             child.JSXContainer = Container;
           }
 
-          return /*#__PURE__*/React.createElement(FormArray, {
+          return /*#__PURE__*/React__default["default"].createElement(FormArray, {
             autoFill: _this4.autoFill[index],
             ref: _this4.refrences[index],
             setParent: _this4.setParent,
@@ -522,7 +537,7 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
             child.JSXContainer = Container;
           }
 
-          return /*#__PURE__*/React.createElement(FormGroup$1, {
+          return /*#__PURE__*/React__default["default"].createElement(FormGroup$1, {
             autoFill: _this4.autoFill[index],
             ref: _this4.refrences[index],
             setParent: _this4.setParent,
@@ -605,9 +620,9 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
         }
       };
 
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formArray"
-      }, /*#__PURE__*/React.createElement(this.props.JSXContainer, {
+      }, /*#__PURE__*/React__default["default"].createElement(this.props.JSXContainer, {
         border: getBorder(),
         addChild: this.addChild,
         removeChild: this.removeChild,
@@ -617,25 +632,25 @@ var FormArray = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return FormArray;
-}(React.Component);
+}(React__default["default"].Component);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var FormGroup = /*#__PURE__*/function (_React$Component) {
-  _inherits(FormGroup, _React$Component);
+  _inherits__default["default"](FormGroup, _React$Component);
 
   var _super = _createSuper(FormGroup);
 
   function FormGroup(props) {
     var _this;
 
-    _classCallCheck(this, FormGroup);
+    _classCallCheck__default["default"](this, FormGroup);
 
     _this = _super.call(this, props);
     _this.type = "formGroup";
@@ -649,20 +664,20 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
       color: "#36bc78"
     };
     _this.refrences = {};
-    _this.getData = _this.getData.bind(_assertThisInitialized(_this));
+    _this.getData = _this.getData.bind(_assertThisInitialized__default["default"](_this));
     Object.keys(_this.props.controls).forEach(function (key) {
       _this.state.statuses[key] = "VALID";
-      _this.refrences[key] = /*#__PURE__*/React.createRef();
+      _this.refrences[key] = /*#__PURE__*/React__default["default"].createRef();
     });
-    _this.setParent = _this.setParent.bind(_assertThisInitialized(_this));
-    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized(_this));
-    _this.reset = _this.reset.bind(_assertThisInitialized(_this));
+    _this.setParent = _this.setParent.bind(_assertThisInitialized__default["default"](_this));
+    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized__default["default"](_this));
+    _this.reset = _this.reset.bind(_assertThisInitialized__default["default"](_this));
     _this.copyState = Object.assign({}, _this.state);
     _this.autoFill = _this.props.autoFill ? _this.props.autoFill : {};
     return _this;
   }
 
-  _createClass(FormGroup, [{
+  _createClass__default["default"](FormGroup, [{
     key: "checkStatus",
     value: function checkStatus(statuses) {
       if (Object.values(statuses).includes('PENDING')) {
@@ -758,7 +773,7 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
             child.JSXElement = Input;
           }
 
-          return /*#__PURE__*/React.createElement(FormControl, {
+          return /*#__PURE__*/React__default["default"].createElement(FormControl, {
             controlType: child.controlType,
             dataInject: child.dataInject,
             dataType: child.dataType,
@@ -790,14 +805,14 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
             child.JSXContainer = Container;
           }
 
-          return /*#__PURE__*/React.createElement(FormArray, (_React$createElement = {
+          return /*#__PURE__*/React__default["default"].createElement(FormArray, (_React$createElement = {
             autoFill: _this4.autoFill[key],
             ref: _this4.refrences[key],
             value: _this4.state.value[key],
             setParent: _this4.setParent,
             parent: _this4,
             control: child
-          }, _defineProperty(_React$createElement, "value", _this4.state.value[key]), _defineProperty(_React$createElement, "name", key), _defineProperty(_React$createElement, "key", key), _defineProperty(_React$createElement, "index", index), _defineProperty(_React$createElement, "JSXContainer", child.JSXContainer), _defineProperty(_React$createElement, "status", _this4.state.statuses[key]), _defineProperty(_React$createElement, "controls", child.controls), _React$createElement));
+          }, _defineProperty__default["default"](_React$createElement, "value", _this4.state.value[key]), _defineProperty__default["default"](_React$createElement, "name", key), _defineProperty__default["default"](_React$createElement, "key", key), _defineProperty__default["default"](_React$createElement, "index", index), _defineProperty__default["default"](_React$createElement, "JSXContainer", child.JSXContainer), _defineProperty__default["default"](_React$createElement, "status", _this4.state.statuses[key]), _defineProperty__default["default"](_React$createElement, "controls", child.controls), _React$createElement));
         }
 
         if (child.type === 'formGroup') {
@@ -807,14 +822,14 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
             child.JSXContainer = Container;
           }
 
-          return /*#__PURE__*/React.createElement(FormGroup, (_React$createElement2 = {
+          return /*#__PURE__*/React__default["default"].createElement(FormGroup, (_React$createElement2 = {
             autoFill: _this4.autoFill[key],
             ref: _this4.refrences[key],
             value: _this4.state.value[key],
             setParent: _this4.setParent,
             parent: _this4,
             control: child
-          }, _defineProperty(_React$createElement2, "value", _this4.state.value[key]), _defineProperty(_React$createElement2, "index", index), _defineProperty(_React$createElement2, "name", key), _defineProperty(_React$createElement2, "controls", child.controls), _defineProperty(_React$createElement2, "status", _this4.state.statuses[key]), _defineProperty(_React$createElement2, "JSXContainer", child.JSXContainer), _defineProperty(_React$createElement2, "key", key), _React$createElement2));
+          }, _defineProperty__default["default"](_React$createElement2, "value", _this4.state.value[key]), _defineProperty__default["default"](_React$createElement2, "index", index), _defineProperty__default["default"](_React$createElement2, "name", key), _defineProperty__default["default"](_React$createElement2, "controls", child.controls), _defineProperty__default["default"](_React$createElement2, "status", _this4.state.statuses[key]), _defineProperty__default["default"](_React$createElement2, "JSXContainer", child.JSXContainer), _defineProperty__default["default"](_React$createElement2, "key", key), _React$createElement2));
         }
       });
     }
@@ -833,9 +848,9 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
         }
       };
 
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formGroup"
-      }, /*#__PURE__*/React.createElement(this.Container, {
+      }, /*#__PURE__*/React__default["default"].createElement(this.Container, {
         ref: this.state.ref,
         border: getBorder(),
         children: this.makeChildren(this.state.controls)
@@ -844,7 +859,11 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return FormGroup;
-}(React.Component);
+}(React__default["default"].Component);
 var FormGroup$1 = FormGroup;
 
-export { Container, FormArray, FormControl, FormGroup$1 as FormGroup, Input };
+exports.Container = Container;
+exports.FormArray = FormArray;
+exports.FormControl = FormControl;
+exports.FormGroup = FormGroup$1;
+exports.Input = Input;
