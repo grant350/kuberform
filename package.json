@@ -1,18 +1,19 @@
 {
-  "name": "@zenabyss/reactformbuilder",
-  "version": "1.3.5",
-  "description": "reactive formbuilder",
+  "name": "@kuberspace/kuberform",
+  "version": "0.0.1",
+  "description": "kuberform is a reactive formbuilder",
   "notes": " readme not finished",
-  "keywords": ["react","react form builder","formbuilder","form builder","form-builder","reactive-formbuilder","reactive forms"],
+  "keywords": ["react","react form builder","formbuilder","form builder","form-builder","reactive-formbuilder","reactive forms","kuberform","kuberspace"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/grant350/reactformbuilder.git"
   },
   "module": "dist/index.js",
   "scripts": {
-    "start": "mv node_moduless node_modules; rollup -c -w ",
-    "end":"mv node_modules node_moduless"
+    "start": "mv node_moduless node_modules; rollup -c; mv node_modules node_moduless ",
+    "end":""
   },
+  "main":"dist/index.js",
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
   "license" : "GNU3",
   "licenseURL": "https://www.gnu.org/licenses/gpl-3.0.en.html",

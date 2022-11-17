@@ -4,648 +4,31 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var _classCallCheck = require('@babel/runtime/helpers/classCallCheck');
 var _createClass = require('@babel/runtime/helpers/createClass');
+var _assertThisInitialized = require('@babel/runtime/helpers/assertThisInitialized');
 var _inherits = require('@babel/runtime/helpers/inherits');
 var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstructorReturn');
 var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
 var React = require('react');
-var material = require('@mui/material');
-var _defineProperty = require('@babel/runtime/helpers/defineProperty');
-var _assertThisInitialized = require('@babel/runtime/helpers/assertThisInitialized');
 var rxjs = require('rxjs');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var _classCallCheck__default = /*#__PURE__*/_interopDefaultLegacy(_classCallCheck);
 var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
+var _assertThisInitialized__default = /*#__PURE__*/_interopDefaultLegacy(_assertThisInitialized);
 var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
 var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
 var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
-var _defineProperty__default = /*#__PURE__*/_interopDefaultLegacy(_defineProperty);
-var _assertThisInitialized__default = /*#__PURE__*/_interopDefaultLegacy(_assertThisInitialized);
-
-function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
-
-function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var Container = /*#__PURE__*/function (_React$Component) {
-  _inherits__default["default"](Container, _React$Component);
-
-  var _super = _createSuper$4(Container);
-
-  function Container(props) {
-    _classCallCheck__default["default"](this, Container);
-
-    return _super.call(this, props);
-  }
-
-  _createClass__default["default"](Container, [{
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React__default["default"].createElement(material.FormGroup, {
-        className: "container",
-        style: {
-          width: "100%",
-          height: "auto",
-          position: "relative",
-          "left": "20px"
-        }
-      }, /*#__PURE__*/React__default["default"].createElement("div", null, this.props.children.map(function (item) {
-        return item;
-      })), this.props.addChild ? /*#__PURE__*/React__default["default"].createElement("div", null, /*#__PURE__*/React__default["default"].createElement(material.Button, {
-        className: "btn",
-        onClick: this.props.addChild
-      }, "Add Child"), " ", /*#__PURE__*/React__default["default"].createElement(material.Button, {
-        className: "btn",
-        onClick: this.props.removeChild
-      }, "Remove Child")) : null);
-    }
-  }]);
-
-  return Container;
-}(React__default["default"].Component);
-
-function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
-
-function _isNativeReflectConstruct$3() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var Input = /*#__PURE__*/function (_React$Component) {
-  _inherits__default["default"](Input, _React$Component);
-
-  var _super = _createSuper$3(Input);
-
-  function Input(props) {
-    _classCallCheck__default["default"](this, Input);
-
-    return _super.call(this, props); //needs to be simplified where styling is up to the user
-  }
-
-  _createClass__default["default"](Input, [{
-    key: "render",
-    value: function render() {
-      var _this = this;
-
-      return /*#__PURE__*/React__default["default"].createElement(material.FormControl, {
-        className: "input",
-        style: {
-          position: "relative",
-          left: this.props.tabOver ? this.props.tabOver.toString() + "px" : "0px"
-        }
-      }, /*#__PURE__*/React__default["default"].createElement("label", {
-        style: {
-          display: "block",
-          width: "100%",
-          position: "relative",
-          margin: "5px"
-        }
-      }, " ", this.props.label), /*#__PURE__*/React__default["default"].createElement(material.TextField, {
-        size: "small",
-        onChange: function onChange(e) {
-          _this.props.update(e.target.value);
-        },
-        onClick: function onClick(e) {
-          _this.props.touchEvent(e);
-        },
-        value: this.props.value,
-        type: this.props.controlType,
-        label: this.props.innerlabel ? this.props.s : "type here",
-        error: this.props.error ? this.props.error : false,
-        required: this.props.required ? this.props.required : false,
-        disabled: this.props.disabled ? this.props.disabled : false,
-        helperText: this.props.helperText ? this.props.helperText : "",
-        InputProps: {
-          style: {
-            fontSize: this.props.InputProps ? this.props.InputProp : 10
-          }
-        },
-        InputLabelProps: {
-          style: {
-            fontSize: this.props.InputLabelProps ? this.props.InputLabelProps : 12
-          }
-        },
-        style: {
-          background: 'white',
-          "borderLeft": "20px solid " + this.props.border,
-          "borderRadius": "10px",
-          boxSizing: "border-box"
-        },
-        id: "filled-basic",
-        variant: "filled"
-      }));
-    }
-  }]);
-
-  return Input;
-}(React__default["default"].Component);
 
 function _createSuper$2(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$2(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$2() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-var FormControl = /*#__PURE__*/function (_React$Component) {
-  _inherits__default["default"](FormControl, _React$Component);
-
-  var _super = _createSuper$2(FormControl);
-
-  function FormControl(props) {
-    var _this;
-
-    _classCallCheck__default["default"](this, FormControl);
-
-    _this = _super.call(this, props);
-    _this.name = _this.props.name;
-    _this.type = "formControl";
-    _this.validator = _this.props.validator ? _this.props.validator : null;
-    _this.required = _this.props.required;
-    _this.className = _this.props.className;
-    _this.update = _this.update.bind(_assertThisInitialized__default["default"](_this));
-    _this.subject$ = new rxjs.BehaviorSubject(null);
-    _this.label = _this.props.label ? _this.props.label : 'type here';
-    _this.width = _this.props.width ? _this.props.width : '200px';
-    _this.dataType = _this.props.dataType;
-    _this.parent = _this.props.parent;
-    _this.dataType = _this.props.dataType;
-    _this.getDataType = _this.getDataType.bind(_assertThisInitialized__default["default"](_this));
-    _this.state = {
-      error: false,
-      touched: false,
-      dirty: false,
-      enabled: true,
-      disabled: _this.props.disabled ? _this.props.disabled : false
-    };
-    _this.value = _this.props.value ? _this.props.value : _this.getDataType();
-
-    if (_this.state.disabled) {
-      _this.value = '';
-    }
-
-    _this.helperMessage = _this.props.helperMessage;
-    _this.errorMessage = _this.props.errorMessage;
-    _this.touchEvent = _this.touchEvent.bind(_assertThisInitialized__default["default"](_this));
-    _this.copyvalue = _this.props.value;
-    _this.wrapperRef = /*#__PURE__*/React__default["default"].createRef();
-    _this.handleClickOutside = _this.handleClickOutside.bind(_assertThisInitialized__default["default"](_this));
-    return _this;
-  }
-
-  _createClass__default["default"](FormControl, [{
-    key: "handleClickOutside",
-    value: function handleClickOutside(event) {// if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
-      //   if (this.props.value !== undefined){
-      //   console.log('was touched',this.state.touched,JSON.stringify(this.props.value));
-      //   if (this.state.touched &&  JSON.stringify(this.props.value).length <= 0){
-      //     alert("You clicked outside of me!");
-      //   }
-      // }
-      // }
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.update(this.value);
-    }
-  }, {
-    key: "getDataType",
-    value: function getDataType() {
-      if (this.dataType !== undefined) {
-        if (this.dataType.toLowerCase() === "object") {
-          return {};
-        }
-
-        if (this.dataType.toLowerCase() === "string") {
-          return "";
-        }
-
-        if (this.dataType.toLowerCase() === "number") {
-          return 0;
-        }
-
-        if (this.dataType.toLowerCase() === "array") {
-          return [];
-        }
-      } else {
-        return "";
-      }
-    } //needs work not sure what to do. when touch is true and val <= 0 control invalid;
-    //
-
-  }, {
-    key: "touchEvent",
-    value: function touchEvent(e) {
-      this.setState({
-        touched: true
-      }, function () {// console.log('after touch',this.state)
-        // if (this.required){
-        //   if (typeof this.props.value === 'string'){
-        //     if (this.props.value.length <= 0){
-        //       this.update(this.props.value,true)
-        //     }
-        //   } else
-        //       if (this.state.touched === true && JSON.stringify(this.props.value) === JSON.stringify(this.copyvalue)){
-        //         this.update(this.props.value,true)
-        //       }
-        //   }
-      });
-    }
-  }, {
-    key: "update",
-    value: function update(value, error) {
-      var _this2 = this;
-
-      if (error === undefined) {
-        if (this.validator) {
-          this.subject$.next(null);
-          this.validator(value, this.subject$, this);
-        } else {
-          this.subject$.next(true);
-        }
-      } else {
-        this.subject$.next(false);
-      }
-
-      this.subject$.subscribe(function (x) {
-        var status;
-
-        if (x === null) {
-          status = 'PENDING';
-        } else if (x === false) {
-          status = 'INVALID';
-        } else if (x === true) {
-          status = "VALID";
-        }
-
-        if (_this2.props.parent.type === 'formGroup') {
-          _this2.props.setParent(_this2.name, value, status);
-        }
-
-        if (_this2.props.parent.type === 'formArray') {
-          _this2.props.setParent(_this2.props.index, value, status);
-        }
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      var getBorder = function getBorder() {
-        if (_this3.props.status === "VALID") {
-          return "#36bc78";
-        } else if (_this3.props.status === "PENDING") {
-          return "#f2da33";
-        } else if (_this3.props.status === "INVALID") {
-          return "#cb1842";
-        }
-      };
-
-      return /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "formControl",
-        onMouseDown: this.handleClickOutside,
-        ref: this.wrapperRef
-      }, /*#__PURE__*/React__default["default"].createElement(this.props.JSXElement, {
-        controlType: this.props.controlType,
-        dataInject: this.props.dataInject,
-        touchEvent: this.touchEvent,
-        disabled: this.state.disabled,
-        errorMessage: this.errorMessage,
-        helperText: this.props.helperText,
-        required: this.required,
-        label: this.label,
-        update: this.update,
-        border: getBorder(),
-        name: this.props.name,
-        value: this.props.value ? this.props.value : this.getDataType(),
-        status: this.props.status
-      }));
-    }
-  }]);
-
-  return FormControl;
-}(React__default["default"].Component);
-
-function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys$1(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
-
-function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-var FormArray = /*#__PURE__*/function (_React$Component) {
-  _inherits__default["default"](FormArray, _React$Component);
-
-  var _super = _createSuper$1(FormArray);
-
-  function FormArray(props) {
-    var _this;
-
-    _classCallCheck__default["default"](this, FormArray);
-
-    _this = _super.call(this, props);
-    _this.type = "formArray";
-    _this.name = _this.props.name;
-    _this.state = {
-      statuses: [],
-      color: "#36bc78",
-      value: _this.props.value ? _this.props.value : [],
-      status: _this.props.status ? _this.props.status : "VALID",
-      controls: _this.props.controls
-    };
-    _this.reset = _this.reset.bind(_assertThisInitialized__default["default"](_this));
-    _this.refrences = [];
-    _this.makeChildren = _this.makeChildren.bind(_assertThisInitialized__default["default"](_this));
-    _this.addChild = _this.addChild.bind(_assertThisInitialized__default["default"](_this));
-    _this.removeChild = _this.removeChild.bind(_assertThisInitialized__default["default"](_this));
-    _this.resetControl = _this.resetControl.bind(_assertThisInitialized__default["default"](_this));
-    _this.setParent = _this.setParent.bind(_assertThisInitialized__default["default"](_this));
-    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized__default["default"](_this));
-    _this.copyState = Object.assign({}, _this.state);
-    _this.autoFill = _this.props.autoFill ? _this.props.autoFill : [];
-    _this.copy = Object.assign({}, _this.props.controls.slice(0, 1)[0]);
-
-    _this.state.controls.forEach(function (item, index) {
-      _this.state.statuses[index] = "VALID";
-      _this.refrences[index] = /*#__PURE__*/React__default["default"].createRef();
-      _this.props.controls[index];
-    });
-
-    return _this;
-  }
-
-  _createClass__default["default"](FormArray, [{
-    key: "reset",
-    value: function reset() {
-      var _this2 = this;
-
-      this.setState(_objectSpread$1({}, this.copyState), function () {
-        if (_this2.refrences) {
-          _this2.refrences.forEach(function (refrences) {
-            var control = refrences.current;
-
-            if (control instanceof FormControl) {
-              control.update('');
-            }
-
-            if (control instanceof FormGroup$1) {
-              control.reset();
-            }
-
-            if (control instanceof FormArray) {
-              control.reset();
-            }
-          });
-        }
-      });
-    } //last but not least is to change value from [] to put in controls.
-
-  }, {
-    key: "checkStatus",
-    value: function checkStatus(statuses) {
-      if (statuses.includes('INVALID')) {
-        return 'INVALID';
-      } else if (statuses.includes('PENDING')) {
-        return "PENDING";
-      } else {
-        return "VALID";
-      }
-    }
-  }, {
-    key: "setParent",
-    value: function setParent(key, value, status) {
-      var _this3 = this;
-
-      var statuses = this.state.statuses.slice();
-
-      if (status) {
-        statuses[key] = status;
-      }
-
-      var newstatus = this.checkStatus(statuses);
-      var statevalue = this.state.value.slice(0);
-      statevalue[key] = value;
-      this.setState({
-        value: statevalue,
-        statuses: statuses,
-        status: newstatus
-      }, function () {
-        if (_this3.props.setParent) {
-          if (_this3.props.parent.type === 'formGroup') {
-            _this3.props.setParent(_this3.name, _this3.state.value, _this3.state.status);
-          } else if (_this3.props.parent.type === 'formArray') {
-            _this3.props.setParent(_this3.props.index, _this3.state.value, _this3.state.status);
-          }
-        }
-      });
-    }
-  }, {
-    key: "resetControl",
-    value: function resetControl(control, keepcontrols) {
-      var removeValues = function removeValues(control) {
-        control = Object.assign({}, control);
-
-        if (control.type == "formArray") {
-          if (!keepcontrols || keepcontrols === undefined) {
-            control.controls = control.controls.slice(0, 1).map(function (ctl, index) {
-              return removeValues(ctl);
-            });
-          } else {
-            control.controls = control.controls.slice(0).map(function (ctl, index) {
-              return removeValues(ctl);
-            });
-          }
-        } else if (control.type == "formGroup") {
-          Object.keys(control.controls).forEach(function (key) {
-            var ctl = control.controls[key];
-            control.controls[key] = removeValues(ctl);
-          });
-        } else if (control.type === "formControl") {
-          if (control.keepvalue) ; else {
-            control.value = undefined;
-          }
-        }
-
-        return control;
-      };
-
-      var result = removeValues(control);
-      return result;
-    }
-  }, {
-    key: "makeChildren",
-    value: function makeChildren(ctls) {
-      var _this4 = this;
-
-      return ctls.map(function (child, index) {
-        if (_this4.autoFill[index]) {
-          _this4.state.value[index] = _this4.autoFill[index];
-        }
-
-        if (child.type === 'formControl') {
-          if (child.JSXElement === undefined) {
-            child.JSXElement = Input;
-          }
-
-          return /*#__PURE__*/React__default["default"].createElement(FormControl, {
-            controlType: child.controlType,
-            dataInject: child.dataInject,
-            dataType: child.dataType,
-            className: child.className,
-            required: child.required,
-            helperText: child.helperText,
-            errorMessage: child.errorMessage,
-            ref: _this4.refrences[index],
-            disabled: child.disabled,
-            width: child.width,
-            label: child.label,
-            setParent: _this4.setParent,
-            parent: _this4,
-            control: child,
-            validator: child.validator,
-            VALIDATE: _this4.VALIDATE,
-            index: index,
-            JSXElement: child.JSXElement,
-            name: child.name,
-            key: index,
-            value: _this4.state.value[index],
-            status: _this4.state.statuses[index]
-          });
-        }
-
-        if (child.type === 'formArray') {
-          if (child.JSXContainer === undefined) {
-            child.JSXContainer = Container;
-          }
-
-          return /*#__PURE__*/React__default["default"].createElement(FormArray, {
-            autoFill: _this4.autoFill[index],
-            ref: _this4.refrences[index],
-            setParent: _this4.setParent,
-            parent: _this4,
-            control: child,
-            index: index,
-            VALIDATE: _this4.VALIDATE,
-            value: _this4.state.value[index],
-            name: child.name,
-            key: index,
-            JSXContainer: child.JSXContainer,
-            controls: child.controls
-          });
-        }
-
-        if (child.type === 'formGroup') {
-          if (child.JSXContainer === undefined) {
-            child.JSXContainer = Container;
-          }
-
-          return /*#__PURE__*/React__default["default"].createElement(FormGroup$1, {
-            autoFill: _this4.autoFill[index],
-            ref: _this4.refrences[index],
-            setParent: _this4.setParent,
-            parent: _this4,
-            control: child,
-            index: index,
-            VALIDATE: _this4.VALIDATE,
-            value: _this4.state.value[index],
-            name: child.name,
-            key: index,
-            controls: child.controls,
-            JSXContainer: child.JSXContainer
-          });
-        }
-      });
-    }
-  }, {
-    key: "addChild",
-    value: function addChild() {
-      var controls = this.state.controls.slice(0);
-      controls.push(this.resetControl(this.copy));
-      controls.length;
-      var value = this.state.value.slice();
-
-      switch (controls[controls.length - 1].type) {
-        case 'formControl':
-          value.push("");
-          break;
-
-        case 'formArray':
-          value.push([]);
-          break;
-
-        case 'FormGroup':
-          value.push({});
-          break;
-      }
-
-      this.setState({
-        controls: controls,
-        value: value
-      });
-    }
-  }, {
-    key: "removeChild",
-    value: function removeChild(index) {
-      if (this.state.controls.length - 1 > 0) {
-        this.state.controls.pop();
-        this.state.value.pop();
-        this.state.statuses.pop();
-        var newstatus = this.checkStatus(this.state.statuses);
-        this.setState({
-          controls: this.state.controls,
-          value: this.state.value,
-          statuses: this.state.statuses,
-          status: newstatus
-        }, function () {
-          if (this.props.setParent) {
-            if (this.props.parent.type === 'formGroup') {
-              this.props.setParent(this.name, this.state.value, this.state.status);
-            } else if (this.props.parent.type === 'formArray') {
-              this.props.setParent(this.props.index, this.state.value, this.state.status);
-            }
-          }
-        });
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this5 = this;
-
-      var getBorder = function getBorder() {
-        if (_this5.state.status === "VALID") {
-          return "#36bc78";
-        } else if (_this5.state.status === "PENDING") {
-          return "#f2da33";
-        } else {
-          return "#cb1842";
-        }
-      };
-
-      return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "formArray"
-      }, /*#__PURE__*/React__default["default"].createElement(this.props.JSXContainer, {
-        border: getBorder(),
-        addChild: this.addChild,
-        removeChild: this.removeChild,
-        children: this.makeChildren(this.state.controls)
-      })));
-    }
-  }]);
-
-  return FormArray;
-}(React__default["default"].Component);
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty__default["default"](target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 var FormGroup = /*#__PURE__*/function (_React$Component) {
   _inherits__default["default"](FormGroup, _React$Component);
 
-  var _super = _createSuper(FormGroup);
+  var _super = _createSuper$2(FormGroup);
 
   function FormGroup(props) {
     var _this;
@@ -653,217 +36,248 @@ var FormGroup = /*#__PURE__*/function (_React$Component) {
     _classCallCheck__default["default"](this, FormGroup);
 
     _this = _super.call(this, props);
-    _this.type = "formGroup";
-    _this.name = _this.props.name;
-    _this.Container = _this.props.JSXContainer ? _this.props.JSXContainer : Container;
     _this.state = {
-      value: _this.props.value ? _this.props.value : {},
-      status: _this.props.status ? _this.props.status : "VALID",
-      controls: _this.props.controls,
+      value: {},
+      status: "VALID",
       statuses: {},
-      color: "#36bc78"
+      ref: {}
     };
-    _this.refrences = {};
-    _this.getData = _this.getData.bind(_assertThisInitialized__default["default"](_this));
-    Object.keys(_this.props.controls).forEach(function (key) {
-      _this.state.statuses[key] = "VALID";
-      _this.refrences[key] = /*#__PURE__*/React__default["default"].createRef();
-    });
-    _this.setParent = _this.setParent.bind(_assertThisInitialized__default["default"](_this));
-    _this.checkStatus = _this.checkStatus.bind(_assertThisInitialized__default["default"](_this));
-    _this.reset = _this.reset.bind(_assertThisInitialized__default["default"](_this));
-    _this.copyState = Object.assign({}, _this.state);
-    _this.autoFill = _this.props.autoFill ? _this.props.autoFill : {};
+    _this.ref = {};
+    _this.children = React__default["default"].Children.map(_this.props.children, function (child) {
+      if (child.props.fieldName) {
+        _this.ref[child.props.fieldName] = /*#__PURE__*/React__default["default"].createRef();
+        return /*#__PURE__*/React__default["default"].cloneElement(child, {
+          parent: _assertThisInitialized__default["default"](_this),
+          status: _this.state.status,
+          ref: _this.ref[child.props.fieldName]
+        });
+      } else if (child.props.groupName) {
+        _this.ref[child.props.groupName] = /*#__PURE__*/React__default["default"].createRef();
+        return /*#__PURE__*/React__default["default"].cloneElement(child, {
+          ref: _this.ref[child.props.groupName],
+          status: _this.state.status
+        });
+      }
+    }); // console.log('children',this.children)
+
     return _this;
   }
 
   _createClass__default["default"](FormGroup, [{
-    key: "checkStatus",
-    value: function checkStatus(statuses) {
-      if (Object.values(statuses).includes('PENDING')) {
-        return 'PENDING';
-      } else if (Object.values(statuses).includes('INVALID')) {
-        return "INVALID";
-      } else {
-        return "VALID";
-      }
+    key: "getParent",
+    value: function getParent() {
+      return this;
     }
   }, {
-    key: "reset",
-    value: function reset() {
-      var _this2 = this;
-
-      this.setState(_objectSpread({}, this.copyState), function () {
-        if (_this2.refrences) {
-          Object.keys(_this2.refrences).forEach(function (key) {
-            var control = _this2.refrences[key].current;
-
-            if (control instanceof FormControl) {
-              control.update('');
-            }
-
-            if (control instanceof FormGroup) {
-              control.reset();
-            }
-
-            if (control instanceof FormArray) {
-              control.reset();
-            }
-          });
-        }
-      }); //this is fine what should happen is the furthest refrenece will validate again
+    key: "getStatus",
+    value: function getStatus() {
+      return this.state.status;
     }
   }, {
-    key: "setParent",
-    value: function setParent(key, value, status) {
-      var _this3 = this;
-
-      var statuses = this.state.statuses;
-      statuses[key] = status;
-      var newstatus = this.checkStatus(statuses);
-      var statevalue = Object.assign({}, this.state.value);
-      statevalue[key] = value;
-      this.setState({
-        value: statevalue,
-        statuses: statuses,
-        status: newstatus
-      }, function () {
-        if (_this3.props.setParent) {
-          if (_this3.props.parent.type === 'formGroup') {
-            _this3.props.setParent(_this3.name, _this3.state.value, _this3.state.status);
-          } else if (_this3.props.parent.type === 'formArray') {
-            _this3.props.setParent(_this3.props.index, _this3.state.value, _this3.state.status);
-          }
-        }
-      });
-    }
-  }, {
-    key: "isValid",
-    value: function isValid() {
-      switch (this.state.status) {
-        case 'INVALID':
-          return false;
-
-        case 'VALID':
-          return true;
-
-        default:
-          return null;
-      }
-    }
-  }, {
-    key: "getData",
-    value: function getData() {
+    key: "getValue",
+    value: function getValue() {
       return this.state.value;
     }
   }, {
-    key: "makeChildren",
-    value: function makeChildren(ctls) {
-      var _this4 = this;
+    key: "getStatusString",
+    value: function getStatusString(status) {
+      switch (status) {
+        case null:
+          return "PENDING";
 
-      return Object.keys(ctls).map(function (key, index) {
-        var child = ctls[key];
+        case false:
+          return "INVALID";
 
-        if (_this4.autoFill[key]) {
-          _this4.state.value[key] = _this4.autoFill[key];
-        }
+        default:
+          return "VALID";
+      }
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
 
-        if (child.type === 'formControl') {
-          if (child.JSXElement === undefined) {
-            child.JSXElement = Input;
-          }
-
-          return /*#__PURE__*/React__default["default"].createElement(FormControl, {
-            controlType: child.controlType,
-            dataInject: child.dataInject,
-            dataType: child.dataType,
-            className: child.className,
-            required: child.required,
-            helperText: child.helperText,
-            errorMessage: child.errorMessage,
-            ref: _this4.refrences[key],
-            disabled: child.disabled,
-            width: child.width,
-            label: child.label,
-            setParent: _this4.setParent,
-            validator: child.validator,
-            parent: _this4,
-            control: child,
-            index: index,
-            JSXElement: child.JSXElement,
-            name: key,
-            value: _this4.state.value[key],
-            status: _this4.state.statuses[key],
-            key: key
+      var checkStatuses = function checkStatuses(status) {
+        if (Object.values(_this2.state.statuses).includes(null)) {
+          _this2.setState({
+            status: _this2.getStatusString(null),
+            statuses: _this2.state.statuses
+          });
+        } else if (Object.values(_this2.state.statuses).includes(false)) {
+          _this2.setState({
+            status: _this2.getStatusString(false),
+            statuses: _this2.state.statuses
+          });
+        } else {
+          _this2.setState({
+            status: _this2.getStatusString(true),
+            statuses: _this2.state.statuses
           });
         }
 
-        if (child.type === 'formArray') {
-          var _React$createElement;
+        console.log(_this2.state);
+      };
 
-          if (child.JSXContainer === undefined) {
-            child.JSXContainer = Container;
+      Object.keys(this.ref).forEach(function (key) {
+        var child = _this2.ref[key];
+
+        if (child.current !== null) {
+          if (child.current.status$) {
+            child.current.status$.subscribe(function (status) {
+              _this2.state.statuses[key] = status;
+              console.log('status', key, status);
+              checkStatuses();
+            });
           }
 
-          return /*#__PURE__*/React__default["default"].createElement(FormArray, (_React$createElement = {
-            autoFill: _this4.autoFill[key],
-            ref: _this4.refrences[key],
-            value: _this4.state.value[key],
-            setParent: _this4.setParent,
-            parent: _this4,
-            control: child
-          }, _defineProperty__default["default"](_React$createElement, "value", _this4.state.value[key]), _defineProperty__default["default"](_React$createElement, "name", key), _defineProperty__default["default"](_React$createElement, "key", key), _defineProperty__default["default"](_React$createElement, "index", index), _defineProperty__default["default"](_React$createElement, "JSXContainer", child.JSXContainer), _defineProperty__default["default"](_React$createElement, "status", _this4.state.statuses[key]), _defineProperty__default["default"](_React$createElement, "controls", child.controls), _React$createElement));
-        }
+          if (child.current.value$) {
+            child.current.value$.subscribe(function (val) {
+              _this2.state.value[key] = val;
 
-        if (child.type === 'formGroup') {
-          var _React$createElement2;
-
-          if (child.JSXContainer === undefined) {
-            child.JSXContainer = Container;
+              _this2.setState({
+                value: _this2.state.value
+              }, function () {});
+            });
           }
-
-          return /*#__PURE__*/React__default["default"].createElement(FormGroup, (_React$createElement2 = {
-            autoFill: _this4.autoFill[key],
-            ref: _this4.refrences[key],
-            value: _this4.state.value[key],
-            setParent: _this4.setParent,
-            parent: _this4,
-            control: child
-          }, _defineProperty__default["default"](_React$createElement2, "value", _this4.state.value[key]), _defineProperty__default["default"](_React$createElement2, "index", index), _defineProperty__default["default"](_React$createElement2, "name", key), _defineProperty__default["default"](_React$createElement2, "controls", child.controls), _defineProperty__default["default"](_React$createElement2, "status", _this4.state.statuses[key]), _defineProperty__default["default"](_React$createElement2, "JSXContainer", child.JSXContainer), _defineProperty__default["default"](_React$createElement2, "key", key), _React$createElement2));
         }
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
-
-      var getBorder = function getBorder() {
-        if (_this5.state.status === "VALID") {
-          return "#36bc78";
-        } else if (_this5.state.status === "PENDING") {
-          return "#f2da33";
-        } else if (_this5.state.status === "INVALID") {
-          return "#cb1842";
-        }
-      };
-
-      return /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, /*#__PURE__*/React__default["default"].createElement("div", {
+      return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formGroup"
-      }, /*#__PURE__*/React__default["default"].createElement(this.Container, {
-        ref: this.state.ref,
-        border: getBorder(),
-        children: this.makeChildren(this.state.controls)
-      })));
+      }, this.props.container ? /*#__PURE__*/React__default["default"].createElement(this.props.container, null, this.children) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, this.children));
     }
   }]);
 
   return FormGroup;
 }(React__default["default"].Component);
-var FormGroup$1 = FormGroup;
 
-exports.Container = Container;
-exports.FormArray = FormArray;
+function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
+
+function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+/*#__PURE__*/(function (_React$Component) {
+  _inherits__default["default"](FormArray, _React$Component);
+
+  var _super = _createSuper$1(FormArray);
+
+  function FormArray(props) {
+    _classCallCheck__default["default"](this, FormArray);
+
+    return _super.call(this, props);
+  }
+
+  _createClass__default["default"](FormArray, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React__default["default"].createElement("div", {
+        className: "formArray"
+      }, this.props.children);
+    }
+  }]);
+
+  return FormArray;
+})(React__default["default"].Component);
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+var FormControl = /*#__PURE__*/function (_React$Component) {
+  _inherits__default["default"](FormControl, _React$Component);
+
+  var _super = _createSuper(FormControl);
+
+  function FormControl(props) {
+    var _this;
+
+    _classCallCheck__default["default"](this, FormControl);
+
+    _this = _super.call(this, props);
+    _this.status$ = new rxjs.BehaviorSubject(null);
+    _this.value$ = new rxjs.BehaviorSubject(_this.props.value ? _this.props.value : '');
+    _this.update = _this.update.bind(_assertThisInitialized__default["default"](_this));
+    _this.state = {
+      status: "VALID"
+    };
+    _this.getStatusString = _this.getStatusString.bind(_assertThisInitialized__default["default"](_this)); // this.update(this.props.value? this.props.value: '')
+
+    return _this;
+  }
+
+  _createClass__default["default"](FormControl, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.update(this.props.value ? this.props.value : '');
+      this.status$.subscribe(function (status) {
+        _this2.setState({
+          status: _this2.getStatusString(status)
+        });
+      });
+    }
+  }, {
+    key: "getStatusString",
+    value: function getStatusString(status) {
+      switch (status) {
+        case null:
+          return "PENDING";
+
+        case false:
+          return "INVALID";
+
+        default:
+          return "VALID";
+      }
+    }
+  }, {
+    key: "valueChanges",
+    value: function valueChanges() {
+      return this.value$;
+    }
+  }, {
+    key: "statusChanges",
+    value: function statusChanges() {
+      return this.status$;
+    }
+  }, {
+    key: "validate",
+    value: function validate(value) {
+      //if false set parent errors:{}
+      console.log(this.props); // later take more than one validator
+
+      if (this.props.validator) {
+        this.status$.next(null);
+        this.props.validator(value, this.status$);
+      } else {
+        this.status$.next(true);
+      } //later validator observable subject can send object back with fieldErrorexample: 'field error message' or if error defaulted when false.
+
+    }
+  }, {
+    key: "update",
+    value: function update(value) {
+      this.value$.next(value);
+      this.validate(value);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/React__default["default"].createElement("div", {
+        className: "formControl"
+      }, /*#__PURE__*/React__default["default"].createElement(this.props.element, {
+        status: this.state.status,
+        fieldName: this.props.fieldName,
+        update: this.update
+      }));
+    }
+  }]);
+
+  return FormControl;
+}(React__default["default"].Component);
+
 exports.FormControl = FormControl;
-exports.FormGroup = FormGroup$1;
-exports.Input = Input;
+exports.FormGroup = FormGroup;
