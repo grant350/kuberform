@@ -1,81 +1,61 @@
-//
-// import FormControl from './FormControl.js';
-// import FormArray from './FormArray.js';
+"use strict";
+
 import React from 'react';
 import { Observable, BehaviorSubject, mergeMap, map } from 'rxjs';
+import AbstractControl from './AbstractControl';
 
-class FormGroup extends React.Component {
+class FormGroup extends AbstractControl {
 
   constructor(props) {
     super(props)
+
     this.state = {
       value: {},
-      status: "VALID",
-      statuses: {},
-      ref: {}
+      status: "VALID"
     }
-    this.ref = {};
+    this.value$ = new BehaviorSubject({});
+    this.controls = {};
 
-    this.children = React.Children.map(this.props.children, (child) => {
+    Object.defineProperty(this, 'clonedChildren',  { value: React.Children.map(this.props.children, (child) => {
       if (child.props.fieldName) {
-        this.ref[child.props.fieldName] = React.createRef();
-        return React.cloneElement(child, { parent: this, status:this.state.status,ref: this.ref[child.props.fieldName] })
-      } else if (child.props.groupName) {
-        this.ref[child.props.groupName] = React.createRef();
-        return React.cloneElement(child, { ref: this.ref[child.props.groupName],status:this.state.status })
+        this.controls[child.props.fieldName] = React.createRef();
+        return React.cloneElement(child, { parent: this, ref: this.controls[child.props.fieldName] })
+      } else if (child.props.groupName || child.props.arrayName) {
+        if (child.props.arrayName){
+          this.controls[child.props.arrayName] = React.createRef();
+          return React.cloneElement(child, { ref: this.controls[child.props.arrayName] })
+        }
+        if (child.props.groupName){ this.controls[child.props.groupName] = React.createRef();
+          return React.cloneElement(child, { ref: this.controls[child.props.groupName] })
+        }
       }
+    }), writable: false });
+  }
+
+  anyControls(condition){
+      Object.entries(this.controls).forEach(([key,value])=>{
+        const fieldName=key;
+        const control=value.current.state;
+        return condition(control);
     })
-    // console.log('children',this.children)
-  }
-
-  getParent(){
-    return this;
-  }
-
-  getStatus(){
-    return this.state.status;
-  }
-
-  getValue(){
-    return this.state.value
-  }
-
-  getStatusString(status) {
-    switch (status) {
-      case null: return "PENDING";
-        break;
-      case false: return "INVALID";
-        break;
-      default: return "VALID"
-    }
   }
 
   componentDidMount() {
-    var checkStatuses = (status) => {
-      if (Object.values(this.state.statuses).includes(null)) {
-        this.setState({ status: this.getStatusString(null), statuses: this.state.statuses })
-      } else if (Object.values(this.state.statuses).includes(false)) {
-        this.setState({ status: this.getStatusString(false), statuses: this.state.statuses })
-      } else {
-        this.setState({ status: this.getStatusString(true), statuses: this.state.statuses })
-      }
-      console.log(this.state);
-    }
-    Object.keys(this.ref).forEach(key => {
-      const child = this.ref[key];
+
+    Object.keys(this.controls).forEach(key => {
+      const child = this.controls[key];
       if (child.current !== null) {
-        if (child.current.status$) {
-          child.current.status$.subscribe(status => {
-            this.state.statuses[key] = status;
-            console.log('status',key,status)
-            checkStatuses(status);
+        if (child.current.statusChanges) {
+          child.current.statusChanges().subscribe(status => {
+            this.status$.next(this.calculateStatus());
           })
         }
-        if (child.current.value$) {
-          child.current.value$.subscribe(val => {
+        if (child.current.valueChanges) {
+          child.current.valueChanges().subscribe(val => {
             this.state.value[key] = val;
             this.setState({ value: this.state.value }, () => {
-            })
+              this.value$.next(this.state.value);
+            });
           })
         }
       }
@@ -87,7 +67,7 @@ class FormGroup extends React.Component {
   render() {
     return (
       <div className="formGroup">
-        {this.props.container ? <this.props.container>{this.children}</this.props.container> : <React.Fragment>{this.children}</React.Fragment>}
+        {this.props.container ? <this.props.container>{this.clonedChildren}</this.props.container> : <React.Fragment>{this.clonedChildren}</React.Fragment>}
       </div>)
   }
 };

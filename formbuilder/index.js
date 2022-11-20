@@ -4,4 +4,4 @@ import FormGroup from './FormGroup.js';
 import FormArray from './FormArray.js';
 import FormControl from './FormControl.js';
 
-export {FormGroup,FormControl}
+export {FormGroup,FormControl,FormArray}
