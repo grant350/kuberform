@@ -1,29 +1,26 @@
+"use strict";
 import React from 'react';
-import { Observable, BehaviorSubject, map,take,Subject } from 'rxjs';
+import { Observable, BehaviorSubject,forkJoin, map,take,Subject } from 'rxjs';
 
 class AbstractControl extends React.Component {
   constructor(props) {
     super(props)
-    // this.state = {value: null, status: "VALID"}
-    this.status$ = new BehaviorSubject("VALID");
-    this.setValue = this.setValue.bind(this);
-    this.valueChanges= this.valueChanges.bind(this);
-    this.statusChanges= this.statusChanges.bind(this);
-    this.setErrors = this.setErrors.bind(this);
-    this.updateStatus = this.updateStatus.bind(this);
-    this.calculateStatus = this.calculateStatus.bind(this);
-    this.anyControlsHaveStatus = this.anyControlsHaveStatus.bind(this);
-    this.anyControls = this.anyControls.bind(this);
+    Object.defineProperty(this,'status$', {value:new BehaviorSubject("VALID"),writable:false});
+    // this.setValue = this.setValue.bind(this);
+    Object.defineProperty(this,'setValue', {value:this.setValue.bind(this),writable:false});
+    Object.defineProperty(this,'valueChanges', {value:this.valueChanges,writable:false});
+    Object.defineProperty(this,'statusChanges', {value:this.statusChanges,writable:false});
+    Object.defineProperty(this,'setErrors', {value:this.setErrors,writable:false});
+    // Object.defineProperty(this,'calculateStatus', {value:this.calculateStatus,writable:false});
+    // Object.defineProperty(this,'anyControlsHaveStatus', {value:this.anyControlsHaveStatus,writable:false});
+    // Object.defineProperty(this,'anyControls', {value:this.anyControls,writable:false});
+    Object.defineProperty(this,'validator', {value:this.props.validators? this.mergeValidators(this.props.validators): null,writable:false});
+  }
+  getRawValue(){
+    const frozenObjectValue = Object.assign({},this.state.value)
+    return Object.defineProperty({},'value', {value:frozenObjectValue,writable:false});
   }
 
-  getRawValue(){
-    return this.state.value;
-  }
-  updateStatus(status){
-    this.setState({status:status},()=>{
-      this.status$.next(status);
-    });
-  }
 
   calculateStatus(){
     if (this.state.errors !== null) {
@@ -39,25 +36,45 @@ class AbstractControl extends React.Component {
   anyControlsHaveStatus(status){
     return this.anyControls( (control)=>{return control.status == status})
   }
-
+  contains(fieldName){
+    if (Array.isArray(this.controls)){
+      return this.controls.some((control) => control.hasOwnProperty(fieldName));
+    } else {
+      return this.controls.hasOwnProperty(fieldName);
+    }
+  }
   anyControls(condition){
     condition(this.state);
   }
+  getRawStatus(){
+    return this.state.status;
+  }
+  mergeValidators(validators){
+    const asyncValidatorObservables = this.props.validators.map(validator => {
+      return new Observable((error$) => {
+        validator(this.state.value, error$);
+      }).pipe(
+        take(1)
+      )
+    });
+    return forkJoin(asyncValidatorObservables).pipe(map(this.mergeErrors))
+  }
+  mergeErrors(arrayOfErrors){
+    let totalErrors = {};
+    arrayOfErrors.forEach((errorsObj) => {
+      if (errorsObj !== null){
+        totalErrors = Object.assign(totalErrors,errorsObj)
+      }
+    });
+    return Object.keys(totalErrors).length === 0 ? null : totalErrors;
+  }
 
   setErrors(errorObject){
-    if (errorObject !== null){
       this.setState({errors:errorObject},()=>{
         const status = this.calculateStatus();
-        console.log('statu',status);
         this.status$.next(status)
         this.setState({status:status});
       });
-    } else {
-      const status = this.calculateStatus();
-      console.log('statu',status);
-      this.status$.next(status)
-      this.setState({status:status});
-    }
   }
 
   valueChanges(){
@@ -69,9 +86,12 @@ class AbstractControl extends React.Component {
 
   setValue(value) {
     this.value$.next(value);
-    if (this.props.validators) {
-      this.validate(value);
-    }
+    this.setState({value:value},()=>{
+      if (this.validator) {
+        this.validate(value);
+      }
+    });
+
   }
 
 };

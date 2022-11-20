@@ -1,25 +1,22 @@
 "use strict";
-
 import React from 'react';
 import { Observable, BehaviorSubject, mergeMap, map } from 'rxjs';
 import AbstractControl from './AbstractControl';
 
 class FormGroup extends AbstractControl {
-
   constructor(props) {
-    super(props)
-
-    this.state = {
-      value: {},
-      status: "VALID"
-    }
-    this.value$ = new BehaviorSubject({});
+    super(props);
+    this.state = { value: {}, status: "VALID" };
     this.controls = {};
 
+    Object.defineProperty(this,'groupName', {value:this.props.groupName,writable:false});
+    Object.defineProperty(this,'value$', {value:new BehaviorSubject({}),writable:false});
     Object.defineProperty(this, 'clonedChildren',  { value: React.Children.map(this.props.children, (child) => {
       if (child.props.fieldName) {
+        var val = child.props.defaultValue? child.props.defaultValue:'';
+        //maybe for default value this would work great.
         this.controls[child.props.fieldName] = React.createRef();
-        return React.cloneElement(child, { parent: this, ref: this.controls[child.props.fieldName] })
+        return React.cloneElement(child, {  ref: this.controls[child.props.fieldName],parent: this, defaultValue:val })
       } else if (child.props.groupName || child.props.arrayName) {
         if (child.props.arrayName){
           this.controls[child.props.arrayName] = React.createRef();
@@ -30,24 +27,31 @@ class FormGroup extends AbstractControl {
         }
       }
     }), writable: false });
+    if (this.props.getControls){
+      this.props.getControls(this.controls);
+    }
   }
 
   anyControls(condition){
-      Object.entries(this.controls).forEach(([key,value])=>{
-        const fieldName=key;
-        const control=value.current.state;
-        return condition(control);
-    })
+    for (const [fieldName, control] of Object.entries(this.controls)){
+      if (condition(control.current.state)){
+        return true;
+        break;
+      }
+    }
+    return false;
   }
 
   componentDidMount() {
-
     Object.keys(this.controls).forEach(key => {
       const child = this.controls[key];
       if (child.current !== null) {
         if (child.current.statusChanges) {
           child.current.statusChanges().subscribe(status => {
-            this.status$.next(this.calculateStatus());
+            const groupStatus = this.calculateStatus();
+            this.setState({status:groupStatus},()=>{
+              this.status$.next(groupStatus);
+            })
           })
         }
         if (child.current.valueChanges) {
