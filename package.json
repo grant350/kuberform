@@ -1,12 +1,12 @@
 {
   "name": "@kuberspace/kuberform",
   "version": "0.0.1",
-  "description": "kuberform is a reactive formbuilder",
+  "description": "kuberform is a reactive formbuilder that uses rxjs to handle value and status changes",
   "notes": " readme not finished",
   "keywords": ["react","react form builder","formbuilder","form builder","form-builder","reactive-formbuilder","reactive forms","kuberform","kuberspace"],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/grant350/reactformbuilder.git"
+    "url": "git+ssh://git@github.com/grant350/kuberform.git"
   },
   "module": "dist/index.js",
   "scripts": {
@@ -18,9 +18,9 @@
   "license" : "GNU3",
   "licenseURL": "https://www.gnu.org/licenses/gpl-3.0.en.html",
   "bugs": {
-    "url": "https://github.com/grant350/reactformbuilder/issues"
+    "url": "https://github.com/grant350/kuberform/issues"
   },
-  "homepage": "https://github.com/grant350/reactformbuilder#readme",
+  "homepage": "https://github.com/grant350/kuberform#readme",
   "devDependencies": {
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.2",
