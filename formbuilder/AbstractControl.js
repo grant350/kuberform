@@ -11,19 +11,30 @@ class AbstractControl extends React.Component {
     Object.defineProperty(this,'valueChanges', {value:this.valueChanges,writable:false});
     Object.defineProperty(this,'statusChanges', {value:this.statusChanges,writable:false});
     Object.defineProperty(this,'setErrors', {value:this.setErrors,writable:false});
-    // Object.defineProperty(this,'calculateStatus', {value:this.calculateStatus,writable:false});
-    // Object.defineProperty(this,'anyControlsHaveStatus', {value:this.anyControlsHaveStatus,writable:false});
-    // Object.defineProperty(this,'anyControls', {value:this.anyControls,writable:false});
+    Object.defineProperty(this,'setTouched', {value:this.setTouched.bind(this),writable:false});
+    Object.defineProperty(this,'setDirty', {value:this.setDirty.bind(this),writable:false});
     Object.defineProperty(this,'validator', {value:this.props.validators? this.mergeValidators(this.props.validators): null,writable:false});
   }
+
+
   getRawValue(){
     const frozenObjectValue = Object.assign({},this.state.value)
     return Object.defineProperty({},'value', {value:frozenObjectValue,writable:false});
   }
+  get invalid(){return this.state.status === "INVALID"? true:false};
 
+  setTouched(){
+    this.setState({touched:true});
+    if (this.parent){this.parent.setTouched()};
+  }
+
+  setDirty(value){
+    this.setState({dirty:true});
+    if (this.parent){this.parent.setDirty()};
+  }
 
   calculateStatus(){
-    if (this.state.errors !== null) {
+    if (this.state.errors) {
       return "INVALID"
     } else
     if (this.anyControlsHaveStatus("INVALID")){
@@ -34,17 +45,11 @@ class AbstractControl extends React.Component {
   }
 
   anyControlsHaveStatus(status){
-    return this.anyControls( (control)=>{return control.status == status})
+    return this.anyControls( (control)=>{return control.state.status == status})
   }
-  contains(fieldName){
-    if (Array.isArray(this.controls)){
-      return this.controls.some((control) => control.hasOwnProperty(fieldName));
-    } else {
-      return this.controls.hasOwnProperty(fieldName);
-    }
-  }
+
   anyControls(condition){
-    condition(this.state);
+    condition(this);
   }
   getRawStatus(){
     return this.state.status;
@@ -69,11 +74,23 @@ class AbstractControl extends React.Component {
     return Object.keys(totalErrors).length === 0 ? null : totalErrors;
   }
 
+  updateControlsErrors(){
+    const status = this.calculateStatus();
+    this.setState({status:status},()=>{
+      this.status$.next(status);
+      this.status = "INVALIDS"
+    });
+
+    if (this.props.parent) {
+      this.props.parent.updateControlsErrors();
+    }
+  }
+  getStatus(){
+    return this.status;
+  }
   setErrors(errorObject){
       this.setState({errors:errorObject},()=>{
-        const status = this.calculateStatus();
-        this.status$.next(status)
-        this.setState({status:status});
+        this.updateControlsErrors();
       });
   }
 
@@ -85,13 +102,19 @@ class AbstractControl extends React.Component {
   }
 
   setValue(value) {
-    this.value$.next(value);
-    this.setState({value:value},()=>{
+    if (this.state.value !== value){
+      this.setDirty();
+      this.value$.next(value);
+      this.setState({value:value},()=>{
+        if (this.validator) {
+          this.validate(value);
+        }
+      });
+    } else {
       if (this.validator) {
         this.validate(value);
       }
-    });
-
+    }
   }
 
 };

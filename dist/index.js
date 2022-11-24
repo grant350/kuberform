@@ -38,6 +38,7 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     _classCallCheck__default["default"](this, AbstractControl);
 
     _this = _super.call(this, props);
+    _this.status = "VALID";
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'status$', {
       value: new rxjs.BehaviorSubject("VALID"),
       writable: false
@@ -57,6 +58,14 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     });
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setErrors', {
       value: _this.setErrors,
+      writable: false
+    });
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setTouched', {
+      value: _this.setTouched.bind(_assertThisInitialized__default["default"](_this)),
+      writable: false
+    });
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setDirty', {
+      value: _this.setDirty.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
     }); // Object.defineProperty(this,'calculateStatus', {value:this.calculateStatus,writable:false});
     // Object.defineProperty(this,'anyControlsHaveStatus', {value:this.anyControlsHaveStatus,writable:false});
@@ -79,9 +88,36 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "invalid",
+    get: function get() {
+      return this.state.status === "INVALID" ? true : false;
+    }
+  }, {
+    key: "setTouched",
+    value: function setTouched() {
+      this.setState({
+        touched: true
+      });
+
+      if (this.parent) {
+        this.parent.setTouched();
+      }
+    }
+  }, {
+    key: "setDirty",
+    value: function setDirty(value) {
+      this.setState({
+        dirty: true
+      });
+
+      if (this.parent) {
+        this.parent.setDirty();
+      }
+    }
+  }, {
     key: "calculateStatus",
     value: function calculateStatus() {
-      if (this.state.errors !== null) {
+      if (this.state.errors) {
         return "INVALID";
       } else if (this.anyControlsHaveStatus("INVALID")) {
         return "INVALID";
@@ -93,24 +129,13 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     key: "anyControlsHaveStatus",
     value: function anyControlsHaveStatus(status) {
       return this.anyControls(function (control) {
-        return control.status == status;
+        return control.state.status == status;
       });
-    }
-  }, {
-    key: "contains",
-    value: function contains(fieldName) {
-      if (Array.isArray(this.controls)) {
-        return this.controls.some(function (control) {
-          return control.hasOwnProperty(fieldName);
-        });
-      } else {
-        return this.controls.hasOwnProperty(fieldName);
-      }
     }
   }, {
     key: "anyControls",
     value: function anyControls(condition) {
-      condition(this.state);
+      condition(this);
     }
   }, {
     key: "getRawStatus",
@@ -141,20 +166,37 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       return Object.keys(totalErrors).length === 0 ? null : totalErrors;
     }
   }, {
+    key: "updateControlsErrors",
+    value: function updateControlsErrors() {
+      var _this3 = this;
+
+      var status = this.calculateStatus();
+      this.setState({
+        status: status
+      }, function () {
+        _this3.status$.next(status);
+
+        _this3.status = "INVALIDS";
+      });
+
+      if (this.props.parent) {
+        this.props.parent.updateControlsErrors();
+      }
+    }
+  }, {
+    key: "getStatus",
+    value: function getStatus() {
+      return this.status;
+    }
+  }, {
     key: "setErrors",
     value: function setErrors(errorObject) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.setState({
         errors: errorObject
       }, function () {
-        var status = _this3.calculateStatus();
-
-        _this3.status$.next(status);
-
-        _this3.setState({
-          status: status
-        });
+        _this4.updateControlsErrors();
       });
     }
   }, {
@@ -170,16 +212,23 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "setValue",
     value: function setValue(value) {
-      var _this4 = this;
+      var _this5 = this;
 
-      this.value$.next(value);
-      this.setState({
-        value: value
-      }, function () {
-        if (_this4.validator) {
-          _this4.validate(value);
+      if (this.state.value !== value) {
+        this.setDirty();
+        this.value$.next(value);
+        this.setState({
+          value: value
+        }, function () {
+          if (_this5.validator) {
+            _this5.validate(value);
+          }
+        });
+      } else {
+        if (this.validator) {
+          this.validate(value);
         }
-      });
+      }
     }
   }]);
 
@@ -203,7 +252,8 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     _this = _super.call(this, props);
     _this.state = {
       value: {},
-      status: "VALID"
+      status: "VALID",
+      touched: false
     };
     _this.controls = {};
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'groupName', {
@@ -217,8 +267,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
       value: React__default["default"].Children.map(_this.props.children, function (child) {
         if (child.props.fieldName) {
-          var val = child.props.defaultValue ? child.props.defaultValue : ''; //maybe for default value this would work great.
-
+          var val = child.props.defaultValue !== undefined ? child.props.defaultValue : '';
           _this.controls[child.props.fieldName] = /*#__PURE__*/React__default["default"].createRef();
           return /*#__PURE__*/React__default["default"].cloneElement(child, {
             ref: _this.controls[child.props.fieldName],
@@ -229,6 +278,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
           if (child.props.arrayName) {
             _this.controls[child.props.arrayName] = /*#__PURE__*/React__default["default"].createRef();
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              parent: _assertThisInitialized__default["default"](_this),
               ref: _this.controls[child.props.arrayName]
             });
           }
@@ -236,9 +286,12 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
           if (child.props.groupName) {
             _this.controls[child.props.groupName] = /*#__PURE__*/React__default["default"].createRef();
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              parent: _assertThisInitialized__default["default"](_this),
               ref: _this.controls[child.props.groupName]
             });
           }
+        } else {
+          return /*#__PURE__*/React__default["default"].cloneElement(child, {});
         }
       }),
       writable: false
@@ -259,7 +312,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             _Object$entries$_i[0];
             var control = _Object$entries$_i[1];
 
-        if (condition(control.current.state)) {
+        if (condition(control.current)) {
           return true;
         }
       }
@@ -313,6 +366,12 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   return FormGroup;
 }(AbstractControl);
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
 function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -330,7 +389,8 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     _this = _super.call(this, props);
     _this.state = {
       value: [],
-      status: "VALID"
+      status: "VALID",
+      touched: false
     };
     _this.controls = [];
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'value$', {
@@ -344,11 +404,11 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
       value: React__default["default"].Children.map(_this.props.children, function (child, index) {
         if (child.props.fieldName) {
-          var val = child.props.value ? child.props.value : '';
+          var val = child.props.defaultValue !== undefined ? child.props.defaultValue : '';
           _this.controls[index] = /*#__PURE__*/React__default["default"].createRef();
           return /*#__PURE__*/React__default["default"].cloneElement(child, {
             parent: _assertThisInitialized__default["default"](_this),
-            value: val,
+            defaultValue: val,
             ref: _this.controls[index]
           });
         } else if (child.props.groupName || child.props.arrayName) {
@@ -375,10 +435,22 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
   _createClass__default["default"](FormArray, [{
     key: "anyControls",
     value: function anyControls(condition) {
-      for (var control in this.controls) {
-        if (condition(control.current.state)) {
-          return true;
+      var _iterator = _createForOfIteratorHelper(this.controls),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var control = _step.value;
+
+          if (condition(control.current)) {
+            return true;
+            break;
+          }
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
 
       return false;
@@ -388,13 +460,17 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.controls.forEach(function (control, index) {
-        var child = control;
-
+      this.controls.forEach(function (child, index) {
         if (child.current !== null) {
           if (child.current.statusChanges) {
             child.current.statusChanges().subscribe(function (status) {
-              _this2.calculateStatus();
+              var arrayStatus = _this2.calculateStatus();
+
+              _this2.setState({
+                status: arrayStatus
+              }, function () {
+                _this2.status$.next(arrayStatus);
+              });
             });
           }
 
@@ -448,10 +524,13 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     _classCallCheck__default["default"](this, FormControl);
 
     _this = _super.call(this, props);
+    _this.updateOn = _this.props.updateOn ? _this.props.updateOn : 'change';
     _this.state = {
       status: "VALID",
-      value: _this.props.value ? _this.props.value : '',
-      errors: null
+      value: _this.props.defaultValue ? _this.props.defaultValue : '',
+      errors: null,
+      touched: false,
+      dirty: false
     };
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'fieldName', {
       value: _this.props.fieldName,
@@ -473,13 +552,21 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       value: null,
       writable: false
     });
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'onChange', {
+      value: _this.onChange.bind(_assertThisInitialized__default["default"](_this)),
+      writable: false
+    });
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'onBlur', {
+      value: _this.onBlur.bind(_assertThisInitialized__default["default"](_this)),
+      writable: false
+    });
     return _this;
   }
 
   _createClass__default["default"](FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.setValue(this.props.value ? this.props.value : '');
+      this.setValue(this.props.defaultValue !== undefined ? this.props.defaultValue : '');
     }
   }, {
     key: "validate",
@@ -502,13 +589,59 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       });
     }
   }, {
+    key: "onChange",
+    value: function onChange(e) {
+      if (this.updateOn === "change") {
+        var value = e.target.value;
+
+        if (value === "true") {
+          value = true;
+        }
+
+        if (value === "false") {
+          value = false;
+        }
+
+        if (value !== null && value !== undefined) {
+          this.setValue(value);
+        }
+      }
+    }
+  }, {
+    key: "onBlur",
+    value: function onBlur(e) {
+      if (this.updateOn === "blur") {
+        var value = e.target.value;
+
+        if (value === "true") {
+          value = true;
+        }
+
+        if (value === "false") {
+          value = false;
+        }
+
+        if (value !== null && value !== undefined) {
+          this.setValue(value);
+        }
+      }
+
+      this.setTouched();
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/React__default["default"].createElement("div", {
-        className: "formControl"
+        className: "formControl",
+        onBlur: this.onBlur,
+        onChange: this.onChange
       }, /*#__PURE__*/React__default["default"].createElement(this.props.element, {
+        errorMessages: this.props.errorMessages,
+        dirty: this.state.dirty,
         errors: this.state.errors,
+        getStatus: this.getStatus,
         label: this.props.label,
+        touched: this.state.touched,
         status: this.state.status,
         fieldName: this.fieldName,
         setValue: this.setValue
