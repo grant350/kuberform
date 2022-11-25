@@ -39,8 +39,7 @@
 #
 ## How to make a Container
 ### Make sure you add this.props.children in the render function else nothing will render properly
-<code>
-
+```
     class Container extends React.Component {
       constructor(props){
         super(props);
@@ -49,16 +48,10 @@
         return (<div className="container">{this.props.children}</div>);
       }
     }
-</code>
+```
 
-## OR
 
-<code>
 
-    function Container(props){
-        return (<div className="container">{props.children}</div>);
-    }
-</code>
 
 #
 ## How to make a Control
@@ -75,25 +68,11 @@
         return (
           <div className="my-formcontrol">
             <label>{this.props.fieldName}</label>
-            <input onChange={(e)=>{this.props.update(e.target.value)}}/>
+            <input className="myinput" />
           </div>
         );
       }
     }
-</code>
-
-## OR
-<code>
-
-    function Control(props) {
-      return (
-        <div className="my-formcontrol">
-          <label>{props.fieldName}</label>
-          <input onChange={(e)=>{props.update(e.target.value)}}/>
-        </div>
-      );
-    }
-
 </code>
 
 #

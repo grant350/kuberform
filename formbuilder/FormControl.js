@@ -7,19 +7,18 @@ class FormControl extends AbstractControl {
   constructor(props) {
     super(props);
     this.updateOn = this.props.updateOn? this.props.updateOn:'change';
-    this.state = {status:"VALID", value:this.props.defaultValue ? this.props.defaultValue : '', errors:null,touched:false,dirty:false};
+    this.state = {status:"VALID", value:this.props.defaultValue !== undefined ? this.props.defaultValue : null, errors:null,touched:false,dirty:false};
     Object.defineProperty(this,'fieldName', {value:this.props.fieldName,writable:false});
-    Object.defineProperty(this,'value$', {value: new BehaviorSubject(this.props.value ? this.props.value : ''),writable:false});
+    Object.defineProperty(this,'value$', {value: new BehaviorSubject(this.props.defaultValue !== undefined ? this.props.defaultValue : null),writable:false});
     Object.defineProperty(this.state,'status', {value:'VALID',writable:false});
-    Object.defineProperty(this.state,'value', {value:'',writable:false});
+    Object.defineProperty(this.state,'value', {value:this.props.defaultValue !== undefined ? this.props.defaultValue : null,writable:false});
     Object.defineProperty(this.state,'errors', {value:null,writable:false});
     Object.defineProperty(this,'onChange', {value:this.onChange.bind(this),writable:false});
     Object.defineProperty(this,'onBlur', {value:this.onBlur.bind(this),writable:false});
-
   }
 
   componentDidMount() {
-    this.setValue(this.props.defaultValue !== undefined? this.props.defaultValue: '');
+    this.setValue(this.state.value);
   }
 
   validate(value) {
@@ -37,6 +36,10 @@ class FormControl extends AbstractControl {
 
   onChange(e){
     if (this.updateOn === "change"){
+    if (this.leaveAsNullWhenEmpty){
+      if (value === ''){value === null}
+    }
+
     var value = e.target.value;
     if (value === "true"){value = true};
     if (value === "false"){value = false};
@@ -49,8 +52,7 @@ class FormControl extends AbstractControl {
   onBlur(e){
     if (this.updateOn === "blur"){
       var value = e.target.value;
-      if (value === "true"){value = true};
-      if (value === "false"){value = false};
+      if (value === ''){value === null}
       if (value !== null && value !== undefined){
         this.setValue(value);
       }
@@ -59,7 +61,7 @@ class FormControl extends AbstractControl {
   }
 
   render() {
-    return (<div className="formControl"  onBlur={this.onBlur} onChange={this.onChange} ><this.props.element errorMessages={this.props.errorMessages} dirty={this.state.dirty} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element></div>)
+    return (<div className="formControl"  onBlur={this.onBlur} onChange={this.onChange} ><this.props.element invalid={this.invalid} errorMessages={this.props.errorMessages} dirty={this.state.dirty} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element></div>)
   }
 };
 export default FormControl;

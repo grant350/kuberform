@@ -13,16 +13,32 @@ class FormArray extends AbstractControl {
 
     Object.defineProperty(this, 'clonedChildren',  { value: React.Children.map(this.props.children, (child,index) => {
       if (child.props.fieldName) {
-        var val = child.props.defaultValue !== undefined? child.props.defaultValue:'';
-        this.controls[index] = React.createRef();
-        return React.cloneElement(child, { parent: this, defaultValue:val,ref: this.controls[index] })
-      } else if (child.props.groupName || child.props.arrayName) {
-        if (child.props.arrayName){
-          this.controls[index] = React.createRef();
-          return React.cloneElement(child, { ref: this.controls[index] });
+        const newref = element => {
+          this.controls[index] = element;
+        };
+        if (child.props.defaultValue){
+          // this.controls[index] = React.createRef();
+          return React.cloneElement(child, { parent: this, defaultValue:child.props.defaultValue, ref: newref })
+        } else {
+          // this.controls[index] = React.createRef();
+          return React.cloneElement(child, { parent: this,ref: newref })
         }
-        if (child.props.groupName){ this.controls[index] = React.createRef();
-          return React.cloneElement(child, { ref: this.controls[index] })
+
+      } else if (child.props.groupName || child.props.arrayName) {
+
+        if (child.props.arrayName){
+          const newref = element => {
+            this.controls[index] = element;
+          };
+          // this.controls[index] = React.createRef();
+          return React.cloneElement(child, { ref: newref });
+        }
+        if (child.props.groupName){
+          //  this.controls[index] = React.createRef();
+          const newref = element => {
+            this.controls[index] = element;
+          };
+          return React.cloneElement(child, { ref: newref})
         }
       }
     }), writable: false });
@@ -31,7 +47,7 @@ class FormArray extends AbstractControl {
 
   anyControls(condition){
     for (const control of this.controls){
-      if (condition(control.current)){
+      if (condition(control)){
         return true;
         break;
       }
@@ -41,17 +57,17 @@ class FormArray extends AbstractControl {
 
   componentDidMount() {
     this.controls.forEach((child,index) => {
-      if (child.current !== null) {
-        if (child.current.statusChanges) {
-          child.current.statusChanges().subscribe(status => {
+      if (child !== null) {
+        if (child.statusChanges) {
+          child.statusChanges().subscribe(status => {
             const arrayStatus = this.calculateStatus();
             this.setState({status:arrayStatus},()=>{
               this.status$.next(arrayStatus);
             })
           })
         }
-        if (child.current.valueChanges) {
-          child.current.valueChanges().subscribe(val => {
+        if (child.valueChanges) {
+          child.valueChanges().subscribe(val => {
             this.state.value[index] = val;
             this.setState({ value: this.state.value }, () => {
               this.value$.next(this.state.value);

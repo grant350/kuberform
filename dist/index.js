@@ -38,12 +38,10 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     _classCallCheck__default["default"](this, AbstractControl);
 
     _this = _super.call(this, props);
-    _this.status = "VALID";
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'status$', {
       value: new rxjs.BehaviorSubject("VALID"),
       writable: false
-    }); // this.setValue = this.setValue.bind(this);
-
+    });
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setValue', {
       value: _this.setValue.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
@@ -67,14 +65,12 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setDirty', {
       value: _this.setDirty.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
-    }); // Object.defineProperty(this,'calculateStatus', {value:this.calculateStatus,writable:false});
-    // Object.defineProperty(this,'anyControlsHaveStatus', {value:this.anyControlsHaveStatus,writable:false});
-    // Object.defineProperty(this,'anyControls', {value:this.anyControls,writable:false});
-
+    });
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'validator', {
       value: _this.props.validators ? _this.mergeValidators(_this.props.validators) : null,
       writable: false
     });
+    _this.leaveAsNullWhenEmpty = _this.props.leaveAsNullWhenEmpty ? true : false;
     return _this;
   }
 
@@ -91,6 +87,18 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     key: "invalid",
     get: function get() {
       return this.state.status === "INVALID" ? true : false;
+    }
+  }, {
+    key: "isEmptyValue",
+    get: function get() {
+      if (this.state.value === null) {
+        return true;
+      }
+
+      if (this.state.value.length <= 0) {
+        return true;
+      }
+      return false;
     }
   }, {
     key: "setTouched",
@@ -176,13 +184,14 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       }, function () {
         _this3.status$.next(status);
 
-        _this3.status = "INVALIDS";
+        _this3.status = status;
       });
 
       if (this.props.parent) {
         this.props.parent.updateControlsErrors();
       }
-    }
+    } //this.forceupdate instead of using state and pass in the static values
+
   }, {
     key: "getStatus",
     value: function getStatus() {
@@ -267,27 +276,46 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
       value: React__default["default"].Children.map(_this.props.children, function (child) {
         if (child.props.fieldName) {
-          var val = child.props.defaultValue !== undefined ? child.props.defaultValue : '';
-          _this.controls[child.props.fieldName] = /*#__PURE__*/React__default["default"].createRef();
-          return /*#__PURE__*/React__default["default"].cloneElement(child, {
-            ref: _this.controls[child.props.fieldName],
-            parent: _assertThisInitialized__default["default"](_this),
-            defaultValue: val
-          });
+          var newref = function newref(element) {
+            _this.controls[child.props.fieldName] = element;
+          };
+
+          if (child.props.defaultValue) {
+            // this.controls[child.props.fieldName] = React.createRef();
+            return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              ref: newref,
+              parent: _assertThisInitialized__default["default"](_this),
+              defaultValue: child.props.defaultValue
+            });
+          } else {
+            // this.controls[child.props.fieldName] = React.createRef();
+            return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              ref: newref,
+              parent: _assertThisInitialized__default["default"](_this)
+            });
+          }
         } else if (child.props.groupName || child.props.arrayName) {
           if (child.props.arrayName) {
-            _this.controls[child.props.arrayName] = /*#__PURE__*/React__default["default"].createRef();
+            var _newref = function _newref(element) {
+              _this.controls[child.props.arrayName] = element;
+            }; // this.controls[child.props.arrayName] = React.createRef();
+
+
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
               parent: _assertThisInitialized__default["default"](_this),
-              ref: _this.controls[child.props.arrayName]
+              ref: _newref
             });
           }
 
           if (child.props.groupName) {
-            _this.controls[child.props.groupName] = /*#__PURE__*/React__default["default"].createRef();
+            // this.controls[child.props.groupName] = React.createRef();
+            var _newref2 = function _newref2(element) {
+              _this.controls[child.props.groupName] = element;
+            };
+
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
               parent: _assertThisInitialized__default["default"](_this),
-              ref: _this.controls[child.props.groupName]
+              ref: _newref2
             });
           }
         } else {
@@ -305,6 +333,11 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   }
 
   _createClass__default["default"](FormGroup, [{
+    key: "getControl",
+    value: function getControl(control) {
+      return this.controls[control];
+    }
+  }, {
     key: "anyControls",
     value: function anyControls(condition) {
       for (var _i = 0, _Object$entries = Object.entries(this.controls); _i < _Object$entries.length; _i++) {
@@ -312,7 +345,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             _Object$entries$_i[0];
             var control = _Object$entries$_i[1];
 
-        if (condition(control.current)) {
+        if (condition(control)) {
           return true;
         }
       }
@@ -327,9 +360,9 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       Object.keys(this.controls).forEach(function (key) {
         var child = _this2.controls[key];
 
-        if (child.current !== null) {
-          if (child.current.statusChanges) {
-            child.current.statusChanges().subscribe(function (status) {
+        if (child !== null) {
+          if (child.statusChanges) {
+            child.statusChanges().subscribe(function (status) {
               var groupStatus = _this2.calculateStatus();
 
               _this2.setState({
@@ -340,8 +373,9 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             });
           }
 
-          if (child.current.valueChanges) {
-            child.current.valueChanges().subscribe(function (val) {
+          if (child.valueChanges) {
+            child.valueChanges().subscribe(function (val) {
+              //if state value === null then set it to an object.
               _this2.state.value[key] = val;
 
               _this2.setState({
@@ -404,25 +438,44 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
       value: React__default["default"].Children.map(_this.props.children, function (child, index) {
         if (child.props.fieldName) {
-          var val = child.props.defaultValue !== undefined ? child.props.defaultValue : '';
-          _this.controls[index] = /*#__PURE__*/React__default["default"].createRef();
-          return /*#__PURE__*/React__default["default"].cloneElement(child, {
-            parent: _assertThisInitialized__default["default"](_this),
-            defaultValue: val,
-            ref: _this.controls[index]
-          });
+          var newref = function newref(element) {
+            _this.controls[index] = element;
+          };
+
+          if (child.props.defaultValue) {
+            // this.controls[index] = React.createRef();
+            return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              parent: _assertThisInitialized__default["default"](_this),
+              defaultValue: child.props.defaultValue,
+              ref: newref
+            });
+          } else {
+            // this.controls[index] = React.createRef();
+            return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              parent: _assertThisInitialized__default["default"](_this),
+              ref: newref
+            });
+          }
         } else if (child.props.groupName || child.props.arrayName) {
           if (child.props.arrayName) {
-            _this.controls[index] = /*#__PURE__*/React__default["default"].createRef();
+            var _newref = function _newref(element) {
+              _this.controls[index] = element;
+            }; // this.controls[index] = React.createRef();
+
+
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              ref: _this.controls[index]
+              ref: _newref
             });
           }
 
           if (child.props.groupName) {
-            _this.controls[index] = /*#__PURE__*/React__default["default"].createRef();
+            //  this.controls[index] = React.createRef();
+            var _newref2 = function _newref2(element) {
+              _this.controls[index] = element;
+            };
+
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              ref: _this.controls[index]
+              ref: _newref2
             });
           }
         }
@@ -442,7 +495,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var control = _step.value;
 
-          if (condition(control.current)) {
+          if (condition(control)) {
             return true;
             break;
           }
@@ -461,9 +514,9 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       var _this2 = this;
 
       this.controls.forEach(function (child, index) {
-        if (child.current !== null) {
-          if (child.current.statusChanges) {
-            child.current.statusChanges().subscribe(function (status) {
+        if (child !== null) {
+          if (child.statusChanges) {
+            child.statusChanges().subscribe(function (status) {
               var arrayStatus = _this2.calculateStatus();
 
               _this2.setState({
@@ -474,8 +527,8 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
             });
           }
 
-          if (child.current.valueChanges) {
-            child.current.valueChanges().subscribe(function (val) {
+          if (child.valueChanges) {
+            child.valueChanges().subscribe(function (val) {
               _this2.state.value[index] = val;
 
               _this2.setState({
@@ -527,7 +580,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     _this.updateOn = _this.props.updateOn ? _this.props.updateOn : 'change';
     _this.state = {
       status: "VALID",
-      value: _this.props.defaultValue ? _this.props.defaultValue : '',
+      value: _this.props.defaultValue !== undefined ? _this.props.defaultValue : null,
       errors: null,
       touched: false,
       dirty: false
@@ -537,7 +590,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       writable: false
     });
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'value$', {
-      value: new rxjs.BehaviorSubject(_this.props.value ? _this.props.value : ''),
+      value: new rxjs.BehaviorSubject(_this.props.defaultValue !== undefined ? _this.props.defaultValue : null),
       writable: false
     });
     Object.defineProperty(_this.state, 'status', {
@@ -545,7 +598,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       writable: false
     });
     Object.defineProperty(_this.state, 'value', {
-      value: '',
+      value: _this.props.defaultValue !== undefined ? _this.props.defaultValue : null,
       writable: false
     });
     Object.defineProperty(_this.state, 'errors', {
@@ -566,7 +619,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
   _createClass__default["default"](FormControl, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.setValue(this.props.defaultValue !== undefined ? this.props.defaultValue : '');
+      this.setValue(this.state.value);
     }
   }, {
     key: "validate",
@@ -592,6 +645,8 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     key: "onChange",
     value: function onChange(e) {
       if (this.updateOn === "change") {
+        if (this.leaveAsNullWhenEmpty) ;
+
         var value = e.target.value;
 
         if (value === "true") {
@@ -613,14 +668,6 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       if (this.updateOn === "blur") {
         var value = e.target.value;
 
-        if (value === "true") {
-          value = true;
-        }
-
-        if (value === "false") {
-          value = false;
-        }
-
         if (value !== null && value !== undefined) {
           this.setValue(value);
         }
@@ -636,6 +683,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
         onBlur: this.onBlur,
         onChange: this.onChange
       }, /*#__PURE__*/React__default["default"].createElement(this.props.element, {
+        invalid: this.invalid,
         errorMessages: this.props.errorMessages,
         dirty: this.state.dirty,
         errors: this.state.errors,

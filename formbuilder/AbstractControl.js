@@ -6,7 +6,6 @@ class AbstractControl extends React.Component {
   constructor(props) {
     super(props)
     Object.defineProperty(this,'status$', {value:new BehaviorSubject("VALID"),writable:false});
-    // this.setValue = this.setValue.bind(this);
     Object.defineProperty(this,'setValue', {value:this.setValue.bind(this),writable:false});
     Object.defineProperty(this,'valueChanges', {value:this.valueChanges,writable:false});
     Object.defineProperty(this,'statusChanges', {value:this.statusChanges,writable:false});
@@ -14,6 +13,7 @@ class AbstractControl extends React.Component {
     Object.defineProperty(this,'setTouched', {value:this.setTouched.bind(this),writable:false});
     Object.defineProperty(this,'setDirty', {value:this.setDirty.bind(this),writable:false});
     Object.defineProperty(this,'validator', {value:this.props.validators? this.mergeValidators(this.props.validators): null,writable:false});
+    this.leaveAsNullWhenEmpty = this.props.leaveAsNullWhenEmpty? true:false;
   }
 
 
@@ -21,7 +21,13 @@ class AbstractControl extends React.Component {
     const frozenObjectValue = Object.assign({},this.state.value)
     return Object.defineProperty({},'value', {value:frozenObjectValue,writable:false});
   }
+
   get invalid(){return this.state.status === "INVALID"? true:false};
+  get isEmptyValue(){
+    if (this.state.value === null){return true};
+    if (this.state.value.length <= 0){return true};
+    return false;
+  }
 
   setTouched(){
     this.setState({touched:true});
@@ -78,13 +84,14 @@ class AbstractControl extends React.Component {
     const status = this.calculateStatus();
     this.setState({status:status},()=>{
       this.status$.next(status);
-      this.status = "INVALIDS"
+      this.status = status;
     });
 
     if (this.props.parent) {
       this.props.parent.updateControlsErrors();
     }
   }
+  //this.forceupdate instead of using state and pass in the static values
   getStatus(){
     return this.status;
   }
