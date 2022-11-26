@@ -49,6 +49,11 @@ interface Props {
   defaultValue: any;
   validators:Array< (value: string, observable: Observable<{[key:String]:String} | null>) => void > | undefined;
   label: String | undefined;
+  setValue: (value: any)=> void;
+  touched: boolean;
+  dirty: boolean;
+  errors: {[key:String]: Boolean | any};
+  invalid: Boolean;
 }
 ```
 #
@@ -123,5 +128,48 @@ interface Methods {
   statusChanges: ()=>Observable<"VALID" | "INVALID" | "PENDING">;
 }
 ```
+
+### How to make a Input field
+
+#### hence most inputs have active events such as blur and onchange so you do not need to manualy setValue. the time you would need to call setValue is when your uploading an image.
+
+```jsx
+import React from 'react';
+import { FormControl, InputLabel, TextField, FormHelperText } from '@mui/material'
+
+class InputField extends React.Component {
+  constructor(props) {super(props);}
+
+  getErrorMessage(){
+    if (this.props.errors === null){return null};
+    if (this.props.errorMessages && this.props.touched && this.props.invalid){
+      return Object.keys(this.props.errorMessages).map(key=>{
+        if (this.props.errors[key]){
+          return (<FormHelperText key={key} error={true}> {this.props.errorMessages[key]}</FormHelperText>)
+        }
+      })
+    }
+  }
+
+  render() {
+    return (
+      <div id={this.props.fieldName}>
+        <FormControl >
+         <TextField variant="filled"
+          error={ this.props.touched && this.props.invalid ? true:false}
+          multiline
+          maxRows={2}
+          id="outlined-error"
+          label={this.props.label}
+        />
+        {this.getErrorMessage()}
+        </FormControl>
+      </div>
+    );
+  }
+}
+
+```
+
 
 

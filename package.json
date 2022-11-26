@@ -1,6 +1,6 @@
 {
   "name": "@kuberspace/kuberform",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "kuberform is a reactive formbuilder that uses rxjs to handle value and status changes",
   "notes": " readme not finished",
   "keywords": ["react","react form builder","formbuilder","form builder","form-builder","reactive-formbuilder","reactive forms","kuberform","kuberspace"],
@@ -10,7 +10,8 @@
   },
   "module": "dist/index.js",
   "scripts": {
-    "start": "mv node_moduless node_modules; rollup -c; mv node_modules node_moduless ",
+    "start":"npm install",
+    "startBuild": "mv node_moduless node_modules; rollup -c; mv node_modules node_moduless ",
     "end":""
   },
   "main":"dist/index.js",
@@ -42,7 +43,7 @@
   },
   "dependencies": {
     "react-rxjs-elements": "^0.0.7",
-    "rxjs": "^7.5.5",
+    "rxjs": "^7.5.7",
     "source-map-loader": "^3.0.1"
   }
 }

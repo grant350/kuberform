@@ -11,7 +11,7 @@ var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstru
 var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
 var React = require('react');
 var rxjs = require('rxjs');
-
+console.log(rxjs);
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var _slicedToArray__default = /*#__PURE__*/_interopDefaultLegacy(_slicedToArray);
