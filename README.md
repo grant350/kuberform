@@ -8,79 +8,120 @@
 
 ### Install Kuberform
 
-<code>
-
-    npm install kuberform --save
-</code>
+```bash
+  npm install kuberform --save
+```
 
 ### Import the three necessary components to our react application.
 
-<code>
-
+```jsx
     import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
-</code>
-
-### The recomended way to use Kuberforms is to start with a FormGroup container and add children to the container. You may choose to add a wrapper container to the children components or leave container prop empty. groupName is required.
-
-<code>
-
-    <FormGroup container={Container} groupName="form">
-</code>
-
-### element is required as it has the ability to update state value and for you to build your own custom input component
-### fieldName is required
-### validator is not requied but may be useful to validate input
-
-<code>
-
-           <FormControl element={Control} fieldName="firstName" validator={validator}></FormControl>
-</code>
-
-#
-## How to make a Container
-### Make sure you add this.props.children in the render function else nothing will render properly
 ```
-    class Container extends React.Component {
-      constructor(props){
-        super(props);
-      }
-      render(){
-        return (<div className="container">{this.props.children}</div>);
-      }
-    }
+
+### FormGroup props
+
+```ts
+interface Props {
+  container: React.Element | undefined;
+  groupName: String;
+}
+```
+
+### FormArray props
+
+```ts
+interface Props {
+  container: React.Element | undefined;
+  arrayName: String;
+}
 ```
 
 
+### FormControl props
 
 
+```ts
+
+interface Props {
+  element: React.Element;
+  fieldName: String;
+  errorMessages: {[key:String]:String} | undefined;
+  defaultValue: any;
+  validators:Array< (value: string, observable: Observable<{[key:String]:String} | null>) => void > | undefined;
+  label: String | undefined;
+}
+```
 #
-## How to make a Control
-### Make sure you call this.props.update or nothing will update in the form data object
 
-<code>
+###  Here is an example of how to make a form
 
-    class Control extends React.Component {
-      constructor(props){
-        super(props)
+```jsx
+import React from 'react';
+import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
+import InputField from 'yourinputfield';
+
+class myform extends React.component {
+
+  constructor(props){
+    super(props);
+    this.myform = React.createRef();
+  }
+
+  render(){
+    return (
+        <FormGroup ref={this.myform} groupName="form">
+          <FormControl
+            validators={[requiredValidator()]}
+            errorMessages={{myError:"my message"}}
+            element={InputField}
+            fieldName="productName"
+            label="Product Name">
+          </FormControl>
+        <FormGroup />
+    )
+  }
+}
+```
+
+
+## Making a validator
+### A validator is a function that will provide you a value and observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.
+
+```jsx
+export default function required() {
+  return (value, obs) => {
+    if (value === "bob"){
+      obs.next(null);
+      //valid
+    } else {
+      obs.next({err:true});
+      //invalid
     }
+  }
+}
 
-      render(){
-        return (
-          <div className="my-formcontrol">
-            <label>{this.props.fieldName}</label>
-            <input className="myinput" />
-          </div>
-        );
-      }
-    }
-</code>
+```
 
-#
-## How to get data from the form
+### To get Data from the form you can call getRawValue();
+```jsx
+ componentDidMount(){
+  this.myform.getRawValue();
+ }
+```
 
 
+### callable methods on formGroup refrence
 
-## How to manualy update a control and validate
+```ts
+
+interface Methods {
+  getRawValue: ()=> Object | null | String;
+  getRawStatus: ()=> "VALID" | "INVALID" | "PENDING";
+  getControl: (control:String) => React.Refrence;
+  setValue: (value: any) => void;
+  valueChanges: ()=>Observable<Object>;
+  statusChanges: ()=>Observable<"VALID" | "INVALID" | "PENDING">;
+}
+```
 
 
-## how to?

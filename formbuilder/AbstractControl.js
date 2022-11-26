@@ -60,6 +60,7 @@ class AbstractControl extends React.Component {
   getRawStatus(){
     return this.state.status;
   }
+
   mergeValidators(validators){
     const asyncValidatorObservables = this.props.validators.map(validator => {
       return new Observable((error$) => {
@@ -72,6 +73,7 @@ class AbstractControl extends React.Component {
   }
   mergeErrors(arrayOfErrors){
     let totalErrors = {};
+    // let totalWarnings = {};
     arrayOfErrors.forEach((errorsObj) => {
       if (errorsObj !== null){
         totalErrors = Object.assign(totalErrors,errorsObj)
