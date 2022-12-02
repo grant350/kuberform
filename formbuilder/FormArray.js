@@ -8,6 +8,7 @@ class FormArray extends AbstractControl {
     super(props);
     this.state = { value: [], status: "VALID", touched:false };
     this.controls = [];
+    throw Error("FORMARRAY IS NOT FINISHED. PLEASE WAIT THANK YOU...")
     Object.defineProperty(this,'value$', {value:new BehaviorSubject([]),writable:false});
     Object.defineProperty(this,'arrayName', {value:this.props.arrayName,writable:false});
 
@@ -17,24 +18,18 @@ class FormArray extends AbstractControl {
           this.controls[index] = element;
         };
         if (child.props.defaultValue){
-          // this.controls[index] = React.createRef();
           return React.cloneElement(child, { parent: this, defaultValue:child.props.defaultValue, ref: newref })
         } else {
-          // this.controls[index] = React.createRef();
           return React.cloneElement(child, { parent: this,ref: newref })
         }
-
       } else if (child.props.groupName || child.props.arrayName) {
-
         if (child.props.arrayName){
           const newref = element => {
             this.controls[index] = element;
           };
-          // this.controls[index] = React.createRef();
           return React.cloneElement(child, { ref: newref });
         }
         if (child.props.groupName){
-          //  this.controls[index] = React.createRef();
           const newref = element => {
             this.controls[index] = element;
           };

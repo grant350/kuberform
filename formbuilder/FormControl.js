@@ -1,20 +1,21 @@
 "use strict"
 import React from 'react';
-import { Observable, BehaviorSubject,map, take, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, map, take, Subject } from 'rxjs';
 import AbstractControl from './AbstractControl';
 
 class FormControl extends AbstractControl {
   constructor(props) {
     super(props);
-    this.updateOn = this.props.updateOn? this.props.updateOn:'change';
-    this.state = {status:"VALID", value:this.props.defaultValue !== undefined ? this.props.defaultValue : null, errors:null,touched:false,dirty:false};
-    Object.defineProperty(this,'fieldName', {value:this.props.fieldName,writable:false});
-    Object.defineProperty(this,'value$', {value: new BehaviorSubject(this.props.defaultValue !== undefined ? this.props.defaultValue : null),writable:false});
-    Object.defineProperty(this.state,'status', {value:'VALID',writable:false});
-    Object.defineProperty(this.state,'value', {value:this.props.defaultValue !== undefined ? this.props.defaultValue : null,writable:false});
-    Object.defineProperty(this.state,'errors', {value:null,writable:false});
-    Object.defineProperty(this,'onChange', {value:this.onChange.bind(this),writable:false});
-    Object.defineProperty(this,'onBlur', {value:this.onBlur.bind(this),writable:false});
+    this.updateOn = this.props.updateOn ? this.props.updateOn : 'change';
+    this.state = { status: "VALID", value: this.props.defaultValue !== undefined ? this.props.defaultValue : null, errors: null, touched: false, dirty: false };
+    if (!this.props.fieldName){throw new ReferenceError("fieldName does not exists on FormControl")}
+    Object.defineProperty(this, 'fieldName', { value: this.props.fieldName, writable: false });
+    Object.defineProperty(this, 'value$', { value: new BehaviorSubject(this.props.defaultValue !== undefined ? this.props.defaultValue : null), writable: false });
+    Object.defineProperty(this.state, 'status', { value: 'VALID', writable: false });
+    Object.defineProperty(this.state, 'value', { value: this.props.defaultValue !== undefined ? this.props.defaultValue : null, writable: false });
+    Object.defineProperty(this.state, 'errors', { value: null, writable: false });
+    Object.defineProperty(this, 'onChange', { value: this.onChange.bind(this), writable: false });
+    Object.defineProperty(this, 'onBlur', { value: this.onBlur.bind(this), writable: false });
   }
 
   componentDidMount() {
@@ -29,31 +30,31 @@ class FormControl extends AbstractControl {
       this.status$.next("PENDING");
       this.setState({ status: "PENDING" });
     }
-    this.validator.subscribe(errs=>{
+    this.validator.subscribe(errs => {
       this.setErrors(errs);
     });
   }
 
-  onChange(e){
-    if (this.updateOn === "change"){
-    if (this.leaveAsNullWhenEmpty){
-      if (value === ''){value === null}
-    }
+  onChange(e) {
+    if (this.updateOn === "change") {
+      if (this.leaveAsNullWhenEmpty) {
+        if (value === '') { value === null }
+      }
 
-    var value = e.target.value;
-    if (value === "true"){value = true};
-    if (value === "false"){value = false};
-    if (value !== null && value !== undefined){
-      this.setValue(value)
-    }
-  }
-  }
-
-  onBlur(e){
-    if (this.updateOn === "blur"){
       var value = e.target.value;
-      if (value === ''){value === null}
-      if (value !== null && value !== undefined){
+      if (value.toLowerCase() === "true") { value = true };
+      if (value.toLowerCase() === "false") { value = false };
+      if (value !== null && value !== undefined) {
+        this.setValue(value)
+      }
+    }
+  }
+
+  onBlur(e) {
+    if (this.updateOn === "blur") {
+      var value = e.target.value;
+      if (value === '') { value === null }
+      if (value !== null && value !== undefined) {
         this.setValue(value);
       }
     }
@@ -61,7 +62,16 @@ class FormControl extends AbstractControl {
   }
 
   render() {
-    return (<div className="formControl"  onBlur={this.onBlur} onChange={this.onChange} ><this.props.element invalid={this.invalid} errorMessages={this.props.errorMessages} dirty={this.state.dirty} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element></div>)
+    return (
+      <div className="formControl" onBlur={this.onBlur} onChange={this.onChange} >
+        {this.props.element ?
+          <this.props.element invalid={this.invalid} errorMessages={this.props.errorMessages} dirty={this.state.dirty} value={this.state.value} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element> :
+          <React.Fragment>{React.Children.map(this.props.children, (child) => {
+            return React.cloneElement(child, { invalid: this.invalid, errorMessages: this.props.errorMessages, dirty: this.state.dirty, value: this.state.value, errors: this.state.errors, getStatus: this.getStatus, label: child.props.label? child.props.label: this.props.label, touched: this.state.touched, status: this.state.status, setValue: this.setValue })
+          })[0]}</React.Fragment>
+        }
+      </div>
+    )
   }
 };
 export default FormControl;

@@ -10,8 +10,7 @@
   },
   "module": "dist/index.js",
   "scripts": {
-    "start":"npm install",
-    "startBuild": "mv node_moduless node_modules; rollup -c; mv node_modules node_moduless ",
+    "start": "mv node_moduless node_modules; rollup -c; mv node_modules node_moduless ",
     "end":""
   },
   "main":"dist/index.js",

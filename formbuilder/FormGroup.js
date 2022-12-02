@@ -17,10 +17,8 @@ class FormGroup extends AbstractControl {
           this.controls[child.props.fieldName] = element;
         };
         if (child.props.defaultValue){
-          // this.controls[child.props.fieldName] = React.createRef();
           return React.cloneElement(child, {  ref: newref,parent: this, defaultValue:child.props.defaultValue })
         } else {
-          // this.controls[child.props.fieldName] = React.createRef();
           return React.cloneElement(child, {  ref: newref, parent: this })
         }
       } else if (child.props.groupName || child.props.arrayName) {
@@ -28,11 +26,9 @@ class FormGroup extends AbstractControl {
           const newref = element => {
             this.controls[child.props.arrayName] = element;
           };
-          // this.controls[child.props.arrayName] = React.createRef();
           return React.cloneElement(child, { parent: this, ref: newref })
         }
         if (child.props.groupName){
-          // this.controls[child.props.groupName] = React.createRef();
           const newref = element => {
             this.controls[child.props.groupName] = element;
           };
@@ -48,6 +44,12 @@ class FormGroup extends AbstractControl {
   }
 
   getControl(control){return this.controls[control]}
+
+  setValue(value) {
+    Object.keys(value).forEach(name => {
+      this.controls[name].setValue(value[name]);
+    });
+  }
 
   anyControls(condition){
     for (const [fieldName, control] of Object.entries(this.controls)){
@@ -73,7 +75,6 @@ class FormGroup extends AbstractControl {
         }
         if (child.valueChanges) {
           child.valueChanges().subscribe(val => {
-            //if state value === null then set it to an object.
             this.state.value[key] = val;
             this.setState({ value: this.state.value }, () => {
               this.value$.next(this.state.value);
@@ -83,8 +84,6 @@ class FormGroup extends AbstractControl {
       }
     });
   }
-
-
 
   render() {
     return (

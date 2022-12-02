@@ -58,7 +58,7 @@ interface Props {
 ```
 #
 
-###  Here is an example of how to make a form
+###  Here is an example of how to make a form using element for a control component
 
 ```jsx
 import React from 'react';
@@ -81,6 +81,35 @@ class myform extends React.component {
             element={InputField}
             fieldName="productName"
             label="Product Name">
+          </FormControl>
+        <FormGroup />
+    )
+  }
+}
+```
+###  Here is an example of how to make a form by directly using your component
+
+```jsx
+import React from 'react';
+import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
+import InputField from 'yourinputfield';
+
+class myform extends React.component {
+
+  constructor(props){
+    super(props);
+    this.myform = React.createRef();
+  }
+
+  render(){
+    return (
+        <FormGroup ref={this.myform} groupName="form">
+          <FormControl
+            validators={[requiredValidator()]}
+            errorMessages={{myError:"my message"}}
+            fieldName="productName"
+            label="Product Name">
+            <InputField width="200" name="my inputfield" >
           </FormControl>
         <FormGroup />
     )
@@ -129,7 +158,7 @@ interface Methods {
 }
 ```
 
-### How to make a Input field
+### How to make a reusable Input field
 
 #### hence most inputs have active events such as blur and onchange so you do not need to manualy setValue. the time you would need to call setValue is when your uploading an image.
 
@@ -156,6 +185,7 @@ class InputField extends React.Component {
       <div id={this.props.fieldName}>
         <FormControl >
          <TextField variant="filled"
+         sx={{width:this.props.width}}
           error={ this.props.touched && this.props.invalid ? true:false}
           multiline
           maxRows={2}
@@ -170,6 +200,5 @@ class InputField extends React.Component {
 }
 
 ```
-
 
 
