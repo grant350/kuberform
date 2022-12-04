@@ -16,6 +16,7 @@ class FormControl extends AbstractControl {
     Object.defineProperty(this.state, 'errors', { value: null, writable: false });
     Object.defineProperty(this, 'onChange', { value: this.onChange.bind(this), writable: false });
     Object.defineProperty(this, 'onBlur', { value: this.onBlur.bind(this), writable: false });
+    Object.defineProperty(this,'validator', {value:this.props.validators? this.mergeValidators(this.props.validators): null,writable:false});
   }
 
   componentDidMount() {
@@ -40,7 +41,6 @@ class FormControl extends AbstractControl {
       if (this.leaveAsNullWhenEmpty) {
         if (value === '') { value === null }
       }
-
       var value = e.target.value;
       if (value.toLowerCase() === "true") { value = true };
       if (value.toLowerCase() === "false") { value = false };
@@ -63,9 +63,9 @@ class FormControl extends AbstractControl {
 
   render() {
     return (
-      <div className="formControl" onBlur={this.onBlur} onChange={this.onChange} >
+      <div className="formControl" style={this.props.sx} onBlur={this.onBlur} onChange={this.onChange} >
         {this.props.element ?
-          <this.props.element invalid={this.invalid} errorMessages={this.props.errorMessages} dirty={this.state.dirty} value={this.state.value} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element> :
+          <this.props.element ref={this.control} invalid={this.invalid} errorMessages={this.props.errorMessages} dirty={this.state.dirty} value={this.state.value} errors={this.state.errors} getStatus={this.getStatus} label={this.props.label} touched={this.state.touched} status={this.state.status} fieldName={this.fieldName} setValue={this.setValue}></this.props.element> :
           <React.Fragment>{React.Children.map(this.props.children, (child) => {
             return React.cloneElement(child, { invalid: this.invalid, errorMessages: this.props.errorMessages, dirty: this.state.dirty, value: this.state.value, errors: this.state.errors, getStatus: this.getStatus, label: child.props.label? child.props.label: this.props.label, touched: this.state.touched, status: this.state.status, setValue: this.setValue })
           })[0]}</React.Fragment>

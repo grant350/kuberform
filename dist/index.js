@@ -66,10 +66,6 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       value: _this.setDirty.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'validator', {
-      value: _this.props.validators ? _this.mergeValidators(_this.props.validators) : null,
-      writable: false
-    });
     _this.leaveAsNullWhenEmpty = _this.props.leaveAsNullWhenEmpty ? true : false;
     return _this;
   }
@@ -341,10 +337,8 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
 
       Object.keys(value).forEach(function (name) {
         _this2.controls[name].setValue(value[name]);
-      }); // this.updateValueAndValidity(options);
-    } // updateValueAndValidity(){
-    // }
-
+      });
+    }
   }, {
     key: "anyControls",
     value: function anyControls(condition) {
@@ -383,7 +377,6 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
 
           if (child.valueChanges) {
             child.valueChanges().subscribe(function (val) {
-              //if state value === null then set it to an object.
               _this3.state.value[key] = val;
 
               _this3.setState({
@@ -435,62 +428,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       touched: false
     };
     _this.controls = [];
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'value$', {
-      value: new rxjs.BehaviorSubject([]),
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'arrayName', {
-      value: _this.props.arrayName,
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
-      value: React__default["default"].Children.map(_this.props.children, function (child, index) {
-        if (child.props.fieldName) {
-          var newref = function newref(element) {
-            _this.controls[index] = element;
-          };
-
-          if (child.props.defaultValue) {
-            // this.controls[index] = React.createRef();
-            return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              parent: _assertThisInitialized__default["default"](_this),
-              defaultValue: child.props.defaultValue,
-              ref: newref
-            });
-          } else {
-            // this.controls[index] = React.createRef();
-            return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              parent: _assertThisInitialized__default["default"](_this),
-              ref: newref
-            });
-          }
-        } else if (child.props.groupName || child.props.arrayName) {
-          if (child.props.arrayName) {
-            var _newref = function _newref(element) {
-              _this.controls[index] = element;
-            }; // this.controls[index] = React.createRef();
-
-
-            return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              ref: _newref
-            });
-          }
-
-          if (child.props.groupName) {
-            //  this.controls[index] = React.createRef();
-            var _newref2 = function _newref2(element) {
-              _this.controls[index] = element;
-            };
-
-            return /*#__PURE__*/React__default["default"].cloneElement(child, {
-              ref: _newref2
-            });
-          }
-        }
-      }),
-      writable: false
-    });
-    return _this;
+    throw Error("FORMARRAY IS NOT FINISHED. PLEASE WAIT THANK YOU...");
   }
 
   _createClass__default["default"](FormArray, [{
@@ -626,6 +564,10 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       value: _this.onBlur.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
     });
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'validator', {
+      value: _this.props.validators ? _this.mergeValidators(_this.props.validators) : null,
+      writable: false
+    });
     return _this;
   }
 
@@ -695,9 +637,11 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
 
       return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formControl",
+        style: this.props.sx,
         onBlur: this.onBlur,
         onChange: this.onChange
       }, this.props.element ? /*#__PURE__*/React__default["default"].createElement(this.props.element, {
+        ref: this.control,
         invalid: this.invalid,
         errorMessages: this.props.errorMessages,
         dirty: this.state.dirty,
@@ -729,6 +673,38 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
   return FormControl;
 }(AbstractControl);
 
+var Validators = /*#__PURE__*/function () {
+  function Validators() {
+    _classCallCheck__default["default"](this, Validators);
+  }
+
+  _createClass__default["default"](Validators, null, [{
+    key: "required",
+    value: function required() {
+      return function (value, obs) {
+        if (typeof value === "string") {
+          if (value.length <= 0) {
+            obs.next({
+              required: true
+            });
+          } else {
+            obs.next(null);
+          }
+        } else if (value == null || value == undefined) {
+          obs.next({
+            required: true
+          });
+        } else {
+          obs.next(null);
+        }
+      };
+    }
+  }]);
+
+  return Validators;
+}();
+
 exports.FormArray = FormArray;
 exports.FormControl = FormControl;
 exports.FormGroup = FormGroup;
+exports.Validators = Validators;

@@ -12,7 +12,6 @@ class AbstractControl extends React.Component {
     Object.defineProperty(this,'setErrors', {value:this.setErrors,writable:false});
     Object.defineProperty(this,'setTouched', {value:this.setTouched.bind(this),writable:false});
     Object.defineProperty(this,'setDirty', {value:this.setDirty.bind(this),writable:false});
-    Object.defineProperty(this,'validator', {value:this.props.validators? this.mergeValidators(this.props.validators): null,writable:false});
     this.leaveAsNullWhenEmpty = this.props.leaveAsNullWhenEmpty? true:false;
   }
 

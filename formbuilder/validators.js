@@ -21,3 +21,4 @@ export class Validators {
 
 }
 
+export default Validators;
