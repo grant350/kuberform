@@ -35,12 +35,10 @@ class FormGroup extends AbstractControl {
           return React.cloneElement(child, { parent: this, ref: newref })
         }
       } else {
-        return React.cloneElement(child, {})
+        return React.cloneElement(child,{})
       }
     }), writable: false });
-    if (this.props.getControls){
-      this.props.getControls(this.controls);
-    }
+
   }
 
   getControl(control){return this.controls[control]}
@@ -68,9 +66,11 @@ class FormGroup extends AbstractControl {
         if (child.statusChanges) {
           child.statusChanges().subscribe(status => {
             const groupStatus = this.calculateStatus();
+            if (this.state.status !== groupStatus){
             this.setState({status:groupStatus},()=>{
               this.status$.next(groupStatus);
             })
+          }
           })
         }
         if (child.valueChanges) {
@@ -86,9 +86,13 @@ class FormGroup extends AbstractControl {
   }
 
   render() {
+    //work around for not having state is to run another react.clone children or abodnand state all togeher and force render
     return (
       <div className="formGroup">
-        {this.props.container ? <this.props.container>{this.clonedChildren}</this.props.container> : <React.Fragment>{this.clonedChildren}</React.Fragment>}
+        {this.props.container ? <this.props.container>{this.clonedChildren}</this.props.container> :
+        <React.Fragment>{React.Children.map(this.clonedChildren, (child) => {
+          return React.cloneElement(child, {status:this.state.status})
+        })}</React.Fragment>}
       </div>)
   }
 };

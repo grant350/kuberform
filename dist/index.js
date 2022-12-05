@@ -317,11 +317,6 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       }),
       writable: false
     });
-
-    if (_this.props.getControls) {
-      _this.props.getControls(_this.controls);
-    }
-
     return _this;
   }
 
@@ -367,11 +362,13 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             child.statusChanges().subscribe(function (status) {
               var groupStatus = _this3.calculateStatus();
 
-              _this3.setState({
-                status: groupStatus
-              }, function () {
-                _this3.status$.next(groupStatus);
-              });
+              if (_this3.state.status !== groupStatus) {
+                _this3.setState({
+                  status: groupStatus
+                }, function () {
+                  _this3.status$.next(groupStatus);
+                });
+              }
             });
           }
 
@@ -392,9 +389,16 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
+      //work around for not having state is to run another react.clone children or abodnand state all togeher and force render
       return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formGroup"
-      }, this.props.container ? /*#__PURE__*/React__default["default"].createElement(this.props.container, null, this.clonedChildren) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, this.clonedChildren));
+      }, this.props.container ? /*#__PURE__*/React__default["default"].createElement(this.props.container, null, this.clonedChildren) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.clonedChildren, function (child) {
+        return /*#__PURE__*/React__default["default"].cloneElement(child, {
+          status: _this4.state.status
+        });
+      })));
     }
   }]);
 
