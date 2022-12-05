@@ -281,8 +281,6 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       //just needs to be mapped
       return React__default["default"].Children.map(children, function (child) {
         if (child.props.fieldName) {
-          console.log('being ran ');
-
           var newref = function newref(element) {
             _this.controls[child.props.fieldName] = element;
           };
@@ -322,10 +320,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             });
           }
         } else {
-          console.log('child in else', child);
-
           if (child.props.container) {
-            console.log('has children');
             return /*#__PURE__*/React__default["default"].cloneElement(child, {
               children: returnMapChildren(child.props.children)
             });

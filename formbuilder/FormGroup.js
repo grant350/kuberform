@@ -45,7 +45,6 @@ class FormGroup extends AbstractControl {
        })
       }
     Object.defineProperty(this, 'clonedChildren',  { value: returnMapChildren(this.props.children), writable: false });
-
   }
 
   getControl(control){return this.controls[control]}
