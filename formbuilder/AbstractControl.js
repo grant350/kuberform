@@ -15,13 +15,17 @@ class AbstractControl extends React.Component {
     this.leaveAsNullWhenEmpty = this.props.leaveAsNullWhenEmpty? true:false;
   }
 
-
+  static setMilk(){
+    this.setMilk = 5;
+    this.forceUpdate();
+  }
   getRawValue(){
     const frozenObjectValue = Object.assign({},this.state.value)
     return Object.defineProperty({},'value', {value:frozenObjectValue,writable:false});
   }
 
   get invalid(){return this.state.status === "INVALID"? true:false};
+
   get isEmptyValue(){
     if (this.state.value === null){return true};
     if (this.state.value.length <= 0){return true};

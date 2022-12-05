@@ -37,26 +37,51 @@ interface Props {
 ```
 
 
-### FormControl props
-
+### FormControl input props
 
 ```ts
 
 interface Props {
-  element: React.Element;
+  element: React.Element | undefined;
   fieldName: String;
   errorMessages: {[key:String]:String} | undefined;
-  defaultValue: any;
+  defaultValue: any | undefined;
   validators:Array< (value: string, observable: Observable<{[key:String]:String} | null>) => void > | undefined;
   label: String | undefined;
-  setValue: (value: any)=> void;
-  touched: boolean;
-  dirty: boolean;
-  errors: {[key:String]: Boolean | any};
-  invalid: Boolean;
 }
 ```
-#
+
+### FormControl output props
+
+```ts
+
+interface Props {
+  errorMessages: {[key:String]:String} | undefined;
+  value: any | null;
+  label: String | undefined;
+  status: String;
+  setValue: (value: any): void {};
+  invalid: Boolean;
+  touched: Boolean;
+  dirty: Boolean;
+  errors: {[key:String]: Boolean | any};
+}
+```
+
+### Container output props
+```ts
+
+interface Props {
+  value: any | null;
+  status: String;
+  invalid: Boolean;
+  touched: Boolean;
+  dirty: Boolean;
+  addChlid: (index: number): void {} | undefined;
+  removeChild: (index:number): void {} | undefined;
+}
+```
+
 
 ###  Here is an example of how to make a form using element for a control component
 
@@ -117,6 +142,38 @@ class myform extends React.component {
 }
 ```
 
+###  Here is an example of how to make a form with a wrapper container. you need the prop container to let it know that this element is a container. In your container component set the children using {this.props.children} or {props.children} in the return statement;
+
+```jsx
+import React from 'react';
+import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
+import InputField from 'yourinputfield';
+import MyContainer from 'mycontainer';
+class myform extends React.component {
+
+  constructor(props){
+    super(props);
+    this.myform = React.createRef();
+  }
+
+  render(){
+    return (
+        <FormGroup ref={this.myform} groupName="form">
+        <MyContainer container>
+          <div> untracted random element still gets rendered</div>
+          <FormControl
+            validators={[requiredValidator()]}
+            errorMessages={{myError:"my message"}}
+            fieldName="productName"
+            label="Product Name">
+            <InputField width="200" name="my inputfield" >
+          </FormControl>
+          <MyContainer/>
+        <FormGroup />
+    )
+  }
+}
+```
 
 ## Making a validator
 ### A validator is a function that will provide you a value and observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.

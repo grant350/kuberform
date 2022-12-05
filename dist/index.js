@@ -236,6 +236,12 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         }
       }
     }
+  }], [{
+    key: "setMilk",
+    value: function setMilk() {
+      this.setMilk = 5;
+      this.forceUpdate();
+    }
   }]);
 
   return AbstractControl;
@@ -270,9 +276,13 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       value: new rxjs.BehaviorSubject({}),
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
-      value: React__default["default"].Children.map(_this.props.children, function (child) {
+
+    var returnMapChildren = function returnMapChildren(children) {
+      //just needs to be mapped
+      return React__default["default"].Children.map(children, function (child) {
         if (child.props.fieldName) {
+          console.log('being ran ');
+
           var newref = function newref(element) {
             _this.controls[child.props.fieldName] = element;
           };
@@ -312,9 +322,22 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             });
           }
         } else {
+          console.log('child in else', child);
+
+          if (child.props.container) {
+            console.log('has children');
+            return /*#__PURE__*/React__default["default"].cloneElement(child, {
+              children: returnMapChildren(child.props.children)
+            });
+          }
+
           return /*#__PURE__*/React__default["default"].cloneElement(child, {});
         }
-      }),
+      });
+    };
+
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'clonedChildren', {
+      value: returnMapChildren(_this.props.children),
       writable: false
     });
     return _this;
@@ -384,7 +407,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
             });
           }
         }
-      });
+      }); // this.forceUpdate();
     }
   }, {
     key: "render",
@@ -395,9 +418,13 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formGroup"
       }, this.props.container ? /*#__PURE__*/React__default["default"].createElement(this.props.container, null, this.clonedChildren) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.clonedChildren, function (child) {
-        return /*#__PURE__*/React__default["default"].cloneElement(child, {
-          status: _this4.state.status
-        });
+        if (child.props.container) {
+          return /*#__PURE__*/React__default["default"].cloneElement(child, {
+            status: _this4.state.status
+          });
+        } else {
+          return child;
+        }
       })));
     }
   }]);

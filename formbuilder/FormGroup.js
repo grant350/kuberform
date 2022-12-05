@@ -8,36 +8,43 @@ class FormGroup extends AbstractControl {
     super(props);
     this.state = { value: {}, status: "VALID", touched:false };
     this.controls = {};
-
     Object.defineProperty(this,'groupName', {value:this.props.groupName,writable:false});
     Object.defineProperty(this,'value$', {value:new BehaviorSubject({}),writable:false});
-    Object.defineProperty(this, 'clonedChildren',  { value: React.Children.map(this.props.children, (child) => {
-      if (child.props.fieldName) {
-        const newref = element => {
-          this.controls[child.props.fieldName] = element;
-        };
-        if (child.props.defaultValue){
-          return React.cloneElement(child, {  ref: newref,parent: this, defaultValue:child.props.defaultValue })
-        } else {
-          return React.cloneElement(child, {  ref: newref, parent: this })
-        }
-      } else if (child.props.groupName || child.props.arrayName) {
-        if (child.props.arrayName){
-          const newref = element => {
-            this.controls[child.props.arrayName] = element;
-          };
-          return React.cloneElement(child, { parent: this, ref: newref })
-        }
-        if (child.props.groupName){
-          const newref = element => {
-            this.controls[child.props.groupName] = element;
-          };
-          return React.cloneElement(child, { parent: this, ref: newref })
-        }
-      } else {
-        return React.cloneElement(child,{})
+
+     const returnMapChildren = (children)=>{
+        //just needs to be mapped
+      return React.Children.map(children, (child) => {
+         if (child.props.fieldName) {
+           const newref = element => {
+             this.controls[child.props.fieldName] = element;
+           };
+           if (child.props.defaultValue){
+             return React.cloneElement(child, {  ref: newref,parent: this, defaultValue:child.props.defaultValue })
+           } else {
+             return React.cloneElement(child, {  ref: newref, parent: this })
+           }
+         } else if (child.props.groupName || child.props.arrayName) {
+           if (child.props.arrayName){
+             const newref = element => {
+               this.controls[child.props.arrayName] = element;
+             };
+             return React.cloneElement(child, { parent: this, ref: newref })
+           }
+           if (child.props.groupName){
+             const newref = element => {
+               this.controls[child.props.groupName] = element;
+             };
+             return React.cloneElement(child, { parent: this, ref: newref })
+           }
+         } else {
+           if (child.props.container){
+            return React.cloneElement(child,{children:returnMapChildren(child.props.children)})
+           }
+           return React.cloneElement(child,{})
+         }
+       })
       }
-    }), writable: false });
+    Object.defineProperty(this, 'clonedChildren',  { value: returnMapChildren(this.props.children), writable: false });
 
   }
 
@@ -83,6 +90,8 @@ class FormGroup extends AbstractControl {
         }
       }
     });
+
+    // this.forceUpdate();
   }
 
   render() {
@@ -91,7 +100,11 @@ class FormGroup extends AbstractControl {
       <div className="formGroup">
         {this.props.container ? <this.props.container>{this.clonedChildren}</this.props.container> :
         <React.Fragment>{React.Children.map(this.clonedChildren, (child) => {
-          return React.cloneElement(child, {status:this.state.status})
+          if (child.props.container){
+            return React.cloneElement(child, {status:this.state.status})
+          } else {
+            return child;
+          }
         })}</React.Fragment>}
       </div>)
   }
