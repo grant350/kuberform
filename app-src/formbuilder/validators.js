@@ -50,9 +50,6 @@ export class Validators {
     }
   }
 
-  get isTimeStamp(format){
-    //can be int or string to seconds
-  }
 
   get isNumber(){
     return (control, obs) => {
