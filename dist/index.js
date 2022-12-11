@@ -11,6 +11,7 @@ var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstru
 var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
 var React = require('react');
 var rxjs = require('rxjs');
+var ReactDOM = require('react-dom');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -22,6 +23,7 @@ var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
 var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
 var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
 var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+var ReactDOM__default = /*#__PURE__*/_interopDefaultLegacy(ReactDOM);
 
 function _createSuper$3(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$3(); return function _createSuperInternal() { var Super = _getPrototypeOf__default["default"](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default["default"](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default["default"](this, result); }; }
 
@@ -38,45 +40,79 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     _classCallCheck__default["default"](this, AbstractControl);
 
     _this = _super.call(this, props);
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'status$', {
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'statusChanges', {
       value: new rxjs.BehaviorSubject("VALID"),
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setValue', {
-      value: _this.setValue.bind(_assertThisInitialized__default["default"](_this)),
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'valueChanges', {
-      value: _this.valueChanges,
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'statusChanges', {
-      value: _this.statusChanges,
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setErrors', {
-      value: _this.setErrors,
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setTouched', {
-      value: _this.setTouched.bind(_assertThisInitialized__default["default"](_this)),
-      writable: false
-    });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'setDirty', {
-      value: _this.setDirty.bind(_assertThisInitialized__default["default"](_this)),
-      writable: false
-    });
-    _this.leaveAsNullWhenEmpty = _this.props.leaveAsNullWhenEmpty ? true : false;
     return _this;
   }
 
   _createClass__default["default"](AbstractControl, [{
-    key: "getRawValue",
-    value: function getRawValue() {
+    key: "setView",
+    value: function setView() {
+      // see if the dom node can handle event listener blur or other things
+      if (!this.controlHasProps) {
+        // components need to use value prop
+        var FORM_CONTROL = ReactDOM__default["default"].findDOMNode(this.ref.current); //find closest Input or target attr
+
+        var TEXTAREA_NODE = FORM_CONTROL.querySelectorAll("textarea")[0];
+        var INPUT_NODE = FORM_CONTROL.querySelectorAll("input")[0];
+        var TARGET_NODE = FORM_CONTROL.querySelectorAll('[id="target"]')[0]; //set the values
+
+        var STATUS_NODE = FORM_CONTROL.querySelectorAll('[id="form-status"]')[0];
+
+        if (STATUS_NODE !== undefined) {
+          STATUS_NODE.innerText = this.state.status;
+        }
+
+        if (TARGET_NODE) {
+          TARGET_NODE.value = this.state.value; // this.forceUpdate();
+
+          return;
+        }
+
+        if (TEXTAREA_NODE) {
+          TEXTAREA_NODE.value = this.state.value; // this.forceUpdate();
+
+          return;
+        }
+
+        if (INPUT_NODE) {
+          INPUT_NODE.value = this.state.value; // this.forceUpdate();
+
+          return;
+        }
+      }
+    }
+  }, {
+    key: "getErrors",
+    value: function getErrors() {
+      return this.state.errors;
+    }
+  }, {
+    key: "getValue",
+    value: function getValue() {
       var frozenObjectValue = Object.assign({}, this.state.value);
       return Object.defineProperty({}, 'value', {
         value: frozenObjectValue,
         writable: false
+      });
+    }
+  }, {
+    key: "getStatus",
+    value: function getStatus() {
+      return this.state.status;
+    }
+  }, {
+    key: "setStateAndView",
+    value: function setStateAndView(obj, fn) {
+      var _this2 = this;
+
+      this.setState(obj, function () {
+        //setView first  then run callback
+        _this2.setView();
+
+        fn();
       });
     }
   }, {
@@ -91,32 +127,45 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         return true;
       }
 
-      if (this.state.value.length <= 0) {
+      if (this.state.value === '') {
+        return true;
+      }
+
+      if (this.state.value === undefined) {
         return true;
       }
       return false;
     }
   }, {
     key: "setTouched",
-    value: function setTouched() {
-      this.setState({
-        touched: true
-      });
+    value: function setTouched(options) {
+      var _this3 = this;
 
-      if (this.parent) {
-        this.parent.setTouched();
-      }
+      this.setStateAndView({
+        touched: true
+      }, function () {
+        if (_this3.parent && !options.onlySelf) {
+          _this3.parent.setTouched(options);
+        }
+      });
     }
   }, {
     key: "setDirty",
-    value: function setDirty(value) {
-      this.setState({
-        dirty: true
-      });
+    value: function setDirty(value, options) {
+      var _this4 = this;
 
-      if (this.parent) {
-        this.parent.setDirty();
-      }
+      this.setStateAndView({
+        dirty: true
+      }, function () {
+        if (_this4.parent && !options.onlySelf) {
+          _this4.parent.setDirty(options);
+        }
+      });
+    }
+  }, {
+    key: "isDisabled",
+    value: function isDisabled() {
+      return this.state.disabled;
     }
   }, {
     key: "calculateStatus",
@@ -125,9 +174,13 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         return "INVALID";
       } else if (this.anyControlsHaveStatus("INVALID")) {
         return "INVALID";
-      } else {
-        return "VALID";
+      } else if (this.isDisabled()) {
+        return "DISABLED";
+      } else if (this.anyControlsHaveStatus("PENDING")) {
+        return "PENDING";
       }
+
+      return "VALID";
     }
   }, {
     key: "anyControlsHaveStatus",
@@ -142,27 +195,29 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       condition(this);
     }
   }, {
-    key: "getRawStatus",
-    value: function getRawStatus() {
-      return this.state.status;
+    key: "composeAsyncValidators",
+    value: function composeAsyncValidators(validators) {
+      return validators != null ? this.mergeValidators(validators) : null;
     }
   }, {
     key: "mergeValidators",
     value: function mergeValidators(validators) {
-      var _this2 = this;
+      var _this5 = this;
 
-      var asyncValidatorObservables = this.props.validators.map(function (validator) {
-        return new rxjs.Observable(function (error$) {
-          validator(_this2.state.value, error$);
-        }).pipe(rxjs.take(1));
-      });
-      return rxjs.forkJoin(asyncValidatorObservables).pipe(rxjs.map(this.mergeErrors));
+      return function (control) {
+        var asyncObservables = _this5.props.validators.map(function (validator) {
+          return new rxjs.Observable(function (error$) {
+            validator(control, error$);
+          }).pipe(rxjs.take(1));
+        });
+
+        return rxjs.forkJoin(asyncObservables).pipe(rxjs.map(_this5.mergeErrors));
+      };
     }
   }, {
     key: "mergeErrors",
     value: function mergeErrors(arrayOfErrors) {
-      var totalErrors = {}; // let totalWarnings = {};
-
+      var totalErrors = {};
       arrayOfErrors.forEach(function (errorsObj) {
         if (errorsObj !== null) {
           totalErrors = Object.assign(totalErrors, errorsObj);
@@ -173,74 +228,104 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "updateControlsErrors",
     value: function updateControlsErrors() {
-      var _this3 = this;
+      var _this6 = this;
 
       var status = this.calculateStatus();
-      this.setState({
+      this.setStateAndView({
         status: status
       }, function () {
-        _this3.status$.next(status);
+        _this6.statusChanges.next(status);
 
-        _this3.status = status;
+        if (_this6.parent) {
+          _this6.parent.updateControlsErrors();
+        }
       });
-
-      if (this.props.parent) {
-        this.props.parent.updateControlsErrors();
-      }
     } //this.forceupdate instead of using state and pass in the static values
 
   }, {
-    key: "getStatus",
-    value: function getStatus() {
-      return this.status;
-    }
-  }, {
     key: "setErrors",
     value: function setErrors(errorObject) {
-      var _this4 = this;
+      var _this7 = this;
 
-      this.setState({
+      this.setStateAndView({
         errors: errorObject
       }, function () {
-        _this4.updateControlsErrors();
+        _this7.updateControlsErrors();
       });
     }
   }, {
-    key: "valueChanges",
-    value: function valueChanges() {
-      return this.value$.asObservable();
+    key: "runAsyncValidator",
+    value: function runAsyncValidator(options) {
+      var _this8 = this;
+
+      if (this.asyncValidator) {
+        this.setStateAndView({
+          status: "PENDING"
+        }, function () {
+          _this8.asyncSubscription = _this8.asyncValidator(_this8).subscribe(function (errs) {
+            _this8.setErrors(errs);
+          });
+        });
+      }
     }
   }, {
-    key: "statusChanges",
-    value: function statusChanges() {
-      return this.status$.asObservable();
+    key: "updateValue",
+    value: function updateValue() {// do nohing as theres no controls to update
+      //if emit is false then dont update state.s
+    }
+  }, {
+    key: "setInitialStatusAndErrors",
+    value: function setInitialStatusAndErrors(cb) {
+      this.setStateAndView({
+        status: this.isDisabled() ? "DISABLED" : "VALID",
+        errors: null
+      }, cb);
+    }
+  }, {
+    key: "updateValueAndValidity",
+    value: function updateValueAndValidity(options) {
+      var _this9 = this;
+
+      this.setInitialStatusAndErrors(function () {
+        var status = _this9.calculateStatus();
+
+        _this9.updateValue();
+
+        _this9.setStateAndView({
+          status: status
+        }, function () {
+          if (_this9.state.enabled) {
+            if (_this9.asyncSubscription) {
+              _this9.asyncSubscription.unsubscribe();
+            }
+
+            if (_this9.state.status === "VALID" || _this9.state.status === "PENDING") {
+              _this9.runAsyncValidator(options);
+            }
+          }
+
+          _this9.valueChanges.next(_this9.state.value);
+
+          _this9.statusChanges.next(_this9.state.status);
+
+          if (_this9.parent && !options.onlySelf) {
+            _this9.parent.updateValueAndValidity(options);
+          }
+        });
+      });
     }
   }, {
     key: "setValue",
-    value: function setValue(value) {
-      var _this5 = this;
+    value: function setValue(value, options) {
+      var _this10 = this;
 
-      if (this.state.value !== value) {
-        this.setDirty();
-        this.value$.next(value);
-        this.setState({
-          value: value
-        }, function () {
-          if (_this5.validator) {
-            _this5.validate(value);
-          }
-        });
-      } else {
-        if (this.validator) {
-          this.validate(value);
-        }
-      }
-    }
-  }], [{
-    key: "setMilk",
-    value: function setMilk() {
-      this.setMilk = 5;
-      this.forceUpdate();
+      this.setStateAndView({
+        value: value
+      }, function () {
+        _this10.setView();
+
+        _this10.updateValueAndValidity(options);
+      });
     }
   }]);
 
@@ -272,15 +357,24 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       value: _this.props.groupName,
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'value$', {
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'valueChanges', {
       value: new rxjs.BehaviorSubject({}),
       writable: false
     });
+    _this.reduceChildren = _this.reduceChildren.bind(_assertThisInitialized__default["default"](_this));
 
     var returnMapChildren = function returnMapChildren(children) {
-      //just needs to be mapped
       return React__default["default"].Children.map(children, function (child) {
+        console.log('child in grouo', child);
+
         if (child.props.fieldName) {
+          if (child.props.children.hasOwnProperty('type') === false) {
+            console.log('reset child');
+            child = /*#__PURE__*/React__default["default"].cloneElement(child, {
+              children: /*#__PURE__*/React__default["default"].createElement(child.props.children, null)
+            });
+          }
+
           var newref = function newref(element) {
             _this.controls[child.props.fieldName] = element;
           };
@@ -368,54 +462,36 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       return false;
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this3 = this;
-
-      Object.keys(this.controls).forEach(function (key) {
-        var child = _this3.controls[key];
-
-        if (child !== null) {
-          if (child.statusChanges) {
-            child.statusChanges().subscribe(function (status) {
-              var groupStatus = _this3.calculateStatus();
-
-              if (_this3.state.status !== groupStatus) {
-                _this3.setState({
-                  status: groupStatus
-                }, function () {
-                  _this3.status$.next(groupStatus);
-                });
-              }
-            });
-          }
-
-          if (child.valueChanges) {
-            child.valueChanges().subscribe(function (val) {
-              _this3.state.value[key] = val;
-
-              _this3.setState({
-                value: _this3.state.value
-              }, function () {
-                _this3.value$.next(_this3.state.value);
-              });
-            });
-          }
-        }
-      }); // this.forceUpdate();
+    key: "reduceChildren",
+    value: function reduceChildren() {
+      var newValue = Object.reduce(this.controls, function (acc, control, key) {
+        acc[key] = control.state.getValue();
+        return acc;
+      }, "non");
+      this.setState({
+        value: newValue
+      });
+      this.valueChanges.next(newValue);
     }
+  }, {
+    key: "updateValue",
+    value: function updateValue() {
+      this.reduceChildren();
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {}
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
-      //work around for not having state is to run another react.clone children or abodnand state all togeher and force render
       return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formGroup"
-      }, this.props.container ? /*#__PURE__*/React__default["default"].createElement(this.props.container, null, this.clonedChildren) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.clonedChildren, function (child) {
+      }, /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.clonedChildren, function (child) {
         if (child.props.container) {
           return /*#__PURE__*/React__default["default"].cloneElement(child, {
-            status: _this4.state.status
+            status: _this3.state.status
           });
         } else {
           return child;
@@ -550,36 +626,28 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
 
     _this = _super.call(this, props);
     _this.updateOn = _this.props.updateOn ? _this.props.updateOn : 'change';
-    _this.state = {
-      status: "VALID",
-      value: _this.props.defaultValue !== undefined ? _this.props.defaultValue : null,
-      errors: null,
-      touched: false,
-      dirty: false
-    };
+    var initValue = '';
 
-    if (!_this.props.fieldName) {
-      throw new ReferenceError("fieldName does not exists on FormControl");
+    if (_this.props.leaveAsNullWhenEmpty) {
+      initValue = null;
     }
 
+    _this.state = {
+      status: "VALID",
+      value: _this.props.defaultValue ? _this.props.defaultValue : initValue,
+      errors: null,
+      touched: false,
+      dirty: false,
+      disabled: _this.props.disabled ? true : false,
+      enabled: _this.props.disabled ? false : true
+    };
+    _this.leaveAsNullWhenEmpty = _this.props.leaveAsNullWhenEmpty ? true : false;
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'fieldName', {
       value: _this.props.fieldName,
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'value$', {
+    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'valueChanges', {
       value: new rxjs.BehaviorSubject(_this.props.defaultValue !== undefined ? _this.props.defaultValue : null),
-      writable: false
-    });
-    Object.defineProperty(_this.state, 'status', {
-      value: 'VALID',
-      writable: false
-    });
-    Object.defineProperty(_this.state, 'value', {
-      value: _this.props.defaultValue !== undefined ? _this.props.defaultValue : null,
-      writable: false
-    });
-    Object.defineProperty(_this.state, 'errors', {
-      value: null,
       writable: false
     });
     Object.defineProperty(_assertThisInitialized__default["default"](_this), 'onChange', {
@@ -590,10 +658,10 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       value: _this.onBlur.bind(_assertThisInitialized__default["default"](_this)),
       writable: false
     });
-    Object.defineProperty(_assertThisInitialized__default["default"](_this), 'validator', {
-      value: _this.props.validators ? _this.mergeValidators(_this.props.validators) : null,
-      writable: false
-    });
+    _this.asyncValidator = _this.props.validators ? _this.composeAsyncValidators(_this.props.validators) : null;
+    _this.asyncSubscription = null;
+    _this.ref = /*#__PURE__*/React__default["default"].createRef();
+    _this.controlHasProps = typeof _this.props.children.type !== "string";
     return _this;
   }
 
@@ -603,44 +671,28 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       this.setValue(this.state.value);
     }
   }, {
-    key: "validate",
-    value: function validate(value) {
-      var _this2 = this;
-
-      if (this.props.validators === undefined || this.props.validators === null || !Array.isArray(this.props.validators)) {
-        throw new SyntaxError("validators is not of type Array");
-      }
-
-      if (this.props.validators.length > 0) {
-        this.status$.next("PENDING");
-        this.setState({
-          status: "PENDING"
-        });
-      }
-
-      this.validator.subscribe(function (errs) {
-        _this2.setErrors(errs);
-      });
-    }
-  }, {
     key: "onChange",
     value: function onChange(e) {
+      var value = e.target.value;
+
       if (this.updateOn === "change") {
         if (this.leaveAsNullWhenEmpty) ;
 
-        var value = e.target.value;
+        if (this.allowTypeBoolean) {
+          if (value.toLowerCase() === "true") {
+            value = true;
+          }
 
-        if (value.toLowerCase() === "true") {
-          value = true;
+          if (value.toLowerCase() === "false") {
+            value = false;
+          }
         }
 
-        if (value.toLowerCase() === "false") {
-          value = false;
-        }
+        this.setValue(value);
+      }
 
-        if (value !== null && value !== undefined) {
-          this.setValue(value);
-        }
+      if (this.state.dirty === false) {
+        this.setDirty();
       }
     }
   }, {
@@ -649,49 +701,54 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       if (this.updateOn === "blur") {
         var value = e.target.value;
 
-        if (value !== null && value !== undefined) {
-          this.setValue(value);
+        if (this.leaveAsNullWhenEmpty) ;
+
+        if (this.allowTypeBoolean) {
+          if (value.toLowerCase() === "true") {
+            value = true;
+          }
+
+          if (value.toLowerCase() === "false") {
+            value = false;
+          }
         }
+
+        this.setValue(value);
       }
 
-      this.setTouched();
+      if (this.state.touched === false) {
+        this.setTouched();
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       return /*#__PURE__*/React__default["default"].createElement("div", {
         className: "formControl",
+        ref: this.ref,
         style: this.props.sx,
         onBlur: this.onBlur,
-        onChange: this.onChange
-      }, this.props.element ? /*#__PURE__*/React__default["default"].createElement(this.props.element, {
-        ref: this.control,
-        invalid: this.invalid,
-        errorMessages: this.props.errorMessages,
-        dirty: this.state.dirty,
-        value: this.state.value,
-        errors: this.state.errors,
-        getStatus: this.getStatus,
-        label: this.props.label,
-        touched: this.state.touched,
-        status: this.state.status,
-        fieldName: this.fieldName,
-        setValue: this.setValue
-      }) : /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.props.children, function (child) {
-        return /*#__PURE__*/React__default["default"].cloneElement(child, {
-          invalid: _this3.invalid,
-          errorMessages: _this3.props.errorMessages,
-          dirty: _this3.state.dirty,
-          value: _this3.state.value,
-          errors: _this3.state.errors,
-          getStatus: _this3.getStatus,
-          label: child.props.label ? child.props.label : _this3.props.label,
-          touched: _this3.state.touched,
-          status: _this3.state.status,
-          setValue: _this3.setValue
-        });
+        onChange: this.onChange,
+        touched: this.state.touched.toString(),
+        dirty: this.state.dirty.toString()
+      }, /*#__PURE__*/React__default["default"].createElement(React__default["default"].Fragment, null, React__default["default"].Children.map(this.props.children, function (child) {
+        // console.log('child',child)
+        if (typeof child.type === "string") {
+          return /*#__PURE__*/React__default["default"].cloneElement(child, {});
+        } else {
+          return /*#__PURE__*/React__default["default"].cloneElement(child, {
+            invalid: _this2.invalid,
+            dirty: _this2.state.dirty,
+            value: _this2.state.value,
+            errors: _this2.state.errors,
+            getStatus: _this2.getStatus,
+            touched: _this2.state.touched,
+            status: _this2.state.status,
+            setValue: _this2.setValue
+          });
+        }
       })[0]));
     }
   }]);
@@ -729,6 +786,17 @@ var Validators = /*#__PURE__*/function () {
 
   return Validators;
 }();
+
+Object.reduce = function reduce(object, fn, initValue) {
+  if (Array.isArray(initValue) || typeof initValue === "string") {
+    throw new SyntaxError("initial value must be an object!");
+  }
+
+  Object.keys(object).forEach(function (key) {
+    initValue = fn(initValue, object[key], key);
+  });
+  return initValue;
+};
 
 exports.FormArray = FormArray;
 exports.FormControl = FormControl;

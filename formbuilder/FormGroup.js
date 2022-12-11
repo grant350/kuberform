@@ -9,12 +9,15 @@ class FormGroup extends AbstractControl {
     this.state = { value: {}, status: "VALID", touched:false };
     this.controls = {};
     Object.defineProperty(this,'groupName', {value:this.props.groupName,writable:false});
-    Object.defineProperty(this,'value$', {value:new BehaviorSubject({}),writable:false});
-
+    Object.defineProperty(this,'valueChanges', {value:new BehaviorSubject({}),writable:false});
+    this.reduceChildren = this.reduceChildren.bind(this);
      const returnMapChildren = (children)=>{
-        //just needs to be mapped
       return React.Children.map(children, (child) => {
          if (child.props.fieldName) {
+          if (child.props.children.hasOwnProperty('type') === false){
+            console.log('reset child');
+            child = React.cloneElement(child,{children:<child.props.children></child.props.children>});
+          }
            const newref = element => {
              this.controls[child.props.fieldName] = element;
            };
@@ -65,46 +68,31 @@ class FormGroup extends AbstractControl {
     return false;
   }
 
-  componentDidMount() {
-    Object.keys(this.controls).forEach(key => {
-      const child = this.controls[key];
-      if (child !== null) {
-        if (child.statusChanges) {
-          child.statusChanges().subscribe(status => {
-            const groupStatus = this.calculateStatus();
-            if (this.state.status !== groupStatus){
-            this.setState({status:groupStatus},()=>{
-              this.status$.next(groupStatus);
-            })
-          }
-          })
-        }
-        if (child.valueChanges) {
-          child.valueChanges().subscribe(val => {
-            this.state.value[key] = val;
-            this.setState({ value: this.state.value }, () => {
-              this.value$.next(this.state.value);
-            });
-          })
-        }
-      }
-    });
-
-    // this.forceUpdate();
+  reduceChildren(){
+    const newValue = Object.reduce(this.controls,(acc,control,key)=>{
+      acc[key] = control.state.getValue();
+      return acc;
+    },"non");
+    this.setState({value:newValue});
+    this.valueChanges.next(newValue);
   }
 
+  updateValue(){
+    this.reduceChildren();
+  }
+
+  componentDidMount() {}
+
   render() {
-    //work around for not having state is to run another react.clone children or abodnand state all togeher and force render
     return (
-      <div className="formGroup">
-        {this.props.container ? <this.props.container>{this.clonedChildren}</this.props.container> :
+      <div className="formGroup" sx={this.props.sx}>
         <React.Fragment>{React.Children.map(this.clonedChildren, (child) => {
           if (child.props.container){
             return React.cloneElement(child, {status:this.state.status})
           } else {
             return child;
           }
-        })}</React.Fragment>}
+        })}</React.Fragment>
       </div>)
   }
 };
