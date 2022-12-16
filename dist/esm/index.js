@@ -1,16 +1,14 @@
-'use strict';
-
-var _slicedToArray = require('@babel/runtime/helpers/slicedToArray');
-var _classCallCheck = require('@babel/runtime/helpers/classCallCheck');
-var _createClass = require('@babel/runtime/helpers/createClass');
-var _assertThisInitialized = require('@babel/runtime/helpers/assertThisInitialized');
-var _inherits = require('@babel/runtime/helpers/inherits');
-var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstructorReturn');
-var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
-var React = require('react');
-var rxjs = require('rxjs');
-require('react-dom');
-var _wrapNativeSuper = require('@babel/runtime/helpers/wrapNativeSuper');
+import _slicedToArray from '@babel/runtime/helpers/slicedToArray';
+import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
+import _createClass from '@babel/runtime/helpers/createClass';
+import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
+import _inherits from '@babel/runtime/helpers/inherits';
+import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
+import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
+import React from 'react';
+import { BehaviorSubject, Observable, forkJoin, map } from 'rxjs';
+import 'react-dom';
+import _wrapNativeSuper from '@babel/runtime/helpers/wrapNativeSuper';
 
 function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -105,7 +103,7 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.errorHandler = new ErrorHandler(_assertThisInitialized(_this));
     Object.defineProperty(_assertThisInitialized(_this), 'statusChanges', {
-      value: new rxjs.BehaviorSubject("VALID"),
+      value: new BehaviorSubject("VALID"),
       writable: false
     });
     return _this;
@@ -219,11 +217,11 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       //.pipe(take(1));
       return function (control) {
         var asyncObservables = _this4.props.validators.map(function (validator) {
-          return new rxjs.Observable(function (error$) {
+          return new Observable(function (error$) {
             validator(control, error$);
           });
         });
-        return rxjs.forkJoin(asyncObservables).pipe(rxjs.map(_this4.mergeErrors));
+        return forkJoin(asyncObservables).pipe(map(_this4.mergeErrors));
       };
     }
   }, {
@@ -349,7 +347,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       writable: false
     });
     Object.defineProperty(_assertThisInitialized(_this), 'valueChanges', {
-      value: new rxjs.BehaviorSubject({}),
+      value: new BehaviorSubject({}),
       writable: false
     });
     _this.reduceChildren = _this.reduceChildren.bind(_assertThisInitialized(_this));
@@ -520,7 +518,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       writable: false
     });
     Object.defineProperty(_assertThisInitialized(_this), 'valueChanges', {
-      value: new rxjs.BehaviorSubject({}),
+      value: new BehaviorSubject({}),
       writable: false
     });
     _this.reduceChildren = _this.reduceChildren.bind(_assertThisInitialized(_this));
@@ -689,7 +687,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
       writable: false
     });
     Object.defineProperty(_assertThisInitialized(_this), 'valueChanges', {
-      value: new rxjs.BehaviorSubject(_this.props.defaultValue !== undefined ? _this.props.defaultValue : null),
+      value: new BehaviorSubject(_this.props.defaultValue !== undefined ? _this.props.defaultValue : null),
       writable: false
     });
     Object.defineProperty(_assertThisInitialized(_this), 'onChange', {
@@ -923,8 +921,5 @@ var Validators = /*#__PURE__*/function () {
   return Validators;
 }();
 
-exports.FormArray = FormArray;
-exports.FormControl = FormControl;
-exports.FormGroup = FormGroup;
-exports.Validators = Validators;
+export { FormArray, FormControl, FormGroup, Validators };
 //# sourceMappingURL=index.js.map

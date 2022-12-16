@@ -1,5 +1,5 @@
 import React from 'react';
-import { Validators, FormArray, FormGroup, FormControl } from '../../form-builder/index.js';
+import { Validators, FormArray, FormGroup, FormControl } from '../../kuberform/index.js';
 import './index.scss';
 class FormExample1 extends React.Component {
 
