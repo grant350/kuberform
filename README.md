@@ -90,6 +90,13 @@ class myform extends React.component {
     this.myform = React.createRef();
   }
 
+  submit(){
+    console.log(this.myform.current.getValue());
+  }
+  addChild(){
+    this.myform.current.getControl("nestedArray").addChild();
+  }
+
   render(){
     return (
        <FormGroup ref={this.myform} groupName="login">
@@ -135,7 +142,7 @@ class myform extends React.component {
                     </div>)
                   }}
                 </FormControl>
-                <button type='button' onClick={this.submit} className="add-secretid">Add Another</button>
+                <button type='button' onClick={this.addChild} className="add-secretid">Add Another</button>
               </FormArray>
               <div className="action">
                 <button type='button' onClick={this.submit} className="action-button">Get started</button>
@@ -146,7 +153,6 @@ class myform extends React.component {
             </div>
           </div>
         </div>
-
       </FormGroup>
     )
   }
@@ -154,7 +160,7 @@ class myform extends React.component {
 ```
 
 ## Making a validator
-### A validator is a function that will provide you a value and observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.
+### A validator is a function that will provide you a control and a observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.
 
 ```jsx
 export default function required() {

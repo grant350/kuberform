@@ -26,3 +26,11 @@
 ### This will compile just the formbuilder folder, this saves space in the actual package
 
 ## When you have compiled the project push your changes and make a PullRequest
+
+## Things to work on
+#
+### fix eslint errors
+### set up typescript
+### make auto deploy using npmjs apikey
+### make more example forms and include containers for adding and removing children
+### make simple site for using kuberform
