@@ -18,11 +18,14 @@
     "type": "git",
     "url": "git+ssh://git@github.com/grant350/kuberform.git"
   },
+  "jest":{
+    "testMatch":["**/?(*.)+(spec|test).[jt]s?(x)"]
+  },
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "linter": "eslint src",
-    "test": "jest ./app-src/*.test.js --detectOpenHandles --forceExit "
+    "test": "jest --verbose --detectOpenHandles --forceExit "
   },
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
   "license": "GNU3",
