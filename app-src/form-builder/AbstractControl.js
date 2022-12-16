@@ -2,58 +2,28 @@
 import React from 'react';
 import { Observable, BehaviorSubject, forkJoin, map, take, Subject } from 'rxjs';
 import ReactDOM from 'react-dom'
+import ErrorHandler from './ErrorHandler.js'
 
-class AbstractControl extends React.Component {
+ class AbstractControl extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.errorHandler = new ErrorHandler(this);
     Object.defineProperty(this, 'statusChanges', { value: new BehaviorSubject("VALID"), writable: false });
   }
 
-  setView(){
-    // see if the dom node can handle event listener blur or other things
-    if (!this.controlHasProps ){
-      // components need to use value prop
-      const FORM_CONTROL = ReactDOM.findDOMNode(this.ref.current);
-      //find closest Input or target attr
-      const TEXTAREA_NODE = FORM_CONTROL.querySelectorAll("textarea")[0];
-      const INPUT_NODE = FORM_CONTROL.querySelectorAll("input")[0];
-      const TARGET_NODE = FORM_CONTROL.querySelectorAll('[id="target"]')[0];
-      //set the values
-      const STATUS_NODE = FORM_CONTROL.querySelectorAll('[id="form-status"]')[0];
-      if (STATUS_NODE !== undefined){STATUS_NODE.innerText = this.state.status;  }
-
-      if (TARGET_NODE){
-        TARGET_NODE.value = this.state.value;
-        // this.forceUpdate();
-        return;
-      }
-      if (TEXTAREA_NODE){
-        TEXTAREA_NODE.value = this.state.value;
-        // this.forceUpdate();
-        return;
-      }
-      if (INPUT_NODE){
-        INPUT_NODE.value = this.state.value;
-        // this.forceUpdate();
-        return;
-      }
-   }
-  }
 
   getErrors(){
     return this.state.errors;
   }
   getValue() {
-    const frozenObjectValue = Object.assign({}, this.state.value);
-    return Object.defineProperty({}, 'value', { value: frozenObjectValue, writable: false });
+    return this.state.value;
   }
   getStatus(){
     return this.state.status;
   }
   setStateAndView(obj,fn){
     this.setState(obj,()=>{
-      //setView first  then run callback
-      this.setView();
+      //do something to disable the inputs
       fn();
     })
   }
@@ -96,7 +66,6 @@ class AbstractControl extends React.Component {
     return "VALID";
   }
 
-
   anyControlsHaveStatus(status) {
     return this.anyControls((control) => { return control.state.status == status })
   }
@@ -110,11 +79,12 @@ class AbstractControl extends React.Component {
   }
 
   mergeValidators(validators) {
+    //.pipe(take(1));
     return (control) => {
       const asyncObservables = this.props.validators.map(validator => {
         return new Observable((error$) => {
           validator(control, error$);
-        }).pipe(take(1));
+        })
       });
       return forkJoin(asyncObservables).pipe(map(this.mergeErrors))
     }
@@ -139,7 +109,6 @@ class AbstractControl extends React.Component {
       }
     });
   }
-  //this.forceupdate instead of using state and pass in the static values
 
   setErrors(errorObject) {
     this.setStateAndView({ errors: errorObject }, () => {
@@ -159,8 +128,8 @@ class AbstractControl extends React.Component {
 
   updateValue() {
     // do nohing as theres no controls to update
-    //if emit is false then dont update state.s
   }
+
   setInitialStatusAndErrors(cb) {
     this.setStateAndView({ status: this.isDisabled() ? "DISABLED" : "VALID", errors: null }, cb);
   }
@@ -178,9 +147,8 @@ class AbstractControl extends React.Component {
         }
         this.valueChanges.next(this.state.value);
         this.statusChanges.next(this.state.status);
-
-        if (this.parent && !options.onlySelf) {
-          this.parent.updateValueAndValidity(options);
+        if (this.props.parent && !options.onlySelf) {
+          this.props.parent.updateValueAndValidity(options);
         }
       })
     })
@@ -188,7 +156,6 @@ class AbstractControl extends React.Component {
 
   setValue(value, options) {
     this.setStateAndView({ value: value }, () => {
-      this.setView();
       this.updateValueAndValidity(options);
     });
   }

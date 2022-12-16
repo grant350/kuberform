@@ -40,7 +40,7 @@ export class Validators {
     }
   }
 
-  get isDate(format){
+  static isDate(format){
     return (control, obs) => {
       if (moment(control.getValue(), format, true).isValid()){
         obs.next(null);
@@ -62,7 +62,7 @@ export class Validators {
     }
   }
 
- get regex(regex){
+  static regex(regex){
   return (control, obs) => {
       if (control.getValue().match(regex)){
         obs.next(null);
@@ -88,7 +88,7 @@ export class Validators {
     }
   }
 
-  get max(interger) {
+  static max(interger) {
     return (control, obs) => {
       const VALUE = control.getValue();
         if (VALUE.length > interger) {
@@ -99,7 +99,7 @@ export class Validators {
     }
   }
 
-  get min(interger) {
+  static min(interger) {
     return (control, obs) => {
       const VALUE = control.getValue();
         if (VALUE.length < interger) {
