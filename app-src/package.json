@@ -20,8 +20,8 @@
   },
   "scripts": {
     "start": "webpack serve --mode development",
-    "build": "webpack --mode development",
-    "lint": "eslint src",
+    "build": "webpack --mode production",
+    "linter": "eslint src",
     "test": "jest ./app-src/*.test.js --detectOpenHandles --forceExit "
   },
   "author": "Grant Mitchell soundbreakr1@gmail.com https://github.com/grant350",
@@ -51,8 +51,6 @@
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.2.0",
-    "react-rxjs-elements": "^0.0.7",
-    "rxjs": "^7.5.7",
-    "source-map-loader": "^3.0.1"
+    "rxjs": "^7.5.7"
   }
 }

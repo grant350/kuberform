@@ -1,9 +1,5 @@
 // import css from  'rollup-plugin-css-only';
 const babel = require('@rollup/plugin-babel');
-const commonjs = require('@rollup/plugin-commonjs');
-const resolve = require('@rollup/plugin-node-resolve');
-const packageJson = require('./package.json');
-
 
 module.exports =  {
   input:'app-src/kuberform/index.js',
