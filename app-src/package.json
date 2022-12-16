@@ -18,8 +18,10 @@
     "type": "git",
     "url": "git+ssh://git@github.com/grant350/kuberform.git"
   },
-  "jest":{
-    "testMatch":["**/?(*.)+(spec|test).[jt]s?(x)"]
+  "jest": {
+    "testMatch": [
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ]
   },
   "scripts": {
     "start": "webpack serve --mode development",
@@ -52,6 +54,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "eslint": "^8.29.0",
     "jest": "^29.3.1",
     "react": "^18.0.0",
     "react-dom": "^18.2.0",
