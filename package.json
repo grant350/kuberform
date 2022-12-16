@@ -19,7 +19,7 @@
     "url": "git+ssh://git@github.com/grant350/kuberform.git"
   },
   "scripts": {
-    "rollup": "rollup",
+    "rollup": "rollup -c",
     "start": "webpack serve --mode development",
     "build": "webpack --mode development",
     "lint": "eslint src",

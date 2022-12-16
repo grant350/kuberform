@@ -24,4 +24,4 @@ The name of pull request should contain the issue number and a description of th
 After creating the pull request make sure that all automatic checks have been passed.
 
 ## License
-By contributing your code you agree to license your contribution under the our [License](/LICENSE).
+By contributing your code you agree to license your contribution under the our [License](/license.txt).
