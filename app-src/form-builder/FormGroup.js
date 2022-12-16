@@ -7,7 +7,7 @@ import FormError from './FormError.js';
 class FormGroup extends AbstractControl {
   constructor(props) {
     super(props);
-    this.state = { value: {}, status: "VALID", touched: false };
+    this.state = { value: {}, status: "VALID", touched: false, dirty:false };
     this.controls = {};
 
     Object.defineProperty(this, 'groupName', { value: this.props.groupName, writable: false });

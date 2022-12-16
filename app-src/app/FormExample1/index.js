@@ -10,6 +10,7 @@ class FormExample1 extends React.Component {
   }
   submit(){
     console.log(this.ref.current.getValue());
+    return false;
   }
 
   /*
@@ -34,7 +35,7 @@ class FormExample1 extends React.Component {
                 <small>Let us create your account</small>
               </h2>
             </div>
-            <form className="card-form">
+            <form  className="card-form">
               <FormControl controlName="fullName" defaultValue="Alexander Parkinson">
                 {(props) => {
                   return (<div className="input">
@@ -59,7 +60,7 @@ class FormExample1 extends React.Component {
                   </div>)
                 }}
               </FormControl>
-              <FormGroup groupName="nestedGroup">
+              <FormArray arrayName="nestedArray">
                 <FormControl controlName="secretid">
                   {(props) => {
                     return (<div className="input">
@@ -68,9 +69,9 @@ class FormExample1 extends React.Component {
                     </div>)
                   }}
                 </FormControl>
-              </FormGroup>
+              </FormArray>
               <div className="action">
-                <button onClick={this.submit} className="action-button">Get started</button>
+                <button type='button' onClick={this.submit} className="action-button">Get started</button>
               </div>
             </form>
             <div className="card-info">
