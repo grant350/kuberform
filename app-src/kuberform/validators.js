@@ -56,7 +56,7 @@ class Validators {
    * @param {string} format - A date format such as yyyy/mm/d
    * @returns {Function} This fn returns a function to determin if control value is a a Date
    */
-  static get isDate(format) {
+  static isDate(format) {
     return (control, obs)=> {
       if (moment(control.getValue(), format, true).isValid()) {
         obs.next(null);
@@ -85,7 +85,7 @@ class Validators {
    * @param {string} regex - A string expression
    * @returns {Function} This fn returns a function to determin if control value matches a given regex argument
    */
-  static get regex(regex) {
+  static regex(regex) {
     return (control, obs)=> {
       if (control.getValue().match(regex)) {
         obs.next(null);
@@ -118,7 +118,7 @@ class Validators {
    * @param {number} max - A integer
    * @returns {Function} This fn returns a function to determin if control value > than max
    */
-  static get max(max) {
+  static max(max) {
     return (control, obs)=> {
       const VALUE = control.getValue();
       if (VALUE.length > max) {
@@ -133,7 +133,7 @@ class Validators {
    * @param {number} min - A integer
    * @returns {Function} This fn returns a function to determin if control value < than min
    */
-  static get min(min) {
+  static min(min) {
     return (control, obs)=> {
       const VALUE = control.getValue();
       if (VALUE.length < min) {
@@ -149,7 +149,7 @@ class Validators {
    *
    * @returns {Function} This fn returns a function to determin if control value not null or length of 0
    */
-  get required() {
+  static get required() {
     return (control, obs)=> {
       const VALUE = control.getValue();
       if (typeof VALUE === 'string') {
