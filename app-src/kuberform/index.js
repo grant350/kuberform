@@ -1,6 +1,8 @@
-import FormGroup from './FormGroup.js';
-import FormArray from './FormArray.js';
-import FormControl from './FormControl.js';
-import Validators from './validators.js'
+import FormGroup from './FormGroup';
+import FormArray from './FormArray';
+import FormControl from './FormControl';
+import Validators from './Validators';
 
-export {FormGroup,FormControl,FormArray,Validators}
+export {
+  FormGroup, FormControl, FormArray, Validators
+};
