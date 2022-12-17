@@ -1,71 +1,49 @@
 {
-  "env": {
-    "browser": true,
-    "node": true,
-    "jasmine": true
-  },
   "extends": [
-    "airbnb-base",
-    "plugin:react/recommended"
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsdoc/recommended"
   ],
-  "overrides": [
-    {
-      "files": [
-        "**/*.test.js",
-        "**/*.test.jsx",
-        "spec/*.js"
-      ],
-      "env": {
-        "jest": true
-      }
-    }
-  ],
-  "parser": "babel-eslint",
+  "env": {
+    "jest": true
+  },
+  "ignorePatterns": ["**/public/bundle.js"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint","jsdoc"],
+
   "rules": {
-    "no-underscore-dangle": [
+    "no-var":"off",
+    "no-console": 2,
+    "react/prefer-stateless-function":0,
+    "no-plusplus":0,
+    "react/prop-types":0,
+    "max-len":["error",{"code":120}],
+    "react/forbid-prop-types": [2, { "forbid": ["any"], "checkContextTypes": true, "checkChildContextTypes": true }],
+    "class-methods-use-this":"off",
+    "arrow-spacing":["error",{ "before": false, "after": true }],
+    "object-curly-spacing": ["error", "always", {
+      "arraysInObjects": false,
+      "objectsInObjects": false
+    }],
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/naming-convention": [
       "error",
       {
-        "allow": [
-          "__REDUX_DEVTOOLS_EXTENSION__"
-        ]
-      }
-    ]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
-      }
-    },
-    "react": {
-      "createClass": "createReactClass",
-      "pragma": "React",
-      "version": "detect"
-    },
-    "propWrapperFunctions": [
-      "forbidExtraProps",
-      {
-        "property": "freeze",
-        "object": "Object"
-      },
-      {
-        "property": "myFavoriteWrapper"
+        "selector": "variable",
+        "modifiers": ["const"],
+        "leadingUnderscore": "allow",
+        "format": ["UPPER_CASE"],
+        "trailingUnderscore": "allow"
       }
     ],
-    "linkComponents": [
-      "Hyperlink",
-      {
-        "name": "Link",
-        "linkAttribute": "to"
+    "camelcase":["error",{"properties":"always"}],
+    "comma-dangle": ["error", "never"],
+    "jsx-a11y/label-has-associated-control": ["error", {
+      "required": {
+        "some": ["nesting", "id"]
       }
-    ]
+    }],
+    "semi": 2,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   }
 }

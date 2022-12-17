@@ -1,20 +1,17 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import App from './app/app.js'
+import App from './app/app';
 //
 class Root extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render () {
+  render() {
     return (
-    <div>
-      <App/>
-    </div>
-    )
+      <div>
+        <App />
+      </div>
+    );
   }
 }
 
-const root = ReactDOM.createRoot(document.getElementById('app'));
-root.render(<Root/>);
+// eslint-disable-next-line no-undef
+const ROOT = ReactDOM.createRoot(document.getElementById('app'));
+ROOT.render(<Root />);

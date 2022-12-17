@@ -1,55 +1,38 @@
-
-
-const path = require('path');
-var webpack = require('webpack');
+const PATH = require('path');
 
 module.exports = {
-  // experiments: {
-  //   outputModule: true
-  // },
-  entry: path.join(__dirname, 'index.js'),
+  entry: PATH.join(__dirname, 'index.js'),
   output: {
-    path: path.join(__dirname, 'public'),
-    filename: 'bundle.js',
-    // module: true,
-    // libraryTarget: 'esm',
+    path: PATH.join(__dirname, 'public'),
+    filename: 'bundle.js'
   },
-
   devServer: {
     port: 8000,
-    static: path.join(__dirname, 'public'),
+    static: PATH.join(__dirname, 'public'),
     open: true
   },
-  // resolve: {
-  //   extensions: ['.js', '.jsx'],
-  //   modules: ['node_modules'],
-  // },
   optimization: {
-    minimize: false,
+    minimize: false
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        enforce: "pre",
-        use: ["source-map-loader"],
+        enforce: 'pre',
+        use: ['source-map-loader']
       },
       {
         test: /\.(js|jsx|ts|tsx)$/i,
-        loader: 'babel-loader',
+        loader: 'babel-loader'
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
-          "style-loader",
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
-        ],
-      },
-    ],
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      }
+    ]
   }
-
 };

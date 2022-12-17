@@ -22,7 +22,6 @@
 
 ```ts
 interface Props {
-  container: React.Element | undefined;
   groupName: String;
 }
 ```
@@ -31,7 +30,6 @@ interface Props {
 
 ```ts
 interface Props {
-  container: React.Element | undefined;
   arrayName: String;
 }
 ```
@@ -42,12 +40,9 @@ interface Props {
 ```ts
 
 interface Props {
-  element: React.Element | undefined;
-  fieldName: String;
-  errorMessages: {[key:String]:String} | undefined;
+  controlName: String;
   defaultValue: any | undefined;
   validators:Array< (value: string, observable: Observable<{[key:String]:String} | null>) => void > | undefined;
-  label: String | undefined;
 }
 ```
 
@@ -56,9 +51,7 @@ interface Props {
 ```ts
 
 interface Props {
-  errorMessages: {[key:String]:String} | undefined;
   value: any | null;
-  label: String | undefined;
   status: String;
   setValue: (value: any): void {};
   invalid: Boolean;
@@ -68,7 +61,7 @@ interface Props {
 }
 ```
 
-### Container output props
+### Container output props if container is specified.
 ```ts
 
 interface Props {
@@ -97,91 +90,82 @@ class myform extends React.component {
     this.myform = React.createRef();
   }
 
-  render(){
-    return (
-        <FormGroup ref={this.myform} groupName="form">
-          <FormControl
-            validators={[requiredValidator()]}
-            errorMessages={{myError:"my message"}}
-            element={InputField}
-            fieldName="productName"
-            label="Product Name">
-          </FormControl>
-        <FormGroup />
-    )
+  submit(){
+    console.log(this.myform.current.getValue());
   }
-}
-```
-###  Here is an example of how to make a form by directly using your component
-
-```jsx
-import React from 'react';
-import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
-import InputField from 'yourinputfield';
-
-class myform extends React.component {
-
-  constructor(props){
-    super(props);
-    this.myform = React.createRef();
+  addChild(){
+    this.myform.current.getControl("nestedArray").addChild();
   }
 
   render(){
     return (
-        <FormGroup ref={this.myform} groupName="form">
-          <FormControl
-            validators={[requiredValidator()]}
-            errorMessages={{myError:"my message"}}
-            fieldName="productName"
-            label="Product Name">
-            <InputField width="200" name="my inputfield" >
-          </FormControl>
-        <FormGroup />
-    )
-  }
-}
-```
-
-###  Here is an example of how to make a form with a wrapper container. you need the prop container to let it know that this element is a container. In your container component set the children using {this.props.children} or {props.children} in the return statement;
-
-```jsx
-import React from 'react';
-import {FormGroup,FormControl,FormArray} from '@kuberspace/kuberform';
-import InputField from 'yourinputfield';
-import MyContainer from 'mycontainer';
-class myform extends React.component {
-
-  constructor(props){
-    super(props);
-    this.myform = React.createRef();
-  }
-
-  render(){
-    return (
-        <FormGroup ref={this.myform} groupName="form">
-        <MyContainer container>
-          <div> untracted random element still gets rendered</div>
-          <FormControl
-            validators={[requiredValidator()]}
-            errorMessages={{myError:"my message"}}
-            fieldName="productName"
-            label="Product Name">
-            <InputField width="200" name="my inputfield" >
-          </FormControl>
-          <MyContainer/>
-        <FormGroup />
+       <FormGroup ref={this.myform} groupName="login">
+        <div className="container">
+          <div className="card">
+            <div className="card-image">
+              <h2 className="card-heading">
+                Get started
+                <small>Let us create your account</small>
+              </h2>
+            </div>
+            <form  className="card-form">
+              <FormControl controlName="fullName" defaultValue="Alexander Parkinson">
+                {(props) => {
+                  return (<div className="input">
+                    <input type="text" className="input-field" defaultValue={props.value} required />
+                    <label className="input-label">Full name</label>
+                  </div>);
+                }}
+              </FormControl>
+              <FormControl controlName="email" defaultValue="vlockn@gmail.com">
+                {(props) => {
+                  return (<div className="input">
+                    <input type="text" className="input-field" defaultValue={props.value} required />
+                    <label className="input-label">Email</label>
+                  </div>)
+                }}
+              </FormControl>
+              <FormControl controlName="password">
+                {(props) => {
+                  return (<div className="input">
+                    <input type="password" className="input-field" required />
+                    <label className="input-label">Password</label>
+                  </div>)
+                }}
+              </FormControl>
+              <FormArray arrayName="nestedArray">
+                <FormControl controlName="secretId">
+                  {(props) => {
+                    return (<div className="input">
+                      <input type="text" className="input-field" required />
+                      <label className="input-label">secret-id</label>
+                    </div>)
+                  }}
+                </FormControl>
+                <button type='button' onClick={this.addChild} className="add-secretid">Add Another</button>
+              </FormArray>
+              <div className="action">
+                <button type='button' onClick={this.submit} className="action-button">Get started</button>
+              </div>
+            </form>
+            <div className="card-info">
+              <p>By signing up you are agreeing to our <a href="#">Terms and Conditions</a></p>
+            </div>
+          </div>
+        </div>
+      </FormGroup>
     )
   }
 }
 ```
 
 ## Making a validator
-### A validator is a function that will provide you a value and observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.
+### A validator is a function that will provide you a control and a observable. You do not need to know how rxjs works all you need to know is to call the method next() on the observable. there is only two available inputs for next, and that is null for valid and an object of errors meaning invalid.
 
 ```jsx
 export default function required() {
-  return (value, obs) => {
-    if (value === "bob"){
+  return (control, obs) => {
+    if (control.getValue() === "bob"){
       obs.next(null);
       //valid
     } else {
@@ -196,7 +180,7 @@ export default function required() {
 ### To get Data from the form you can call getRawValue();
 ```jsx
  componentDidMount(){
-  this.myform.getRawValue();
+  this.myform.getValue();
  }
 ```
 
@@ -206,8 +190,8 @@ export default function required() {
 ```ts
 
 interface Methods {
-  getRawValue: ()=> Object | null | String;
-  getRawStatus: ()=> "VALID" | "INVALID" | "PENDING";
+  getValue: ()=> Object | null | String;
+  getStatus: ()=> "VALID" | "INVALID" | "PENDING";
   getControl: (control:String) => React.Refrence;
   setValue: (value: any) => void;
   valueChanges: ()=>Observable<Object>;
@@ -215,9 +199,9 @@ interface Methods {
 }
 ```
 
-### How to make a reusable Input field
+### Reusable Input field
 
-#### hence most inputs have active events such as blur and onchange so you do not need to manualy setValue. the time you would need to call setValue is when your uploading an image.
+#### hence most inputs have active events such as blur and onchange so you do not need to manualy call setValue.
 
 ```jsx
 import React from 'react';
