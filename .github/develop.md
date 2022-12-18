@@ -27,7 +27,7 @@
   git tag -a patch -m "Describe your feature/fix"
 ```
 #
-## push your code with the tag
+## push your code with the tag, always push tag just in case, because the workflow won't catch it
 ```bash
   git push origin branchName -tags
 ```
