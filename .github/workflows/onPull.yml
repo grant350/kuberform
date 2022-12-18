@@ -37,8 +37,8 @@ jobs:
       run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";
+          echo 'source ~/.nvm/nvm.sh' >> ~/.bashrc ~/.bash_profile
     - name: Checkout
       uses: actions/checkout@v3
     - run: |
