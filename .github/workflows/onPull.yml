@@ -9,21 +9,22 @@ jobs:
       matrix:
         node-version: ['18.12.0']
     steps:
+
     - name: Dump GitHub context
       id: github_context_step
       run: echo '${{ toJSON(github.event.pull_request.labels) }}'
 
     - name: see if patch label exists
-      if: contains(github.event.pull_request.labels*.name,'patch')
-      run: echo 'patch lable exists'
+      if: contains(${{github.event.pull_request.labels.*.name}},'patch')
+      run: echo 'patch label exists'
 
     - name: see if minor label exists
-      if: contains(github.event.pull_request.labels*.name,'minor')
-      run: echo 'minor lable exists'
+      if: contains(github.event.pull_request.labels.*.name,'minor')
+      run: echo 'minor label exists'
 
     - name: see if major label exists
-      if: contains(github.event.pull_request.labels*.name,'major')
-      run: echo 'major lable exists'
+      if: contains(github.event.pull_request.labels.*.name,'major')
+      run: echo 'major label exists'
 
     - name: git checkout
       uses: actions/checkout@v3
