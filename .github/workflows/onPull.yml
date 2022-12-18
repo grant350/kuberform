@@ -27,6 +27,9 @@ jobs:
       if: "${{ env.VersionType == '' }}"
       run: echo "Error!"; exit 125
 
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Install nvm
       run: |
           sudo apt install curl; \
@@ -40,8 +43,6 @@ jobs:
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";
           nvm
 
-    - name: Checkout
-      uses: actions/checkout@v3
     - working-directory: /home/runner/work/kuberform/kuberform
       run: |
           nvm ${{ env.VersionType}}; \
