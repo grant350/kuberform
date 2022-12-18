@@ -31,7 +31,8 @@ jobs:
       run: |
           sudo apt install curl \
           curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-          source ~/.bashrc
+          alias src='source ~/.bashrc' \
+          src
 
     - name: Checkout
       uses: actions/checkout@v3
