@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "rxjs": "^7.5.7",
+    "moment": "^2.29.4",
     "source-map-loader": "^3.0.1"
   }
 }
