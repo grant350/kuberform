@@ -31,7 +31,7 @@ jobs:
         VersionType: major
 
     - name: check to see if env is set
-      run: echo "$VersionType"
+      run: echo "${{env.VersionType}}"
 
     - name: git checkout
       uses: actions/checkout@v3
