@@ -12,27 +12,33 @@ jobs:
     - name: Git checkout
       uses: actions/checkout@v3
 
-    - name: install app-src modules
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm install
+    - name: grab git tag and store it in env
+      run: echo git describe --tags --abbrev=0
 
-    - name: install root modules
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: npm install
+    - name: check GITHUB_REF
+      run: echo ${{GITHUB_REF}}
 
-    - name: test the code
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm test
+    # - name: install app-src modules
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm install
 
-    - name: check Linting
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm run linter
+    # - name: install root modules
+    #   working-directory: /home/runner/work/kuberform/kuberform
+    #   run: npm install
 
-    - name: build
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm run build
+    # - name: test the code
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm test
 
-    - name: rollup kuberform
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: npm run rollup
-      # npm version patch, minor, major
+    # - name: check Linting
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm run linter
+
+    # - name: build
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm run build
+
+    # - name: rollup kuberform
+    #   working-directory: /home/runner/work/kuberform/kuberform
+    #   run: npm run rollup
+    #   # npm version patch, minor, major

@@ -1,10 +1,7 @@
 
 <!--- Provide a general summary of your changes in the Title above -->
-## Update Type
-<!--- Place type here: -->
-<!--- If you fixed a bug put patch -->
-<!--- If you made small changes put minor -->
-<!--- If you made many changes that may affect functionality put major -->
+## What tag did you provide?
+<!--- place tag here -->
 
 ## Description
 <!--- Describe your changes in detail -->
@@ -22,4 +19,3 @@
 ## How Has This Been Tested?
 <!--- Please describe in detail how you tested your changes. -->
 <!--- see how your change affects other areas of the code, etc. -->
-

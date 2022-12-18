@@ -1,7 +1,7 @@
 {
   "name": "@kuberspace/kuberform",
   "version": "0.0.9",
-  "description": "kuberform is a reactive formbuilder that uses rxjs to handle value and status changes",
+  "description": "Kuberform is a reactive form builder",
   "notes": " readme not finished",
   "keywords": [
     "react",
