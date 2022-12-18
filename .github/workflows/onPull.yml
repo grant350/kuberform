@@ -31,7 +31,7 @@ jobs:
       run: |
           sudo apt install curl \
           curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-          alias src='source ~/.bashrc' \
+          alias src='source  ~/.nvm/nvm.sh' \
           src
 
     - name: Checkout
