@@ -30,8 +30,7 @@ jobs:
     - name: Install nvm
       run: |
           git clone git://github.com/creationix/nvm.git ~/.nvm
-          alias src='source  ~/.nvm/nvm.sh' \
-          src
+      # /home/runner/.nvm
 
     - name: Checkout
       uses: actions/checkout@v3
