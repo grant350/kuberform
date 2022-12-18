@@ -30,20 +30,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install nvm
-      run: |
-          sudo apt install curl; \
-          curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash; \
-          source ~/.nvm/nvm.sh
+    # - name: Install nvm
+    #   run: |
+    #       sudo apt install curl; \
+    #       curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash; \
+    #       source ~/.nvm/nvm.sh
 
-    - name: Set paths for nvm
-      run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";
-          nvm
-
-    - working-directory: /home/runner/work/kuberform/kuberform
+    # - name: Set paths for nvm
+    #   run: |
+    #       export NVM_DIR="$HOME/.nvm"
+    #       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    #       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion";
+    #       nvm
+    - name: add patch
+      working-directory: /home/runner/work/kuberform/kuberform
+      shell: bash -l {0}
       run: |
           nvm ${{ env.VersionType}}; \
           git config user.name GitHub Actions Bot; \
