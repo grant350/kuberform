@@ -11,11 +11,12 @@ jobs:
     steps:
     - name: Dump GitHub context
       id: github_context_step
-      run: echo '${{ toJSON(github) }}'
+      run: echo '${{ toJSON(github.event.pull_request.labels) }}'
 
     - name: git checkout
       uses: actions/checkout@v3
 
+    #   if pr is merged get the label from the merged pr and find a way to update the main branch
 
     # - name: install app-src modules
     #   working-directory: /home/runner/work/kuberform/kuberform/app-src
