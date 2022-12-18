@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: git a label
       working-directory: /home/runner/work/kuberform/kuberform
-      run: echo | github.event.pull_request.labels
+      run: echo | ${{ github.event.labels }}
 
     - name: grab git tag and store it in env
       working-directory: /home/runner/work/kuberform/kuberform
