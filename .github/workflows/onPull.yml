@@ -17,14 +17,21 @@ jobs:
     - name: see if patch label exists
       if: contains(${{github.event.pull_request.labels.*.name}},'patch')
       run: echo 'patch label exists'
-
+      env:
+        VersionType: patch
     - name: see if minor label exists
       if: contains(github.event.pull_request.labels.*.name,'minor')
       run: echo 'minor label exists'
-
+      env:
+        VersionType: minor
     - name: see if major label exists
       if: contains(github.event.pull_request.labels.*.name,'major')
       run: echo 'major label exists'
+      env:
+        VersionType: major
+
+    - name: check to see if env is set
+      run: echo "$VersionType"
 
     - name: git checkout
       uses: actions/checkout@v3
