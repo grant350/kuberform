@@ -35,8 +35,9 @@ jobs:
 
     - name: Set paths for nvm
       run: |
-          NVM_DIR=$HOME/.nvm \
-          . $NVM_DIR/nvm.sh
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
     - name: Checkout
       uses: actions/checkout@v3
