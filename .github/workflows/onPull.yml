@@ -40,7 +40,7 @@ jobs:
           git config user.email github-actions@github.com; \
           git add .; \
           git commit -m "version controll ${{ env.VersionType}}"; \
-          echo "${{ toJSON(github.event) }}"
+          git push origin versionControl
 
 
     #   if pr is merged get the label from the merged pr and find a way to update the main branch
