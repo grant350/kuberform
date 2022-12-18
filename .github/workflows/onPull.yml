@@ -23,9 +23,6 @@ jobs:
       if: contains(github.event.pull_request.labels.*.name,'major')
       run: echo "VersionType=major" >> $GITHUB_ENV
 
-    - name: check to see if env is set
-      run: echo "${{env.VersionType}}"; if [ condition ]; then
-
     - name: throw error if VersionType is empty
       if: "${{ env.VersionType == '' }}"
       run: echo "Error!"; exit 125
