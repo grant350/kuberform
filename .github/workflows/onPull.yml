@@ -11,30 +11,36 @@ jobs:
 
     steps:
 
-    - name: see if patch label exists
+    - name: See if patch label exists
       if: contains(github.event.pull_request.labels.*.name,'patch')
       run: echo "VersionType=patch" >> $GITHUB_ENV
 
-    - name: see if minor label exists
+    - name: See if minor label exists
       if: contains(github.event.pull_request.labels.*.name,'minor')
       run: echo "VersionType=minor" >> $GITHUB_ENV
 
-    - name: see if major label exists
+    - name: See if major label exists
       if: contains(github.event.pull_request.labels.*.name,'major')
       run: echo "VersionType=major" >> $GITHUB_ENV
 
-    - name: throw error if VersionType is empty
+    - name: Throw error if VersionType is empty
       if: "${{ env.VersionType == '' }}"
       run: echo "Error!"; exit 125
+
+    - name: Install nvm
+      run: |
+          sudo apt install curl \
+          curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
+          source ~/.bashrc
 
     - name: Checkout
       uses: actions/checkout@v3
     - run: |
-          nvm ${{ env.VersionType}}
-          git config user.name GitHub Actions Bot
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "version controll ${{ env.VersionType}}"
+          nvm ${{ env.VersionType}} \
+          git config user.name GitHub Actions Bot \
+          git config user.email github-actions@github.com \
+          git add . \
+          git commit -m "version controll ${{ env.VersionType}}" \
           git push
 
 
