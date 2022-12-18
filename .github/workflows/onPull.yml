@@ -16,7 +16,7 @@ jobs:
 
     - name: see if patch label exists
       if: contains(${{github.event.pull_request.labels.*.name}},'patch')
-      run: echo 'patch label exists'
+      run: echo 'patch label exists'; ${{env.VersionType = boy}}
       env:
         VersionType: patch
     - name: see if minor label exists
