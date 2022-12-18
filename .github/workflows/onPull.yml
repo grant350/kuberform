@@ -36,7 +36,7 @@ jobs:
       shell: bash -l {0}
       run: |
           npm version ${{ env.VersionType}}; \
-          git config user.name GitHub Actions Bot; \
+          git config user.name = 'grant350'; \
           git config user.email github-actions@github.com; \
           git add .; \
           git commit -m "version controll ${{ env.VersionType}}"; \
