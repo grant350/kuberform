@@ -13,9 +13,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: grab git tag and store it in env
+      working-directory: /home/runner/work/kuberform/kuberform
       run: echo | git describe --tags
 
     - name: check GITHUB_REF
+      working-directory: /home/runner/work/kuberform/kuberform
       run: echo $GITHUB_REF
 
     # - name: install app-src modules
