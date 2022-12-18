@@ -36,11 +36,11 @@ jobs:
       shell: bash -l {0}
       run: |
           npm version ${{ env.VersionType}}; \
-          git config user.name = 'grant350'; \
+          git config user.name 'grant350'; \
           git config user.email github-actions@github.com; \
           git add .; \
           git commit -m "version controll ${{ env.VersionType}}"; \
-          git push origin ${GITHUB_REF##*/}
+          git push origin ${GITHUB_REF#refs/heads/}
 
 
     #   if pr is merged get the label from the merged pr and find a way to update the main branch
