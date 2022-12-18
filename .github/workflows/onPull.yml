@@ -13,6 +13,18 @@ jobs:
       id: github_context_step
       run: echo '${{ toJSON(github.event.pull_request.labels) }}'
 
+    - name: see if patch label exists
+      if: contains(github.event.pull_request.labels*.name,'patch')
+      run: echo 'patch lable exists'
+
+    - name: see if minor label exists
+      if: contains(github.event.pull_request.labels*.name,'minor')
+      run: echo 'minor lable exists'
+
+    - name: see if major label exists
+      if: contains(github.event.pull_request.labels*.name,'major')
+      run: echo 'major lable exists'
+
     - name: git checkout
       uses: actions/checkout@v3
 
