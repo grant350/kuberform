@@ -16,7 +16,7 @@ jobs:
       run: echo git describe --tags --abbrev=0
 
     - name: check GITHUB_REF
-      run: echo $env:GITHUB_REF
+      run: echo $GITHUB_REF
 
     # - name: install app-src modules
     #   working-directory: /home/runner/work/kuberform/kuberform/app-src
