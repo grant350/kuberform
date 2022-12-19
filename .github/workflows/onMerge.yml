@@ -14,6 +14,24 @@ jobs:
 
     steps:
 
+
+    - name: See if patch label exists
+      if: contains(github.event.push.labels.*.name,'patch')
+      run: echo "VersionType=patch" >> $GITHUB_ENV
+
+    - name: See if minor label exists
+      if: contains(github.event.push.labels.*.name,'minor')
+      run: echo "VersionType=minor" >> $GITHUB_ENV
+
+    - name: See if major label exists
+      if: contains(github.event.push.labels.*.name,'major')
+      run: echo "VersionType=major" >> $GITHUB_ENV
+
+    - name: Throw error if VersionType is empty
+      if: "${{ env.VersionType == '' }}"
+      run: echo "Error!"; exit 125
+
+
     - uses: actions/checkout@v3
       with:
         fetch-depth: 2
