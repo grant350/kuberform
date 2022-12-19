@@ -14,8 +14,15 @@ jobs:
 
     steps:
 
-    - name: DUMP EVENT PUSH
-      run: echo '${{toJSON(github.event.push)}}
+    - uses: actions/github-script@v6
+      id: my-script
+      with:
+        result-encoding: string
+        retries: 3
+        retry-exempt-status-codes: 400,401
+        script: |
+            const script = require('/home/runner/work/kuberform/kuberform/.github/workflows/script.js')
+            console.log(script({github, context}))
 
     - name: See if patch label exists
       if: contains(github.event.push.labels.*.name,'patch')
@@ -33,21 +40,15 @@ jobs:
       if: "${{ env.VersionType == '' }}"
       run: echo "Error!"; exit 125
 
-
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 2
-    - run: git checkout HEAD^
-
-    - name: add patch
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: |
-          npm version ${{ env.VersionType}}; \
-          git config user.name 'grant350'; \
-          git config user.email github-actions@github.com; \
-          git add .; \
-          git commit -m "version controll ${{ env.VersionType}}"; \
-          git push
+    # - name: add patch
+    #   working-directory: /home/runner/work/kuberform/kuberform
+    #   run: |
+    #       npm version ${{ env.VersionType}}; \
+    #       git config user.name 'grant350'; \
+    #       git config user.email github-actions@github.com; \
+    #       git add .; \
+    #       git commit -m "version controll ${{ env.VersionType}}"; \
+    #       git push
 
 
     #   if pr is merged get the label from the merged pr and find a way to update the main branch
