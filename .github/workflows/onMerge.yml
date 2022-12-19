@@ -14,6 +14,8 @@ jobs:
 
     steps:
 
+    - name: DUMP EVENT PUSH
+      run: echo '${{toJSON(github.event.push)}}
 
     - name: See if patch label exists
       if: contains(github.event.push.labels.*.name,'patch')
