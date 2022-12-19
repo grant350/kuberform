@@ -18,6 +18,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: list files in wrkflow
+      run: ls ./
+
     - uses: actions/github-script@v6
       id: my-script
       with:
