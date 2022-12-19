@@ -25,8 +25,8 @@ jobs:
         retries: 3
         retry-exempt-status-codes: 400,401
         script: |
-            const script = require('./script.js')
-            console.log(script({github, context}))
+            const script = require('./script.js');
+            await script({github, context, core});
 
     - name: See if patch label exists
       if: contains(github.event.push.labels.*.name,'patch')
