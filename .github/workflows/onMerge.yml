@@ -18,8 +18,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: list files in wrkflow
-      run: cd /home/runner/work/kuberform/kuberform/.github; ls
+    - name: list files in workflow
+      run: cd /home/runner/work/kuberform/kuberform/.github/workflows; ls
 
 
     - uses: actions/github-script@v6
