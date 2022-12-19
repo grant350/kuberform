@@ -1,0 +1,58 @@
+name: kuberform
+
+on:
+  push:
+    branches:
+      - main
+      - versionControl
+jobs:
+  buildKuberform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18.12.0']
+
+    steps:
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+    - run: git checkout HEAD^
+
+    - name: add patch
+      working-directory: /home/runner/work/kuberform/kuberform
+      run: |
+          npm version ${{ env.VersionType}}; \
+          git config user.name 'grant350'; \
+          git config user.email github-actions@github.com; \
+          git add .; \
+          git commit -m "version controll ${{ env.VersionType}}"; \
+          git push
+
+
+    #   if pr is merged get the label from the merged pr and find a way to update the main branch
+
+    # - name: install app-src modules
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm install
+
+    # - name: install root modules
+    #   working-directory: /home/runner/work/kuberform/kuberform
+    #   run: npm install
+
+    # - name: test the code
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm test
+
+    # - name: check Linting
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm run linter
+
+    # - name: build
+    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
+    #   run: npm run build
+
+    # - name: rollup kuberform
+    #   working-directory: /home/runner/work/kuberform/kuberform
+    #   run: npm run rollup
+    #   # npm version patch, minor, major
