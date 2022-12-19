@@ -21,7 +21,7 @@ jobs:
         retries: 3
         retry-exempt-status-codes: 400,401
         script: |
-            const script = require('/home/runner/work/kuberform/kuberform/.github/workflows/script.js')
+            const script = require('./script.js')
             console.log(script({github, context}))
 
     - name: See if patch label exists
