@@ -19,7 +19,7 @@ jobs:
         fetch-depth: 0
 
     - name: list files in wrkflow
-      run: ls ./
+      run: find / -type d -name ".github" -exec echo '{}' \;
 
     - uses: actions/github-script@v6
       id: my-script
