@@ -1,6 +1,6 @@
 module.exports = async ({github, context}) => {
   console.log('github issues',github.rest.issues.events);
-  const getIssues = github.rest.issues.events;
+  const getIssues = github.rest.issues.listEvents;
 
   //context.issues
   //rest,request
