@@ -1,11 +1,10 @@
 module.exports = async ({github, context}) => {
-  console.log('github issues',github.rest.issues);
-  const getLabel = github.rest.issues.getLabel;
-  var label = await getLabel({"owner":"grant350","name":"patch","repo":"kuberform"});
-  console.log('label',label);
+  console.log('github issues',github.rest.issues.events);
+  const getIssues = github.rest.issues.events;
+
   //context.issues
   //rest,request
-  // console.log('context',context);
+  console.log('getIssues',getIssues({repo:"kuberform",owner:"grant350"}));
   // https://api.github.com/repos/foo/bar/issues
   return github;
 }
