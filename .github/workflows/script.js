@@ -1,4 +1,5 @@
 module.exports = ({github, context}) => {
-  console.log(github);
-  return context.payload.client_payload.value
+  console.log('github',github);
+  console.log('context',context);
+  return github;
 }
