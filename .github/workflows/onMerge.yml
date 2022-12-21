@@ -22,18 +22,10 @@ jobs:
       run: cd /home/runner/work/kuberform/kuberform/.github/workflows; ls
 
 
-    - uses: actions/github-script@v6
-      id: my-script
-      with:
-        result-encoding: string
-        retries: 3
-        retry-exempt-status-codes: 400,401
-        script: |
-            const script = require('/home/runner/work/kuberform/kuberform/.github/workflows/script.js');
-            await script({github, context, core});
+    #  uses custom action
 
     - name: See if patch label exists
-      if: contains(github.event.push.labels.*.name,'patch')
+      if: contains(github.event.pull_request.labels.*.name,'patch')
       run: echo "VersionType=patch" >> $GITHUB_ENV
 
     - name: See if minor label exists
