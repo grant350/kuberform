@@ -4,7 +4,7 @@ module.exports = async ({github, context}) => {
 
   //context.issues
   //rest,request
-  console.log('getIssues',getIssues({repo:"kuberform",owner:"grant350"}));
+  console.log('getIssues',getIssues({owner:"grant350",repo:"kuberform"}));
   // https://api.github.com/repos/foo/bar/issues
   return github;
 }
