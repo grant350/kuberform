@@ -16,7 +16,7 @@ jobs:
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
-      - name: Get the output time
+      - name: Get the output time from the action
         run: echo "The time was ${{ steps.hello.outputs.time }}"
 
   buildKuberform:
