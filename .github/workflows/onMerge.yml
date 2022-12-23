@@ -6,6 +6,19 @@ on:
       - main
       - versionControl
 jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - name: Hello world action step
+        id: hello
+        uses: octocat/hello-world-javascript-action@v1.1
+        with:
+          who-to-greet: 'Mona the Octocat'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
+
   buildKuberform:
     runs-on: ubuntu-latest
     strategy:
@@ -21,11 +34,12 @@ jobs:
     - name: list files in workflow
       run: cd /home/runner/work/kuberform/kuberform/.github/workflows; ls
 
+    # https://api.github.com/search/issues\?q\=repo:{repo_owner}/{repo}+is:pr+is:merged
 
     #  uses custom action
 
     - name: See if patch label exists
-      if: contains(github.event.pull_request.labels.*.name,'patch')
+      if: contains(github.event.push.labels.*.name,'patch')
       run: echo "VersionType=patch" >> $GITHUB_ENV
 
     - name: See if minor label exists
