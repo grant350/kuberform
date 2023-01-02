@@ -17,6 +17,7 @@ jobs:
           owner: ${{github.actor}}
           repo: ${{github.repository}}
           token: ${{github.token}}
+          event: ${{github.event}}
       - name: Get the output time from the action
         run: echo "JUST CHECKING"
 
