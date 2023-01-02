@@ -13,11 +13,6 @@ jobs:
       - name: Hello world action step
         id: hello
         uses: grant350/get_latest_merged_pull_request_labels@v1.1
-        with:
-          owner: ${{github.actor}}
-          repo: ${{github.repository}}
-          token: ${{github.token}}
-          event: ${{toJSON(github.event)}}
       - name: Get the output time from the action
         run: echo "JUST CHECKING"
 
