@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: grant350/get_latest_merged_pull_request_labels@v1.3
+        uses: grant350/get_latest_merged_pull_request_labels@v1.4
         with:
           who-to-greet: 'my custom action'
       - name: Get the output time from the action
