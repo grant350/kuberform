@@ -13,10 +13,8 @@ jobs:
       - name: Hello world action step
         id: hello
         uses: grant350/get_latest_merged_pull_request_labels@v1.5
-        with:
-          who-to-greet: 'my custom action'
       - name: Get the output time from the action
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        run: echo "JUST CHECKING"
 
   buildKuberform:
     runs-on: ubuntu-latest
