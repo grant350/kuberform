@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: grant350/get_latest_merged_pull_request_labels@v1.6
+        uses: grant350/get_latest_merged_pull_request_labels@v1.1
         with:
           owner: ${{github.actor}}
           repo: ${{github.repository}}
