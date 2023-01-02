@@ -13,6 +13,8 @@ jobs:
       - name: Hello world action step
         id: hello
         uses: grant350/get_latest_merged_pull_request_labels@v1.1
+        with:
+          token: ${{github.token}}
       - name: Get the output time from the action
         run: echo "JUST CHECKING"
 
@@ -28,29 +30,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: list files in workflow
-      run: cd /home/runner/work/kuberform/kuberform/.github/workflows; ls
-
-    # https://api.github.com/search/issues\?q\=repo:{repo_owner}/{repo}+is:pr+is:merged
-
     #  uses custom action
-
-    - name: See if patch label exists
-      if: contains(github.event.push.labels.*.name,'patch')
-      run: echo "VersionType=patch" >> $GITHUB_ENV
-
-    - name: See if minor label exists
-      if: contains(github.event.push.labels.*.name,'minor')
-      run: echo "VersionType=minor" >> $GITHUB_ENV
-
-    - name: See if major label exists
-      if: contains(github.event.push.labels.*.name,'major')
-      run: echo "VersionType=major" >> $GITHUB_ENV
-
-    - name: Throw error if VersionType is empty
-      if: "${{ env.VersionType == '' }}"
-      run: echo "Error!"; exit 125
-
     # - name: add patch
     #   working-directory: /home/runner/work/kuberform/kuberform
     #   run: |
