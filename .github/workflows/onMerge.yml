@@ -10,12 +10,17 @@ jobs:
     name: A job to say hello
     steps:
       - name: Get PR Labels
-        id: getLabels
+        id: getLabelNames
         uses: grant350/get_latest_merged_pull_request_labels@v1.1
         with:
           token: ${{github.token}}
-      - name: Get the output time from the action
-        run: echo ${{ steps.getLabels.outputs.labels }}
+      - name: set version type
+        if:  contains(steps.getLabelNames.outputs.labelNames,'patch')
+        run: echo "is patch"
+      - if:  contains(steps.getLabelNames.outputs.labelNames,'minor')
+        run: echo "is minor"
+      - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
+        run: echo "is major"
 
   buildKuberform:
     runs-on: ubuntu-latest
