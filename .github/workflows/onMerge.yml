@@ -4,28 +4,26 @@ on:
   push:
     branches:
       - main
-      - versionControl
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - name: Hello world action step
-        id: hello
+
+      - name: Get PR Labels
+        id: getLabels
         uses: grant350/get_latest_merged_pull_request_labels@v1.1
         with:
           token: ${{github.token}}
       - name: Get the output time from the action
-        run: echo "JUST CHECKING"
+        run: echo ${{ steps.getLabels.outputs.labels }}
 
   buildKuberform:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: ['18.12.0']
-
     steps:
-
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
