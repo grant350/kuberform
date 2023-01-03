@@ -9,16 +9,17 @@ jobs:
       matrix:
         node-version: ['18.12.0']
     steps:
-    - name: See if patch label exists
-      if: contains(github.event.pull_request.labels.*.name,'patch')
+    - name: Get PR Labels
+      id: getLabelNames
+      uses: grant350/get_latest_merged_pull_request_labels@v1.1
+      with:
+        token: ${{github.token}}
+    - name: set version type
+      if:  contains(steps.getLabelNames.outputs.labelNames,'patch')
       run: echo "VersionType=patch" >> $GITHUB_ENV
-
-    - name: See if minor label exists
-      if: contains(github.event.pull_request.labels.*.name,'minor')
+    - if:  contains(steps.getLabelNames.outputs.labelNames,'minor')
       run: echo "VersionType=minor" >> $GITHUB_ENV
-
-    - name: See if major label exists
-      if: contains(github.event.pull_request.labels.*.name,'major')
+    - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
       run: echo "VersionType=major" >> $GITHUB_ENV
 
     - name: Throw error if VersionType is empty
