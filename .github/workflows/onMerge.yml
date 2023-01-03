@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-
       - name: Get PR Labels
         id: getLabels
         uses: grant350/get_latest_merged_pull_request_labels@v1.1
@@ -50,14 +49,6 @@ jobs:
     #   working-directory: /home/runner/work/kuberform/kuberform
     #   run: npm install
 
-    # - name: test the code
-    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
-    #   run: npm test
-
-    # - name: check Linting
-    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
-    #   run: npm run linter
-
     # - name: build
     #   working-directory: /home/runner/work/kuberform/kuberform/app-src
     #   run: npm run build
@@ -67,6 +58,5 @@ jobs:
     #   run: npm run rollup
     #   # npm version patch, minor, major
 
-
-    # pulls: {
-    #   checkIfMerged:
+    # - name: update node
+    # - name: commit and push to main with updated npm version
