@@ -20,11 +20,12 @@ jobs:
     - if:  contains(steps.getLabelNames.outputs.labelNames,'minor')
       run: echo "VersionType=minor" >> $GITHUB_ENV
     - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
-      run: echo "VersionType=major" >> $GITHUB_ENV
+      run: echo "VersionType=major" >> $GITHUB_ENV;
+    - run: echo ${{steps.getLabelNames.outputs.labelNames}}
 
     - name: Throw error if VersionType is empty
       if: "${{ env.VersionType == '' }}"
-      run: echo "Error!"; exit 125
+      run: echo "Error no versionType!"; exit 125
 
     - uses: actions/checkout@v3
       with:
