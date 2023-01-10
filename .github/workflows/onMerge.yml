@@ -5,17 +5,6 @@ on:
     branches:
       - main
 jobs:
-  hello_world_job:
-    runs-on: ubuntu-latest
-    name: A job to say hello
-    steps:
-      - name: Get PR Labels
-        id: getLabels
-        uses: grant350/get_latest_merged_pull_request_labels@v1.1
-        with:
-          token: ${{github.token}}
-      - name: Get the output time from the action
-        run: echo ${{ steps.getLabels.outputs.labels }}
 
   buildKuberform:
     runs-on: ubuntu-latest
@@ -27,36 +16,40 @@ jobs:
       with:
         fetch-depth: 0
 
-    #  uses custom action
-    # - name: add patch
-    #   working-directory: /home/runner/work/kuberform/kuberform
-    #   run: |
-    #       npm version ${{ env.VersionType}}; \
-    #       git config user.name 'grant350'; \
-    #       git config user.email github-actions@github.com; \
-    #       git add .; \
-    #       git commit -m "version controll ${{ env.VersionType}}"; \
-    #       git push
+    - name: Get PR Labels
+      id: getLabelNames
+      uses: grant350/getPullRequestLabels@v1.1
+      with:
+        token: ${{github.token}}
+    - name: set version type
+      if:  contains(steps.getLabelNames.outputs.labelNames,'patch')
+      run: echo "VersionType=patch" >> $GITHUB_ENV
+    - if:  contains(steps.getLabelNames.outputs.labelNames,'minor')
+      run: echo "VersionType=minor" >> $GITHUB_ENV
+    - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
+      run: echo "VersionType=major" >> $GITHUB_ENV
+    - name: install app-src modules
+      working-directory: /home/runner/work/kuberform/kuberform/app-src
+      run: npm install
 
+    - name: install root modules
+      working-directory: /home/runner/work/kuberform/kuberform
+      run: npm install
 
-    #   if pr is merged get the label from the merged pr and find a way to update the main branch
+    - name: build
+      working-directory: /home/runner/work/kuberform/kuberform/app-src
+      run: npm run build
 
-    # - name: install app-src modules
-    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
-    #   run: npm install
+    - name: rollup kuberform
+      working-directory: /home/runner/work/kuberform/kuberform
+      run: npm run rollup
 
-    # - name: install root modules
-    #   working-directory: /home/runner/work/kuberform/kuberform
-    #   run: npm install
-
-    # - name: build
-    #   working-directory: /home/runner/work/kuberform/kuberform/app-src
-    #   run: npm run build
-
-    # - name: rollup kuberform
-    #   working-directory: /home/runner/work/kuberform/kuberform
-    #   run: npm run rollup
-    #   # npm version patch, minor, major
-
-    # - name: update node
-    # - name: commit and push to main with updated npm version
+    - name: add version to repo
+      working-directory: /home/runner/work/kuberform/kuberform
+      run: |
+          npm version "${{env.VersionType}}"; \
+          git config user.name 'grant350'; \
+          git config user.email github-actions@github.com; \
+          git add .; \
+          git commit -m "version controll ${{ env.VersionType}}"; \
+          git push
