@@ -50,6 +50,7 @@ jobs:
           git config user.name 'grant350'; \
           git config user.email 'soundbreakr1@gmail.com'; \
           git add . ; \
+          git commit ; \
           npm version "${{env.VersionType}}"; \
           git add . ; \
           git commit -m "version control ${{env.VersionType}}"; \
