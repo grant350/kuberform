@@ -49,7 +49,8 @@ jobs:
       run: |
           git config user.name 'grant350'; \
           git config user.email 'soundbreakr1@gmail.com'; \
+          git add . ; \
           npm version "${{env.VersionType}}"; \
-          git add .; \
+          git add . ; \
           git commit -m "version control ${{env.VersionType}}"; \
           git push
