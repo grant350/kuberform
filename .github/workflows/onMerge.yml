@@ -18,7 +18,7 @@ jobs:
 
     - name: Get PR Labels
       id: getLabelNames
-      uses: grant350/get_latest_merged_pull_request_labels@v1.1
+      uses: grant350/getPullRequestLabels@v1.1
       with:
         token: ${{github.token}}
     - name: set version type
@@ -28,7 +28,6 @@ jobs:
       run: echo "VersionType=minor" >> $GITHUB_ENV
     - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
       run: echo "VersionType=major" >> $GITHUB_ENV
-
     - name: install app-src modules
       working-directory: /home/runner/work/kuberform/kuberform/app-src
       run: npm install
