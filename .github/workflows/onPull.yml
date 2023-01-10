@@ -60,8 +60,7 @@ jobs:
       run: |
           git config user.name 'grant350'; \
           git config user.email 'soundbreakr1@gmail.com'; \
-          git remote add origin 'git@github.com:grant350/kuberform.git' ; \
           npm version --no-git-tag-version "${{env.VersionType}}"; \
           git add . ; \
           git commit -m "version control commit ${{env.VersionType}}"; \
-          git push origin versionControl
+          git push origin 'versionControl';
