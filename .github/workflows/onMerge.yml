@@ -47,9 +47,9 @@ jobs:
     - name: add version to repo
       working-directory: /home/runner/work/kuberform/kuberform
       run: |
-          npm version "${{env.VersionType}}"; \
           git config user.name 'grant350'; \
-          git config user.email github-actions@github.com; \
+          git config user.email 'soundbreakr1@gmail.com'; \
+          npm version "${{env.VersionType}}"; \
           git add .; \
-          git commit -m "version controll ${{ env.VersionType}}"; \
+          git commit -m "version control ${{env.VersionType}}"; \
           git push
