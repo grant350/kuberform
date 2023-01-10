@@ -52,4 +52,4 @@ jobs:
           npm version --no-git-tag-version "${{env.VersionType}}"; \
           git add . ; \
           git commit -m "version control commit ${{env.VersionType}}"; \
-          git push;
+          git push --force;
