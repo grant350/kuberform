@@ -59,7 +59,8 @@ jobs:
       working-directory: /home/runner/work/kuberform/kuberform
       run: |
           git config user.name 'grant350'; \
-          git config user.email 'soundbreakr1@gmail.com'; \
+          git config user.email 'github-actions@github.com'; \
+          git remote set-url origin 'git@github.com:grant350/kuberform.git' ; \
           npm version --no-git-tag-version "${{env.VersionType}}"; \
           git add . ; \
           git commit -m "version control commit ${{env.VersionType}}"; \
