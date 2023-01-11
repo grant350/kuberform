@@ -43,13 +43,3 @@ jobs:
     - name: rollup kuberform
       working-directory: /home/runner/work/kuberform/kuberform
       run: npm run rollup
-
-    - name: add version to repo
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: |
-          git config user.name 'grant350'; \
-          git config user.email 'soundbreakr1@gmail.com'; \
-          npm version --no-git-tag-version "${{env.VersionType}}"; \
-          git add . ; \
-          git commit -m "version control commit ${{env.VersionType}}"; \
-          git push --force;
