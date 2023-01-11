@@ -14,8 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0
-
+        fetch-depth: 1
     - name: Get PR Labels
       id: getLabelNames
       uses: grant350/getPullRequestLabels@v1.1
@@ -28,6 +27,7 @@ jobs:
       run: echo "VersionType=minor" >> $GITHUB_ENV
     - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
       run: echo "VersionType=major" >> $GITHUB_ENV
+
     - name: install app-src modules
       working-directory: /home/runner/work/kuberform/kuberform/app-src
       run: npm install
