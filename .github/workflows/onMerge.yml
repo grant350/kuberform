@@ -16,9 +16,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{github.token}}
+
+      - name: Publish to NPM
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
-      - name: Publish to NPM
         run: |
             npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
             npm publish
