@@ -1,14 +1,13 @@
-import _slicedToArray from '@babel/runtime/helpers/slicedToArray';
 import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
 import _createClass from '@babel/runtime/helpers/createClass';
 import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
 import _inherits from '@babel/runtime/helpers/inherits';
 import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
 import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
-import React from 'react';
+import React$1, { React } from 'react';
 import { BehaviorSubject, Observable, forkJoin, map } from 'rxjs';
-import 'react-dom';
 import _wrapNativeSuper from '@babel/runtime/helpers/wrapNativeSuper';
+import moment from 'moment';
 
 function _createSuper$4(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$4(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 function _isNativeReflectConstruct$4() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
@@ -19,7 +18,7 @@ var FormError = /*#__PURE__*/function (_Error) {
     var _this;
     _classCallCheck(this, FormError);
     _this = _super.call(this, message);
-    _this.name = "FormError";
+    _this.name = 'FormError';
     return _this;
   }
   return _createClass(FormError);
@@ -29,62 +28,52 @@ var ErrorHandler = /*#__PURE__*/function () {
   function ErrorHandler(control) {
     _classCallCheck(this, ErrorHandler);
     this.controls = {};
-    if (control.constructor.name === "FormGroup") {
+    if (control.constructor.name === 'FormGroup') {
       this.formGroupHandler(control);
     }
   }
   _createClass(ErrorHandler, [{
     key: "formGroupHandler",
     value: function formGroupHandler(control) {
-      if (control.props.groupName === undefined || typeof control.props.groupName !== "string") {
+      if (control.props.groupName === undefined || typeof control.props.groupName !== 'string') {
         throw new FormError("groupName prop not found on '<FormGroup>' component");
       }
       if (control.props.children === undefined) {
-        throw new FormError("FormGroup component needs children with one instance of <FormGroup>, <FormArray>, <FormControl>");
+        throw new FormError('FormGroup component needs children with one instance of <FormGroup>, <FormArray>, <FormControl>');
       }
     }
-  }, {
-    key: "formArrayHandler",
-    value: function formArrayHandler() {}
-  }, {
-    key: "formControlHandler",
-    value: function formControlHandler(control) {
-      console.log('controls', this.controls);
-      if (this.controls['box']) {
-        throw new FormError("box exists");
-      } else {
-        this.controls['box'] = true;
-      }
-      console.log('control-handler', control);
-    }
+
+    // formArrayHandler() {}
+
+    // formControlHandler(control) {}
   }, {
     key: "checkControlProps",
-    value: function checkControlProps(control, controlNames) {
-      if (control.constructor.name === "FormControl") {
-        if (control.props.controlName === undefined || typeof control.props.controlName !== "string") {
+    value: function checkControlProps(control) {
+      if (control.constructor.name === 'FormControl') {
+        if (control.props.controlName === undefined || typeof control.props.controlName !== 'string') {
           throw new FormError("controlName prop not found on '<FormControl>' component");
         }
         if (control.props.updateOn !== undefined) {
           try {
-            if (["change", "blur"].includes(control.props.updateOn.toLowerCase()) === false) {
-              throw new FormError("updateOn prop must be either 'change' or 'blur' ");
+            if (['change', 'blur'].includes(control.props.updateOn.toLowerCase()) === false) {
+              throw new FormError('updateOn prop must be either "change" or "blur" ');
             }
           } catch (_unused) {
-            throw new FormError("updateOn prop must be either 'change' or 'blur' ");
+            throw new FormError('updateOn prop must be either "change" or "blur" ');
           }
         }
         if (control.props.validators) {
           if (Array.isArray(control.props.validators) === false) {
-            throw new FormError("validators prop on '<FormControl>' must be of type Array");
+            throw new FormError('validators prop on "<FormControl>" must be of type Array');
           }
           control.props.validators.forEach(function (fn) {
             if (fn instanceof Function === false) {
-              throw new FormError("validators must be a function with parameters control and observable");
+              throw new FormError('validators must be a function with parameters control and observable');
             }
           });
         }
         if (control.props.children === undefined) {
-          throw new FormError("FormControl needs children");
+          throw new FormError('FormControl needs children');
         }
       }
     }
@@ -101,55 +90,56 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     var _this;
     _classCallCheck(this, AbstractControl);
     _this = _super.call(this, props);
+    // eslint-disable-next-line react/no-unused-class-component-methods
     _this.errorHandler = new ErrorHandler(_assertThisInitialized(_this));
     Object.defineProperty(_assertThisInitialized(_this), 'statusChanges', {
-      value: new BehaviorSubject("VALID"),
+      value: new BehaviorSubject('VALID'),
       writable: false
     });
     return _this;
   }
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
   _createClass(AbstractControl, [{
     key: "getErrors",
     value: function getErrors() {
-      return this.state.errors;
+      var STATE = this.state.STATE;
+      return STATE.errors;
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "getValue",
     value: function getValue() {
-      return this.state.value;
+      var STATE = this.state.STATE;
+      return STATE.value;
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "getStatus",
     value: function getStatus() {
-      return this.state.status;
+      var STATE = this.state.STATE;
+      return STATE.status;
     }
   }, {
     key: "setStateAndView",
     value: function setStateAndView(obj, fn) {
       this.setState(obj, function () {
-        //do something to disable the inputs
+        // do something to disable the inputs
         fn();
       });
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "invalid",
     get: function get() {
-      return this.state.status === "INVALID" ? true : false;
+      var STATE = this.state.STATE;
+      return STATE.status === 'INVALID';
     }
-  }, {
-    key: "isEmptyValue",
-    get: function get() {
-      if (this.state.value === null) {
-        return true;
-      }
-      if (this.state.value === '') {
-        return true;
-      }
-      if (this.state.value === undefined) {
-        return true;
-      }
-      return false;
-    }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "setTouched",
     value: function setTouched(options) {
@@ -162,6 +152,8 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         }
       });
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "setDirty",
     value: function setDirty(value, options) {
@@ -174,30 +166,37 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         }
       });
     }
+
+    // eslint-disable-next-line react/sort-comp
   }, {
     key: "isDisabled",
     value: function isDisabled() {
-      return this.state.disabled;
+      var STATE = this.state.STATE;
+      return STATE.disabled;
     }
   }, {
     key: "calculateStatus",
     value: function calculateStatus() {
-      if (this.state.errors) {
-        return "INVALID";
-      } else if (this.anyControlsHaveStatus("INVALID")) {
-        return "INVALID";
-      } else if (this.isDisabled()) {
-        return "DISABLED";
-      } else if (this.anyControlsHaveStatus("PENDING")) {
-        return "PENDING";
+      var STATE = this.state.STATE;
+      if (STATE.errors) {
+        return 'INVALID';
       }
-      return "VALID";
+      if (this.anyControlsHaveStatus('INVALID')) {
+        return 'INVALID';
+      }
+      if (this.isDisabled()) {
+        return 'DISABLED';
+      }
+      if (this.anyControlsHaveStatus('PENDING')) {
+        return 'PENDING';
+      }
+      return 'VALID';
     }
   }, {
     key: "anyControlsHaveStatus",
     value: function anyControlsHaveStatus(status) {
       return this.anyControls(function (control) {
-        return control.state.status == status;
+        return control.state.status === status;
       });
     }
   }, {
@@ -205,6 +204,8 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     value: function anyControls(condition) {
       condition(this);
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "composeAsyncValidators",
     value: function composeAsyncValidators(validators) {
@@ -212,16 +213,16 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "mergeValidators",
-    value: function mergeValidators(validators) {
+    value: function mergeValidators() {
       var _this4 = this;
-      //.pipe(take(1));
+      var PROPS = this.props;
       return function (control) {
-        var asyncObservables = _this4.props.validators.map(function (validator) {
+        var ASYNC_OBSERVABLES = PROPS.validators.map(function (validator) {
           return new Observable(function (error$) {
-            validator(control, error$);
+            return validator(control, error$);
           });
         });
-        return forkJoin(asyncObservables).pipe(map(_this4.mergeErrors));
+        return forkJoin(ASYNC_OBSERVABLES).pipe(map(_this4.mergeErrors));
       };
     }
   }, {
@@ -239,11 +240,11 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     key: "updateControlsErrors",
     value: function updateControlsErrors() {
       var _this5 = this;
-      var status = this.calculateStatus();
+      var STATUS = this.calculateStatus();
       this.setStateAndView({
-        status: status
+        status: STATUS
       }, function () {
-        _this5.statusChanges.next(status);
+        _this5.statusChanges.next(STATUS);
         if (_this5.parent) {
           _this5.parent.updateControlsErrors();
         }
@@ -261,11 +262,11 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "runAsyncValidator",
-    value: function runAsyncValidator(options) {
+    value: function runAsyncValidator() {
       var _this7 = this;
       if (this.asyncValidator) {
         this.setStateAndView({
-          status: "PENDING"
+          status: 'PENDING'
         }, function () {
           _this7.asyncSubscription = _this7.asyncValidator(_this7).subscribe(function (errs) {
             _this7.setErrors(errs);
@@ -273,6 +274,8 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
         });
       }
     }
+
+    // eslint-disable-next-line class-methods-use-this
   }, {
     key: "updateValue",
     value: function updateValue() {
@@ -282,7 +285,7 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     key: "setInitialStatusAndErrors",
     value: function setInitialStatusAndErrors(cb) {
       this.setStateAndView({
-        status: this.isDisabled() ? "DISABLED" : "VALID",
+        status: this.isDisabled() ? 'DISABLED' : 'VALID',
         errors: null
       }, cb);
     }
@@ -291,27 +294,31 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     value: function updateValueAndValidity(options) {
       var _this8 = this;
       this.setInitialStatusAndErrors(function () {
-        var status = _this8.calculateStatus();
+        var STATUS = _this8.calculateStatus();
+        var PROPS = _this8.props;
+        var STATE = _this8.state.STATE;
         _this8.updateValue();
         _this8.setStateAndView({
-          status: status
+          STATUS: STATUS
         }, function () {
-          if (_this8.state.enabled) {
+          if (STATE.enabled) {
             if (_this8.asyncSubscription) {
               _this8.asyncSubscription.unsubscribe();
             }
-            if (_this8.state.status === "VALID" || _this8.state.status === "PENDING") {
+            if (STATE.status === 'VALID' || STATE.status === 'PENDING') {
               _this8.runAsyncValidator(options);
             }
           }
-          _this8.valueChanges.next(_this8.state.value);
-          _this8.statusChanges.next(_this8.state.status);
-          if (_this8.props.parent && !options.onlySelf) {
-            _this8.props.parent.updateValueAndValidity(options);
+          _this8.valueChanges.next(STATE.value);
+          _this8.statusChanges.next(STATE.status);
+          if (PROPS.parent && !options.onlySelf) {
+            PROPS.parent.updateValueAndValidity(options);
           }
         });
       });
     }
+
+    // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "setValue",
     value: function setValue(value, options) {
@@ -337,7 +344,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     _this = _super.call(this, props);
     _this.state = {
       value: {},
-      status: "VALID",
+      status: 'VALID',
       touched: false,
       dirty: false
     };
@@ -362,58 +369,63 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     key: "recurseDom",
     value: function recurseDom(children, controls, depth) {
       var _this2 = this;
-      return React.Children.map(children, function (child) {
+      return React$1.Children.map(children, function (child) {
         if (child.props) {
           if (child.props.controlName) {
-            var newref = function newref(element) {
+            var NEWREF = function NEWREF(element) {
               if (controls[child.props.controlName]) {
-                throw new FormError("duplicate controlName");
+                throw new FormError('duplicate controlName');
               }
+              // eslint-disable-next-line no-param-reassign
               controls[child.props.controlName] = element;
             };
-            if (child.props.children.hasOwnProperty('type') === false) {
-              child = /*#__PURE__*/React.cloneElement(child, {
-                children: /*#__PURE__*/React.createElement(child.props.children, null)
+            if (Object.prototype.hasOwnProperty.call(child.props.children, 'type') === false) {
+              return /*#__PURE__*/React$1.cloneElement(child, {
+                ref: NEWREF,
+                parent: _this2,
+                defaultValue: child.props.defaultValue,
+                children: /*#__PURE__*/React$1.createElement(child.props.children, null)
               });
             }
-            return /*#__PURE__*/React.cloneElement(child, {
-              ref: newref,
+            return /*#__PURE__*/React$1.cloneElement(child, {
+              ref: NEWREF,
               parent: _this2,
               defaultValue: child.props.defaultValue
             });
           }
           if (child.props.groupName) {
-            var _newref = function _newref(element) {
+            var _NEWREF = function _NEWREF(element) {
               if (controls[child.props.groupName]) {
-                throw new FormError("duplicate groupName");
+                throw new FormError('duplicate groupName');
               }
+              // eslint-disable-next-line no-param-reassign
               controls[child.props.groupName] = element;
             };
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               parent: _this2,
-              ref: _newref
+              ref: _NEWREF
             });
           }
           if (child.props.arrayName) {
-            var _newref2 = function _newref2(element) {
+            var _NEWREF2 = function _NEWREF2(element) {
               if (controls[child.props.arrayName]) {
-                throw new FormError("duplicate arrayName");
+                throw new FormError('duplicate arrayName');
               }
+              // eslint-disable-next-line no-param-reassign
               controls[child.props.arrayName] = element;
             };
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               parent: _this2,
-              ref: _newref2
+              ref: _NEWREF2
             });
           }
           if (child.props.children && child.props.groupName === undefined && child.props.arrayName === undefined) {
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               children: _this2.recurseDom(child.props.children, controls, depth + 1)
             });
           }
-        } else {
-          return child;
         }
+        return child;
       });
     }
   }, {
@@ -432,11 +444,11 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "anyControls",
     value: function anyControls(condition) {
-      for (var _i = 0, _Object$entries = Object.entries(this.controls); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2);
-          _Object$entries$_i[0];
-          var control = _Object$entries$_i[1];
-        if (condition(control)) {
+      // may cause issues
+      var ENTRIES = Object.entries(this.controls);
+      for (var i = 0; i < ENTRIES.length; i++) {
+        var CONTROL = ENTRIES[i][1];
+        if (condition(CONTROL)) {
           return true;
         }
       }
@@ -445,10 +457,11 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "reduceObject",
     value: function reduceObject(object, fn, initValue) {
-      if (Array.isArray(initValue) || typeof initValue === "string") {
-        throw new SyntaxError("initial value must be an object!");
+      if (Array.isArray(initValue) || typeof initValue === 'string') {
+        throw new SyntaxError('initial value must be an object!');
       }
       Object.keys(object).forEach(function (key) {
+        // eslint-disable-next-line no-param-reassign
         initValue = fn(initValue, object[key], key);
       });
       return initValue;
@@ -456,14 +469,14 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "reduceChildren",
     value: function reduceChildren() {
-      var newValue = this.reduceObject(this.controls, function (acc, control, key) {
+      var NEW_VALUE = this.reduceObject(this.controls, function (acc, control, key) {
         acc[key] = control.getValue();
         return acc;
       }, {});
       this.setState({
-        value: newValue
+        value: NEW_VALUE
       });
-      this.valueChanges.next(newValue);
+      this.valueChanges.next(NEW_VALUE);
     }
   }, {
     key: "updateValue",
@@ -471,34 +484,33 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       this.reduceChildren();
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {}
-  }, {
     key: "render",
     value: function render() {
       var _this4 = this;
-      return /*#__PURE__*/React.createElement("div", {
-        className: "formGroup",
-        sx: this.props.sx
-      }, /*#__PURE__*/React.createElement(React.Fragment, null, React.Children.map(this.clonedChildren, function (child) {
-        if (child.props.container) {
-          return /*#__PURE__*/React.cloneElement(child, {
-            status: _this4.state.status
-          });
-        } else {
+      return (
+        /*#__PURE__*/
+        // eslint-disable-next-line react/no-unknown-property
+        React$1.createElement("div", {
+          className: "formGroup",
+          sx: this.props.sx
+        }, React$1.Children.map(this.clonedChildren, function (child) {
+          if (child.props.container) {
+            return /*#__PURE__*/React$1.cloneElement(child, {
+              status: _this4.state.status
+            });
+          }
           return child;
-        }
-      })));
+        }))
+      );
     }
   }]);
   return FormGroup;
 }(AbstractControl);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _createSuper$1(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct$1(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 function _isNativeReflectConstruct$1() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+// import FormError from './FormError.js';
+/* @extends React.Component */
 var FormArray = /*#__PURE__*/function (_AbstractControl) {
   _inherits(FormArray, _AbstractControl);
   var _super = _createSuper$1(FormArray);
@@ -508,7 +520,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     _this = _super.call(this, props);
     _this.state = {
       value: [],
-      status: "VALID",
+      status: 'VALID',
       touched: false,
       dirty: false
     };
@@ -533,44 +545,50 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     key: "recurseDom",
     value: function recurseDom(children, controls, depth) {
       var _this2 = this;
-      return React.Children.map(children, function (child, index) {
+      // changing to function
+      // eslint-disable-next-line consistent-return
+      return React$1.Children.map(children, function (child) {
         if (child.props) {
           if (child.props.controlName) {
-            var newref = function newref(element) {
-              //check if control already exists in array.
+            var NEWREF = function NEWREF(element) {
+              // check if control already exists in array.
               controls.push(element);
             };
-            if (child.props.children.hasOwnProperty('type') === false) {
-              child = /*#__PURE__*/React.cloneElement(child, {
-                children: /*#__PURE__*/React.createElement(child.props.children, null)
+            // child.props.children.hasOwnProperty('type')
+            if (Object.prototype.hasOwnProperty.call(child.props.children, 'type') === false) {
+              return /*#__PURE__*/React$1.cloneElement(child, {
+                ref: NEWREF,
+                parent: _this2,
+                defaultValue: child.props.defaultValue,
+                children: /*#__PURE__*/React$1.createElement(child.props.children, null)
               });
             }
-            return /*#__PURE__*/React.cloneElement(child, {
-              ref: newref,
+            return /*#__PURE__*/React$1.cloneElement(child, {
+              ref: NEWREF,
               parent: _this2,
               defaultValue: child.props.defaultValue
             });
           }
           if (child.props.groupName) {
-            var _newref = function _newref(element) {
+            var _NEWREF = function _NEWREF(element) {
               controls.push(element);
             };
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               parent: _this2,
-              ref: _newref
+              ref: _NEWREF
             });
           }
           if (child.props.arrayName) {
-            var _newref2 = function _newref2(element) {
+            var _NEWREF2 = function _NEWREF2(element) {
               controls.push(element);
             };
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               parent: _this2,
-              ref: _newref2
+              ref: _NEWREF2
             });
           }
           if (child.props.children && child.props.groupName === undefined && child.props.arrayName === undefined) {
-            return /*#__PURE__*/React.cloneElement(child, {
+            return /*#__PURE__*/React$1.cloneElement(child, {
               children: _this2.recurseDom(child.props.children, controls, depth + 1)
             });
           }
@@ -588,37 +606,28 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
     key: "setValue",
     value: function setValue(value) {
       var _this3 = this;
-      value.forEach(function (value, index) {
-        _this3.controls[index].setValue(value);
+      value.forEach(function (controlValue, index) {
+        _this3.controls[index].setValue(controlValue);
       });
     }
   }, {
     key: "anyControls",
     value: function anyControls(condition) {
-      var _iterator = _createForOfIteratorHelper(this.controls),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var control = _step.value;
-          if (condition(control)) {
-            return true;
-            break;
-          }
+      for (var i = 0; i < this.controls.length; i++) {
+        if (condition(this.controls[i])) {
+          return true;
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
       }
       return false;
     }
   }, {
     key: "reduceObject",
     value: function reduceObject(object, fn, initValue) {
-      if (Array.isArray(initValue) || typeof initValue === "string") {
-        throw new SyntaxError("initial value must be an object!");
+      if (Array.isArray(initValue) || typeof initValue === 'string') {
+        throw new SyntaxError('initial value must be an object!');
       }
       Object.keys(object).forEach(function (key) {
+        // eslint-disable-next-line no-param-reassign
         initValue = fn(initValue, object[key], key);
       });
       return initValue;
@@ -626,14 +635,14 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "reduceChildren",
     value: function reduceChildren() {
-      var newValue = this.controls.reduce(function (acc, control, index) {
+      var NEW_VALUE = this.controls.reduce(function (acc, control, index) {
         acc[index] = control.getValue();
         return acc;
       }, []);
       this.setState({
-        value: newValue
+        value: NEW_VALUE
       });
-      this.valueChanges.next(newValue);
+      this.valueChanges.next(NEW_VALUE);
     }
   }, {
     key: "updateValue",
@@ -641,24 +650,24 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       this.reduceChildren();
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {}
-  }, {
     key: "render",
     value: function render() {
       var _this4 = this;
-      return /*#__PURE__*/React.createElement("div", {
-        className: "formArray",
-        sx: this.props.sx
-      }, /*#__PURE__*/React.createElement(React.Fragment, null, React.Children.map(this.clonedChildren, function (child) {
-        if (child.props.container) {
-          return /*#__PURE__*/React.cloneElement(child, {
-            status: _this4.state.status
-          });
-        } else {
+      return (
+        /*#__PURE__*/
+        // eslint-disable-next-line react/no-unknown-property
+        React$1.createElement("div", {
+          className: "formArray",
+          sx: this.props.sx
+        }, React$1.Children.map(this.clonedChildren, function (child) {
+          if (child.props.container) {
+            return /*#__PURE__*/React$1.cloneElement(child, {
+              status: _this4.state.status
+            });
+          }
           return child;
-        }
-      })));
+        }))
+      );
     }
   }]);
   return FormArray;
@@ -674,13 +683,13 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     _classCallCheck(this, FormControl);
     _this = _super.call(this, props);
     _this.state = {
-      status: "VALID",
+      status: 'VALID',
       value: _this.props.defaultValue ? _this.props.defaultValue : '',
       errors: null,
       touched: false,
       dirty: false,
-      disabled: _this.props.disabled ? true : false,
-      enabled: _this.props.disabled ? false : true
+      disabled: _this.props.disabled,
+      enabled: !_this.props.disabled
     };
     Object.defineProperty(_assertThisInitialized(_this), 'controlName', {
       value: _this.props.controlName,
@@ -701,7 +710,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     _this.updateOn = _this.props.updateOn ? _this.props.updateOn : 'change';
     _this.asyncValidator = _this.props.validators ? _this.composeAsyncValidators(_this.props.validators) : null;
     _this.asyncSubscription = null;
-    _this.ref = /*#__PURE__*/React.createRef();
+    _this.ref = /*#__PURE__*/React$1.createRef();
     return _this;
   }
   _createClass(FormControl, [{
@@ -712,9 +721,9 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "onChange",
     value: function onChange(e) {
-      var value = e.target.value;
-      if (this.updateOn === "change") {
-        this.setValue(value, {});
+      var VALUE = e.target.value;
+      if (this.updateOn === 'change') {
+        this.setValue(VALUE, {});
       }
       if (this.state.dirty === false) {
         this.setDirty();
@@ -723,9 +732,9 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
   }, {
     key: "onBlur",
     value: function onBlur(e) {
-      if (this.updateOn === "blur") {
-        var value = e.target.value;
-        this.setValue(value, {});
+      var VALUE = e.target.value;
+      if (this.updateOn === 'blur') {
+        this.setValue(VALUE, {});
       }
       if (this.state.touched === false) {
         this.setTouched();
@@ -735,16 +744,14 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     key: "render",
     value: function render() {
       var _this2 = this;
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React$1.createElement("div", {
         className: "formControl",
         ref: this.ref,
         style: this.props.sx,
         onBlur: this.onBlur,
-        onChange: this.onChange,
-        touched: this.state.touched.toString(),
-        dirty: this.state.dirty.toString()
-      }, /*#__PURE__*/React.createElement(React.Fragment, null, React.Children.map(this.props.children, function (child) {
-        return /*#__PURE__*/React.cloneElement(child, {
+        onChange: this.onChange
+      }, React$1.Children.map(this.props.children, function (child) {
+        return /*#__PURE__*/React$1.cloneElement(child, {
           invalid: _this2.invalid,
           dirty: _this2.state.dirty,
           value: _this2.state.value,
@@ -754,7 +761,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
           status: _this2.state.status,
           setValue: _this2.setValue
         });
-      })));
+      }));
     }
   }]);
   return FormControl;
@@ -768,10 +775,16 @@ var Validators = /*#__PURE__*/function () {
     key: "isFloat",
     get: function get() {
       return function (control, obs) {
-        function isFloat(n) {
+        /**
+         * n is the number parameter to determine if the control value is a float
+         *
+         * @param  {number | string} n — A string to convert into a number.
+         * @returns {boolean} if n is a float it will return true else it will return false
+         */
+        function checkFloat(n) {
           return Number(n) === n && n % 1 !== 0;
         }
-        if (isFloat(control.getValue())) {
+        if (checkFloat(control.getValue())) {
           obs.next(null);
         } else {
           obs.next({
@@ -780,24 +793,32 @@ var Validators = /*#__PURE__*/function () {
         }
       };
     }
-  }, {
-    key: "isInterger",
-    get: function get() {}
-  }, {
-    key: "isShort",
-    get: function get() {}
-  }, {
-    key: "isArray",
-    get: function get() {}
-  }, {
-    key: "isObject",
-    get: function get() {}
+
+    // get isInterger() {
+
+    // }
+
+    // get isShort(){
+
+    // }
+    // get isArray(){
+
+    // }
+
+    // get isObject(){
+
+    // }
+
+    /**
+     *
+     * @returns {Function} This getter fn returns a function to determin if control value is a Boolean
+     */
   }, {
     key: "isBoolean",
     get: function get() {
       return function (control, obs) {
-        var val = control.getValue().toLowerCase();
-        if (val === "true" || val === "false") {
+        var VALUE = control.getValue().toLowerCase();
+        if (VALUE === 'true' || VALUE === 'false') {
           obs.next(null);
         } else {
           obs.next({
@@ -806,12 +827,24 @@ var Validators = /*#__PURE__*/function () {
         }
       };
     }
+
+    /**
+     * given a date format this function will match the control value to check if it is a date in the format specified
+     *
+     * @param {string} format - A date format such as yyyy/mm/d
+     * @returns {Function} This fn returns a function to determin if control value is a a Date
+     */
   }, {
     key: "isNumber",
-    get: function get() {
+    get:
+    /**
+     *
+     * @returns {Function} this fn returns a function to determin if control value is a a Number
+     */
+    function get() {
       return function (control, obs) {
         try {
-          parseInt(control.getValue());
+          parseInt(control.getValue(), 10);
           obs.next(null);
         } catch (_unused) {
           obs.next({
@@ -820,49 +853,11 @@ var Validators = /*#__PURE__*/function () {
         }
       };
     }
-  }, {
-    key: "isDouble",
-    get: function get() {
-      var _this = this;
-      return function (control, obs) {
-        _this.isNumber(control, obs);
-        var regex = /^[0-9]*[.]?[0-9]+$/;
-        try {
-          if (control.getValue().match(regex)) {
-            obs.next(null);
-          } else {
-            throw new Error("Not A Double");
-          }
-          ;
-        } catch (_unused2) {
-          obs.next({
-            invalidDouble: true
-          });
-        }
-      };
-    }
-  }, {
-    key: "required",
-    get: function get() {
-      return function (control, obs) {
-        var VALUE = control.getValue();
-        if (typeof VALUE === "string") {
-          if (VALUE.length <= 0) {
-            obs.next({
-              required: true
-            });
-          } else {
-            obs.next(null);
-          }
-        } else if (VALUE == null || VALUE == undefined) {
-          obs.next({
-            required: true
-          });
-        } else {
-          obs.next(null);
-        }
-      };
-    }
+
+    /**
+     * @param {string} regex - A string expression
+     * @returns {Function} This fn returns a function to determin if control value matches a given regex argument
+     */
   }], [{
     key: "isDate",
     value: function isDate(format) {
@@ -889,12 +884,41 @@ var Validators = /*#__PURE__*/function () {
         }
       };
     }
+
+    /**
+     * @returns {Function} This fn returns a function to determin if control value is a double
+     */
+  }, {
+    key: "isDouble",
+    get: function get() {
+      var _this = this;
+      return function (control, obs) {
+        _this.isNumber(control, obs);
+        var REGEX = /^[0-9]*[.]?[0-9]+$/;
+        try {
+          if (control.getValue().match(REGEX)) {
+            obs.next(null);
+          } else {
+            throw new Error('Not A Double');
+          }
+        } catch (_unused2) {
+          obs.next({
+            invalidDouble: true
+          });
+        }
+      };
+    }
+
+    /**
+     * @param {number} max - A integer
+     * @returns {Function} This fn returns a function to determin if control value > than max
+     */
   }, {
     key: "max",
-    value: function max(interger) {
+    value: function max(_max) {
       return function (control, obs) {
         var VALUE = control.getValue();
-        if (VALUE.length > interger) {
+        if (VALUE.length > _max) {
           obs.next({
             maxLengthInvalid: true
           });
@@ -903,14 +927,47 @@ var Validators = /*#__PURE__*/function () {
         }
       };
     }
+
+    /**
+     * @param {number} min - A integer
+     * @returns {Function} This fn returns a function to determin if control value < than min
+     */
   }, {
     key: "min",
-    value: function min(interger) {
+    value: function min(_min) {
       return function (control, obs) {
         var VALUE = control.getValue();
-        if (VALUE.length < interger) {
+        if (VALUE.length < _min) {
           obs.next({
             minLengthInvalid: true
+          });
+        } else {
+          obs.next(null);
+        }
+      };
+    }
+
+    /**
+     * Checks if control is valid and if there is a value null or if length is 0
+     *
+     * @returns {Function} This fn returns a function to determin if control value not null or length of 0
+     */
+  }, {
+    key: "required",
+    get: function get() {
+      return function (control, obs) {
+        var VALUE = control.getValue();
+        if (typeof VALUE === 'string') {
+          if (VALUE.length <= 0) {
+            obs.next({
+              required: true
+            });
+          } else {
+            obs.next(null);
+          }
+        } else if (VALUE == null || VALUE === undefined) {
+          obs.next({
+            required: true
           });
         } else {
           obs.next(null);

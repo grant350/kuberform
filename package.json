@@ -1,6 +1,6 @@
 {
   "name": "@kuberspace/kuberform",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Kuberform is a reactive form builder",
   "notes": " readme not finished",
   "keywords": [
