@@ -19,7 +19,7 @@ jobs:
 
       - name: Publish to NPM
         run: |
-            npm set //registry.npmjs.org/:_authToken=$GITHUBACTIONNPM
+            npm set https://registry.npmjs.org/@kuberspace%2fkuberform/:_authToken=$GITHUBACTIONNPM
             npm publish
 
       - name: deploy to npmjs
