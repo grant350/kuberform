@@ -4,7 +4,7 @@ import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized
 import _inherits from '@babel/runtime/helpers/inherits';
 import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
 import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
-import React$1, { React } from 'react';
+import React from 'react';
 import { BehaviorSubject, Observable, forkJoin, map } from 'rxjs';
 import _wrapNativeSuper from '@babel/runtime/helpers/wrapNativeSuper';
 import moment from 'moment';
@@ -369,7 +369,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
     key: "recurseDom",
     value: function recurseDom(children, controls, depth) {
       var _this2 = this;
-      return React$1.Children.map(children, function (child) {
+      return React.Children.map(children, function (child) {
         if (child.props) {
           if (child.props.controlName) {
             var NEWREF = function NEWREF(element) {
@@ -380,14 +380,14 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
               controls[child.props.controlName] = element;
             };
             if (Object.prototype.hasOwnProperty.call(child.props.children, 'type') === false) {
-              return /*#__PURE__*/React$1.cloneElement(child, {
+              return /*#__PURE__*/React.cloneElement(child, {
                 ref: NEWREF,
                 parent: _this2,
                 defaultValue: child.props.defaultValue,
-                children: /*#__PURE__*/React$1.createElement(child.props.children, null)
+                children: /*#__PURE__*/React.createElement(child.props.children, null)
               });
             }
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               ref: NEWREF,
               parent: _this2,
               defaultValue: child.props.defaultValue
@@ -401,7 +401,7 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
               // eslint-disable-next-line no-param-reassign
               controls[child.props.groupName] = element;
             };
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               parent: _this2,
               ref: _NEWREF
             });
@@ -414,13 +414,13 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
               // eslint-disable-next-line no-param-reassign
               controls[child.props.arrayName] = element;
             };
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               parent: _this2,
               ref: _NEWREF2
             });
           }
           if (child.props.children && child.props.groupName === undefined && child.props.arrayName === undefined) {
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               children: _this2.recurseDom(child.props.children, controls, depth + 1)
             });
           }
@@ -490,12 +490,12 @@ var FormGroup = /*#__PURE__*/function (_AbstractControl) {
       return (
         /*#__PURE__*/
         // eslint-disable-next-line react/no-unknown-property
-        React$1.createElement("div", {
+        React.createElement("div", {
           className: "formGroup",
           sx: this.props.sx
-        }, React$1.Children.map(this.clonedChildren, function (child) {
+        }, React.Children.map(this.clonedChildren, function (child) {
           if (child.props.container) {
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               status: _this4.state.status
             });
           }
@@ -547,7 +547,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       var _this2 = this;
       // changing to function
       // eslint-disable-next-line consistent-return
-      return React$1.Children.map(children, function (child) {
+      return React.Children.map(children, function (child) {
         if (child.props) {
           if (child.props.controlName) {
             var NEWREF = function NEWREF(element) {
@@ -556,14 +556,14 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
             };
             // child.props.children.hasOwnProperty('type')
             if (Object.prototype.hasOwnProperty.call(child.props.children, 'type') === false) {
-              return /*#__PURE__*/React$1.cloneElement(child, {
+              return /*#__PURE__*/React.cloneElement(child, {
                 ref: NEWREF,
                 parent: _this2,
                 defaultValue: child.props.defaultValue,
-                children: /*#__PURE__*/React$1.createElement(child.props.children, null)
+                children: /*#__PURE__*/React.createElement(child.props.children, null)
               });
             }
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               ref: NEWREF,
               parent: _this2,
               defaultValue: child.props.defaultValue
@@ -573,7 +573,7 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
             var _NEWREF = function _NEWREF(element) {
               controls.push(element);
             };
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               parent: _this2,
               ref: _NEWREF
             });
@@ -582,13 +582,13 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
             var _NEWREF2 = function _NEWREF2(element) {
               controls.push(element);
             };
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               parent: _this2,
               ref: _NEWREF2
             });
           }
           if (child.props.children && child.props.groupName === undefined && child.props.arrayName === undefined) {
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               children: _this2.recurseDom(child.props.children, controls, depth + 1)
             });
           }
@@ -656,12 +656,12 @@ var FormArray = /*#__PURE__*/function (_AbstractControl) {
       return (
         /*#__PURE__*/
         // eslint-disable-next-line react/no-unknown-property
-        React$1.createElement("div", {
+        React.createElement("div", {
           className: "formArray",
           sx: this.props.sx
-        }, React$1.Children.map(this.clonedChildren, function (child) {
+        }, React.Children.map(this.clonedChildren, function (child) {
           if (child.props.container) {
-            return /*#__PURE__*/React$1.cloneElement(child, {
+            return /*#__PURE__*/React.cloneElement(child, {
               status: _this4.state.status
             });
           }
@@ -710,7 +710,7 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     _this.updateOn = _this.props.updateOn ? _this.props.updateOn : 'change';
     _this.asyncValidator = _this.props.validators ? _this.composeAsyncValidators(_this.props.validators) : null;
     _this.asyncSubscription = null;
-    _this.ref = /*#__PURE__*/React$1.createRef();
+    _this.ref = /*#__PURE__*/React.createRef();
     return _this;
   }
   _createClass(FormControl, [{
@@ -744,14 +744,14 @@ var FormControl = /*#__PURE__*/function (_AbstractControl) {
     key: "render",
     value: function render() {
       var _this2 = this;
-      return /*#__PURE__*/React$1.createElement("div", {
+      return /*#__PURE__*/React.createElement("div", {
         className: "formControl",
         ref: this.ref,
         style: this.props.sx,
         onBlur: this.onBlur,
         onChange: this.onChange
-      }, React$1.Children.map(this.props.children, function (child) {
-        return /*#__PURE__*/React$1.cloneElement(child, {
+      }, React.Children.map(this.props.children, function (child) {
+        return /*#__PURE__*/React.cloneElement(child, {
           invalid: _this2.invalid,
           dirty: _this2.state.dirty,
           value: _this2.state.value,
