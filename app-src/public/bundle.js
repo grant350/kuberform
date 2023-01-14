@@ -28669,7 +28669,7 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
     }
   }]);
   return AbstractControl;
-}(react.React.Component);
+}(react.Component);
 /* harmony default export */ const kuberform_AbstractControl = (AbstractControl);
 // EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
 var jsx_runtime = __webpack_require__(2945);
