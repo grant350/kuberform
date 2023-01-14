@@ -16,10 +16,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{github.token}}
-
+      - env:
+          NPM_TOKEN: ${{secrets.GITHUBACTIONNPM}}
       - name: Publish to NPM
         run: |
-            npm set //registry.npmjs.org/@kuberspace/kuberform/:_authToken=$GITHUBACTIONNPM
+            npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN}
             npm publish
 
       - name: deploy to npmjs
