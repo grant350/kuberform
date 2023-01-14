@@ -12,34 +12,15 @@ jobs:
       matrix:
         node-version: ['18.12.0']
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 1
-    - name: Get PR Labels
-      id: getLabelNames
-      uses: grant350/getPullRequestLabels@v1.1
-      with:
-        token: ${{github.token}}
-    - name: set version type
-      if:  contains(steps.getLabelNames.outputs.labelNames,'patch')
-      run: echo "VersionType=patch" >> $GITHUB_ENV
-    - if:  contains(steps.getLabelNames.outputs.labelNames,'minor')
-      run: echo "VersionType=minor" >> $GITHUB_ENV
-    - if:  contains(steps.getLabelNames.outputs.labelNames,'major')
-      run: echo "VersionType=major" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{github.token}}
 
-    - name: install app-src modules
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm install
+      - name: Publish to NPM
+        run: |
+            npm set //registry.npmjs.org/:_authToken=$GITHUBACTIONNPM
+            npm publish
 
-    - name: install root modules
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: npm install
-
-    - name: build
-      working-directory: /home/runner/work/kuberform/kuberform/app-src
-      run: npm run build
-
-    - name: rollup kuberform
-      working-directory: /home/runner/work/kuberform/kuberform
-      run: npm run rollup
+      - name: deploy to npmjs
+        run: echo 'deploy api'

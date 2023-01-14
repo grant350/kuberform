@@ -1,7 +1,7 @@
 name: kuberform
-
-on: [pull_request]
-
+on:
+  pull_request:
+    types: [opened]
 jobs:
   testAndBuild:
     runs-on: ubuntu-latest
@@ -9,7 +9,7 @@ jobs:
       matrix:
         node-version: ['18.12.0']
     steps:
-
+# check main version to see if its off and update branch if version is off
     - name: Get PR Labels
       id: getLabelNames
       uses: grant350/getPullRequestLabels@v1.1
@@ -30,6 +30,7 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{github.token}}
+
     - name: install app-src modules
       working-directory: /home/runner/work/kuberform/kuberform/app-src
       run: npm install
@@ -37,6 +38,10 @@ jobs:
     - name: install root modules
       working-directory: /home/runner/work/kuberform/kuberform
       run: npm install
+
+    - name: build
+      working-directory: /home/runner/work/kuberform/kuberform/app-src
+      run: npm run build
 
     - name: test the code
       working-directory: /home/runner/work/kuberform/kuberform/app-src
@@ -63,13 +68,3 @@ jobs:
           git add . ; \
           git commit -m "version control commit ${{env.VersionType}}"; \
           git push --force;
-
-    # - name: add version to repo
-    #   working-directory: /home/runner/work/kuberform/kuberform
-    #   run: |
-    #       git config user.name 'grant350'; \
-    #       git config user.email 'soundbreakr1@gmail.com'; \
-    #       npm version --no-git-tag-version "${{env.VersionType}}"; \
-    #       git add . ; \
-    #       git commit -m "version control commit ${{env.VersionType}}"; \
-    #       git push;
