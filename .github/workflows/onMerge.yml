@@ -16,7 +16,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{github.token}}
-      - env:
+        env:
           NPM_TOKEN: ${{secrets.GITHUBACTIONNPM}}
       - name: Publish to NPM
         run: |
