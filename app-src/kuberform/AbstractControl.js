@@ -18,20 +18,17 @@ class AbstractControl extends React.Component {
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   getErrors() {
-    const { STATE } = this.state;
-    return STATE.errors;
+    return this.state.errors;
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   getValue() {
-    const { STATE } = this.state;
-    return STATE.value;
+    return this.state.value;
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   getStatus() {
-    const { STATE } = this.state;
-    return STATE.status;
+    return this.state.status;
   }
 
   setStateAndView(obj, fn) {
@@ -43,8 +40,7 @@ class AbstractControl extends React.Component {
 
   // eslint-disable-next-line react/no-unused-class-component-methods
   get invalid() {
-    const { STATE } = this.state;
-    return STATE.status === 'INVALID';
+    return this.state.status === 'INVALID';
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
@@ -63,13 +59,11 @@ class AbstractControl extends React.Component {
 
   // eslint-disable-next-line react/sort-comp
   isDisabled() {
-    const { STATE } = this.state;
-    return STATE.disabled;
+    return this.state.disabled;
   }
 
   calculateStatus() {
-    const { STATE } = this.state;
-    if (STATE.errors) {
+    if (this.state.errors) {
       return 'INVALID';
     } if (this.anyControlsHaveStatus('INVALID')) {
       return 'INVALID';
@@ -153,17 +147,16 @@ class AbstractControl extends React.Component {
     this.setInitialStatusAndErrors(()=> {
       const STATUS = this.calculateStatus();
       const PROPS = this.props;
-      const { STATE } = this.state;
       this.updateValue();
       this.setStateAndView({ STATUS }, ()=> {
-        if (STATE.enabled) {
+        if (this.state.enabled) {
           if (this.asyncSubscription) { this.asyncSubscription.unsubscribe(); }
-          if (STATE.status === 'VALID' || STATE.status === 'PENDING') {
+          if (this.state.status === 'VALID' || this.state.status === 'PENDING') {
             this.runAsyncValidator(options);
           }
         }
-        this.valueChanges.next(STATE.value);
-        this.statusChanges.next(STATE.status);
+        this.valueChanges.next(this.state.value);
+        this.statusChanges.next(this.state.status);
         if (PROPS.parent && !options.onlySelf) {
           PROPS.parent.updateValueAndValidity(options);
         }

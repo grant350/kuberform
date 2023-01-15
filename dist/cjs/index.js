@@ -105,24 +105,21 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
   _createClass(AbstractControl, [{
     key: "getErrors",
     value: function getErrors() {
-      var STATE = this.state.STATE;
-      return STATE.errors;
+      return this.state.errors;
     }
 
     // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "getValue",
     value: function getValue() {
-      var STATE = this.state.STATE;
-      return STATE.value;
+      return this.state.value;
     }
 
     // eslint-disable-next-line react/no-unused-class-component-methods
   }, {
     key: "getStatus",
     value: function getStatus() {
-      var STATE = this.state.STATE;
-      return STATE.status;
+      return this.state.status;
     }
   }, {
     key: "setStateAndView",
@@ -137,8 +134,7 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "invalid",
     get: function get() {
-      var STATE = this.state.STATE;
-      return STATE.status === 'INVALID';
+      return this.state.status === 'INVALID';
     }
 
     // eslint-disable-next-line react/no-unused-class-component-methods
@@ -173,14 +169,12 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "isDisabled",
     value: function isDisabled() {
-      var STATE = this.state.STATE;
-      return STATE.disabled;
+      return this.state.disabled;
     }
   }, {
     key: "calculateStatus",
     value: function calculateStatus() {
-      var STATE = this.state.STATE;
-      if (STATE.errors) {
+      if (this.state.errors) {
         return 'INVALID';
       }
       if (this.anyControlsHaveStatus('INVALID')) {
@@ -298,21 +292,20 @@ var AbstractControl = /*#__PURE__*/function (_React$Component) {
       this.setInitialStatusAndErrors(function () {
         var STATUS = _this8.calculateStatus();
         var PROPS = _this8.props;
-        var STATE = _this8.state.STATE;
         _this8.updateValue();
         _this8.setStateAndView({
           STATUS: STATUS
         }, function () {
-          if (STATE.enabled) {
+          if (_this8.state.enabled) {
             if (_this8.asyncSubscription) {
               _this8.asyncSubscription.unsubscribe();
             }
-            if (STATE.status === 'VALID' || STATE.status === 'PENDING') {
+            if (_this8.state.status === 'VALID' || _this8.state.status === 'PENDING') {
               _this8.runAsyncValidator(options);
             }
           }
-          _this8.valueChanges.next(STATE.value);
-          _this8.statusChanges.next(STATE.status);
+          _this8.valueChanges.next(_this8.state.value);
+          _this8.statusChanges.next(_this8.state.status);
           if (PROPS.parent && !options.onlySelf) {
             PROPS.parent.updateValueAndValidity(options);
           }

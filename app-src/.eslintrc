@@ -25,6 +25,7 @@
       "arraysInObjects": false,
       "objectsInObjects": false
     }],
+    "react/destructuring-assignment": 0,
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/naming-convention": [
       "error",
