@@ -20,9 +20,9 @@ jobs:
       - name: Publish to NPM
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
+        working-directory: /home/runner/work/kuberform/kuberform/app-src
         run: |
             npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN} \
             npm publish
 
-      - name: deploy to npmjs
-        run: echo 'deploy api'
+
