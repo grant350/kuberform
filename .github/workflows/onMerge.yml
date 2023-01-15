@@ -13,10 +13,6 @@ jobs:
         node-version: ['18.12.0']
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{github.token}}
-
       - name: Publish to NPM
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
