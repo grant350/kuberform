@@ -20,7 +20,7 @@ jobs:
       - name: Publish to NPM
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
-        working-directory: /home/runner/work/kuberform/kuberform/app-src
+        working-directory: /home/runner/work/kuberform/kuberform
         run: |
             npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN} \
             npm publish
