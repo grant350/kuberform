@@ -9,6 +9,10 @@ jobs:
       matrix:
         node-version: ['18.12.0']
     steps:
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node }
 # check main version to see if its off and update branch if version is off
     - name: Get PR Labels
       id: getLabelNames
