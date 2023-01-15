@@ -7,16 +7,17 @@ jobs:
 
   buildKuberform:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['18.12.0']
     steps:
       - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: Publish to NPM
+        working-directory: /home/runner/work/kuberform/kuberform
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
-        working-directory: /home/runner/work/kuberform/kuberform
         run: |
             npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN} \
             npm publish --verbose
