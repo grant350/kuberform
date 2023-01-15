@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened]
 jobs:
-  testAndBuild:
+  test_build_update_version:
     runs-on: ubuntu-latest
     steps:
     - name: Setup node

@@ -4,8 +4,7 @@ on:
     branches:
       - main
 jobs:
-
-  buildKuberform:
+  deploy_kuberform:
     runs-on: ubuntu-latest
     steps:
       - name: Setup node
