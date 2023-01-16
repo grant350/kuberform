@@ -17,7 +17,6 @@ jobs:
         env:
           NPM_TOKEN: ${{secrets.NPMJS_TOKEN}}
         run: |
-            cat package.json; \
             npm set //registry.npmjs.org/:_authToken=${NPM_TOKEN}; \
             npm publish;
 
